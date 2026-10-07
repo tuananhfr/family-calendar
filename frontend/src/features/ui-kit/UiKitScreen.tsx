@@ -46,7 +46,7 @@ import {
   Truncate,
   toast,
 } from "@/design/components";
-import { THEME_STORAGE_KEY } from "@/design/theme-script";
+import { useAppStore } from "@/store/app.store";
 import { LONG_TITLE, MEMBERS, TASK_ROWS, type TaskRow } from "./fixtures";
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
@@ -58,16 +58,8 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-function setTheme(theme: "light" | "dark") {
-  document.documentElement.dataset.theme = theme;
-  try {
-    localStorage.setItem(THEME_STORAGE_KEY, theme);
-  } catch {
-    // Storage may be blocked (private mode); the attribute alone still switches the theme.
-  }
-}
-
 export function UiKitScreen() {
+  const setTheme = useAppStore((s) => s.setTheme);
   const [dialog, setDialog] = useState(false);
   const [sheet, setSheet] = useState(false);
   const [sw, setSw] = useState(true);

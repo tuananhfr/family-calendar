@@ -3,8 +3,10 @@
 import { useState, type ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster, TooltipProvider } from "@/design/components";
+import { useAppearanceSync } from "@/features/preferences/hooks/useAppearanceSync";
 
 export function Providers({ children }: { children: ReactNode }) {
+  useAppearanceSync();
   // One client per browser tab; created lazily so static prerender never shares cache between requests.
   const [client] = useState(
     () =>

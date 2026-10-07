@@ -17,6 +17,7 @@
 .skip:focus { transform: translateY(0); }
 .header { position: relative; z-index: 10; background: var(--color-bg); }
 .headerInner { max-width: 1400px; min-height: 80px; margin: auto; padding: 12px 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.headerActions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
 .brand { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; font-size: 1.2rem; font-weight: 700; text-decoration: none; }
 .navigation { display: flex; align-items: center; gap: 32px; }
 .navigation a { padding: 8px 0; font-size: .92rem; font-weight: 500; text-decoration: none; }
@@ -94,6 +95,8 @@
 :global(:root[data-theme="dark"]) .dataBackdrop { opacity: .18; }
 @media (min-width: 1600px) { .heroBackdrop, .dataBackdrop, .closingBackdrop { object-fit: cover; } }
 @media (max-width: 1100px) {
+  .headerInner { flex-wrap: wrap; gap: 12px; }
+  .navigation { order: 3; width: 100%; justify-content: center; }
   .navigation { gap: 18px; }
   .headerInner { padding: 12px 24px; }
   .section { padding: 80px 32px; }
@@ -133,7 +136,13 @@
   .footer nav { flex-wrap: wrap; gap: 8px 24px; }
 }
 @media (max-width: 520px) {
-  .headerInner { padding-left: 16px; padding-right: 16px; }
+  .headerInner { display: grid; grid-template-columns: 1fr auto; padding-left: 16px; padding-right: 16px; gap: 6px 10px; }
+  .headerActions { display: contents; }
+  .brand { grid-column: 1; grid-row: 1; }
+  .openApp { grid-column: 2; grid-row: 1; }
+  .preferences { grid-column: 1 / -1; grid-row: 2; justify-content: center; }
+  .navigation { grid-column: 1 / -1; grid-row: 3; gap: 12px; }
+  .navigation a { font-size: .75rem; white-space: nowrap; }
   .hero { padding: 32px 16px; }
   .heroContent h1 { font-size: 2.4rem; }
   .heroActions { flex-direction: column; gap: 10px; }

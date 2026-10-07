@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ROUTES } from "@/app-shell/nav-config";
 import { t } from "@/i18n/vi";
+import { AppearanceControls } from "@/features/preferences/components/AppearanceControls";
 import { LandingBrand } from "./LandingBrand";
 import styles from "../landing.module.css";
 
@@ -16,7 +17,10 @@ export function LandingHeader() {
             <a href="#bat-dau">{t("landing.stepsLink")}</a>
             <a href="#du-lieu">{t("landing.dataLink")}</a>
           </nav>
-          <Link href={ROUTES.today} className={styles.openApp}>{t("landing.openApp")}</Link>
+          <div className={styles.headerActions}>
+            <AppearanceControls className={styles.preferences} />
+            <Link href={ROUTES.today} className={styles.openApp}>{t("landing.openApp")}</Link>
+          </div>
         </div>
       </header>
     </>

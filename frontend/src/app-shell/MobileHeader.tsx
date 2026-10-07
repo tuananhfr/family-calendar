@@ -3,17 +3,19 @@
 import Link from "next/link";
 import { t } from "@/i18n/vi";
 import { Illustration } from "@/design/components";
+import { AppearanceControls } from "@/features/preferences/components/AppearanceControls";
 import { HeaderActions } from "./HeaderActions";
 import { ROUTES } from "./nav-config";
 
 export function MobileHeader() {
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-2 border-b border-border bg-surface/95 px-3 backdrop-blur md:hidden">
+    <header data-mobile-header className="sticky top-0 z-30 grid h-16 grid-cols-[auto_auto_1fr] items-center gap-x-2 border-b border-border bg-surface/95 px-3 backdrop-blur max-[479px]:h-auto max-[479px]:grid-cols-[auto_1fr] md:hidden">
       <Link href={ROUTES.today} aria-label={t("appName")} className="shrink-0">
         <Illustration name="logo-mark" height={36} className="rounded-full" priority />
       </Link>
-      <div className="flex min-w-0 flex-1 justify-end">
-        <HeaderActions compact />
+      <AppearanceControls compact className="max-[479px]:col-span-2 max-[479px]:row-start-2 max-[479px]:justify-end max-[479px]:border-t max-[479px]:border-border max-[479px]:pb-1" />
+      <div className="flex min-w-0 justify-end max-[479px]:col-start-2 max-[479px]:row-start-1 max-[479px]:min-h-16">
+        <HeaderActions compact showPreferences={false} />
       </div>
     </header>
   );
