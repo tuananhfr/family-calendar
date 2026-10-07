@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Trash2 } from "lucide-react";
 import { Button, Dialog, TextField, toast } from "@/design/components";
+import { withBase } from "@/core/config";
 import { t } from "@/i18n/vi";
 import { pendingChangeCount, wipeLocalData } from "../model/wipe-local";
 import { SettingsPanel } from "./SettingsPanel";
@@ -26,7 +27,7 @@ export function DangerZone({ onBackupFirst }: { onBackupFirst: () => void }) {
     try {
       await wipeLocalData();
       // A full load, not a client navigation: every hook still holds the deleted database.
-      window.location.replace("/bat-dau/");
+      window.location.replace(withBase("/bat-dau/"));
     } catch {
       setBusy(false);
       toast(t("settings.danger.failed"), "error");

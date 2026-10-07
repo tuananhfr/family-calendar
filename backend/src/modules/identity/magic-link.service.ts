@@ -25,7 +25,7 @@ const invalidToken = () => new ApiError(ErrorCode.VALIDATION_FAILED, 422, undefi
 @Injectable()
 export class MagicLinkService {
   private readonly logger = new Logger(MagicLinkService.name);
-  private readonly frontendOrigin: string;
+  private readonly appUrl: string;
 
   constructor(
     private readonly ds: DataSource,
@@ -33,7 +33,7 @@ export class MagicLinkService {
     private readonly rateLimit: RateLimitService,
     config: ConfigService<AppConfig, true>,
   ) {
-    this.frontendOrigin = config.get('frontendOrigin', { infer: true });
+    this.appUrl = `${config.get('frontendOrigin', { infer: true })}${config.get('publicBasePath', { infer: true })}`;
   }
 
   /**
@@ -51,7 +51,7 @@ export class MagicLinkService {
        VALUES (?, ?, ?, ?, ?, ?, NULL, UTC_TIMESTAMP(3))`,
       [randomUUID(), sha256Hex(token), email, PURPOSE, session.actorId, new Date(Date.now() + TOKEN_TTL_MS)],
     );
-    const link = `${this.frontendOrigin}/xac-thuc/?token=${encodeURIComponent(token)}`;
+    const link = `${this.appUrl}/xac-thuc/?token=${encodeURIComponent(token)}`;
     try {
       const sent = await this.email.send({
         to: email,

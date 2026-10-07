@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { withBase } from "@/core/config";
 import { cn } from "../cn";
 
 export type AvatarPreset = "father" | "mother" | "boy" | "girl" | "grandfather" | "grandmother" | "guardian";
@@ -24,7 +25,7 @@ export interface AvatarProps {
 
 export function Avatar({ name, preset, src, size = "md", colorVar = "--cat-study-bg", ring, className }: AvatarProps) {
   const px = SIZES[size];
-  const image = src ?? (preset ? `/illustrations/avatar-${preset}@2x.webp` : undefined);
+  const image = src ?? (preset ? withBase(`/illustrations/avatar-${preset}@2x.webp`) : undefined);
   return (
     <span
       className={cn("relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full font-bold text-text", ring && "ring-2 ring-surface", className)}

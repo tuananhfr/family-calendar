@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { withBase } from "@/core/config";
 import { cn } from "../cn";
 import { ILLUSTRATION_SIZES, type IllustrationName } from "../illustration-sizes";
 
@@ -9,7 +10,7 @@ export function Illustration({ name, height, alt = "", className, priority }: { 
   const [w, h] = ILLUSTRATION_SIZES[name];
   return (
     <Image
-      src={`/illustrations/${name}@2x.webp`}
+      src={withBase(`/illustrations/${name}@2x.webp`)}
       width={Math.round((height * w) / h)}
       height={height}
       alt={alt}

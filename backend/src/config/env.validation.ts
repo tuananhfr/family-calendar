@@ -18,6 +18,11 @@ export class EnvironmentVariables {
   @IsOptional() @IsString() HOST?: string;
   @IsOptional() @IsString() API_ORIGIN?: string;
   @IsOptional() @IsString() FRONTEND_ORIGIN?: string;
+  @IsOptional()
+  @Matches(/^(\/[a-zA-Z0-9_-]+)*\/?$/, {
+    message: 'PUBLIC_BASE_PATH must be empty or an absolute path like /lich-gia-dinh',
+  })
+  PUBLIC_BASE_PATH?: string;
 
   @IsString() @IsNotEmpty() DB_HOST: string;
   @Type(() => Number) @IsInt() @Min(1) @Max(65535) DB_PORT: number;

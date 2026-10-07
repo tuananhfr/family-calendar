@@ -1,5 +1,6 @@
 // Serves the static export in out/ like production does: route fallback, cache headers and an /api proxy.
-// Used by `npm run preview` and by the e2e package (port 3006 → backend 3007).
+// Used by `npm run preview`, the e2e package (port 3006 → backend 3007) and production behind nginx (`npm start`).
+// The base path defaults to NEXT_PUBLIC_BASE_PATH so the server and the export it serves read one value.
 import { createReadStream } from "node:fs";
 import { stat } from "node:fs/promises";
 import { createServer, request as httpRequest } from "node:http";
@@ -10,6 +11,7 @@ const ROOT = resolve(fileURLToPath(new URL("../out", import.meta.url)));
 const PORT = Number(process.env.PORT ?? 3006);
 const HOST = process.env.HOST ?? "127.0.0.1";
 const API_TARGET = new URL(process.env.API_TARGET ?? "http://127.0.0.1:3007");
+const BASE_PATH = (process.env.BASE_PATH ?? process.env.NEXT_PUBLIC_BASE_PATH ?? "").trim().replace(/\/+$/, "");
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -83,18 +85,19 @@ function send(res, req, file, status, urlPath) {
   createReadStream(file.path).pipe(res);
 }
 
-function proxy(req, res) {
+function proxy(req, res, path) {
   const headers = { ...req.headers, host: API_TARGET.host };
-  headers["x-forwarded-host"] = req.headers.host ?? "";
-  headers["x-forwarded-proto"] = "http";
-  headers["x-forwarded-for"] = req.socket.remoteAddress ?? "";
+  // Behind nginx keep its forwarded values (real client IP, https); listening on loopback means only nginx can set them.
+  headers["x-forwarded-host"] = req.headers["x-forwarded-host"] ?? req.headers.host ?? "";
+  headers["x-forwarded-proto"] = req.headers["x-forwarded-proto"] ?? "http";
+  headers["x-forwarded-for"] = req.headers["x-forwarded-for"] ?? req.socket.remoteAddress ?? "";
   const upstream = httpRequest(
     {
       protocol: API_TARGET.protocol,
       hostname: API_TARGET.hostname,
       port: API_TARGET.port,
       method: req.method,
-      path: req.url,
+      path,
       headers,
     },
     (up) => {
@@ -113,13 +116,23 @@ function proxy(req, res) {
 
 const server = createServer(async (req, res) => {
   const url = new URL(req.url ?? "/", "http://localhost");
-  if (url.pathname === "/api" || url.pathname.startsWith("/api/")) return proxy(req, res);
+  if (BASE_PATH && url.pathname === BASE_PATH) {
+    res.writeHead(308, { Location: `${BASE_PATH}/${url.search}` });
+    return res.end();
+  }
+  if (BASE_PATH && !url.pathname.startsWith(`${BASE_PATH}/`)) {
+    res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+    return res.end("Not found");
+  }
+  const pathname = url.pathname.slice(BASE_PATH.length);
+  // The backend mounts /api at its root, so the base path is stripped before forwarding.
+  if (pathname === "/api" || pathname.startsWith("/api/")) return proxy(req, res, `${pathname}${url.search}`);
   if (req.method !== "GET" && req.method !== "HEAD") {
     res.writeHead(405, { Allow: "GET, HEAD" });
     return res.end();
   }
-  const file = await resolveStatic(url.pathname);
-  if (file) return send(res, req, file, 200, url.pathname);
+  const file = await resolveStatic(pathname);
+  if (file) return send(res, req, file, 200, pathname);
   const notFound = await fileAt(join(ROOT, "404.html"));
   if (notFound) return send(res, req, notFound, 404, "/404.html");
   res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
@@ -127,7 +140,7 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`serving ${ROOT} on http://${HOST}:${PORT} (api → ${API_TARGET.origin})`);
+  console.log(`serving ${ROOT} on http://${HOST}:${PORT}${BASE_PATH}/ (api → ${API_TARGET.origin})`);
 });
 
 for (const signal of ["SIGINT", "SIGTERM"]) process.on(signal, () => server.close(() => process.exit(0)));

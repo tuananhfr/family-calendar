@@ -3,6 +3,8 @@ export interface AppConfig {
   host: string;
   apiOrigin: string;
   frontendOrigin: string;
+  /** "" at the domain root, "/lich-gia-dinh" under a sub-path; prefixes links in mail/invites/ICS and the cookie path. */
+  publicBasePath: string;
   /** Every origin accepted on write requests (FRONTEND_ORIGIN may be a comma-separated list). */
   allowedOrigins: string[];
   db: { host: string; port: number; user: string; password: string; database: string };
@@ -41,6 +43,7 @@ export function configuration(): AppConfig {
     host,
     apiOrigin,
     frontendOrigin: frontendOrigins[0] ?? '',
+    publicBasePath: env('PUBLIC_BASE_PATH').trim().replace(/\/+$/, ''),
     allowedOrigins: [...new Set([...frontendOrigins, apiOrigin])],
     db: {
       host: env('DB_HOST'),

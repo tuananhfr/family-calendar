@@ -13,6 +13,7 @@
     "start:dev": "nest start --watch",
     "start:e2e": "node scripts/start-e2e.mjs",
     "worker": "node dist/worker.js",
+    "deploy": "npm run build && npm run migration:run && sudo systemctl restart family-calendar-api family-calendar-worker",
     "test": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/jest/bin/jest.js",
     "test:int": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/jest/bin/jest.js -c jest.int.config.ts --runInBand",
     "lint": "eslint . && tsc --noEmit -p tsconfig.json",

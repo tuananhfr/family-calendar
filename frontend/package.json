@@ -6,6 +6,8 @@
     "dev": "next dev -p 3004",
     "build": "next build",
     "preview": "node scripts/serve-prod.mjs",
+    "start": "node --env-file-if-exists=.env.local scripts/serve-prod.mjs",
+    "deploy": "npm run build && sudo systemctl restart family-calendar-frontend",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint . && tsc --noEmit",

@@ -22,7 +22,7 @@ export function clearApiSession(): void {
 }
 
 function urlFor(path: string): string {
-  return path.startsWith("/api/") ? path : `${appConfig.apiBase}${path}`;
+  return path.startsWith("/api/") ? `${appConfig.basePath}${path}` : `${appConfig.apiBase}${path}`;
 }
 
 function isAbort(error: unknown): boolean {

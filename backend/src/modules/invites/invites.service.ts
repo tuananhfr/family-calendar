@@ -67,7 +67,7 @@ export async function memberManager(
 @Injectable()
 export class InvitesService {
   private readonly logger = new Logger(InvitesService.name);
-  private readonly frontendOrigin: string;
+  private readonly appUrl: string;
 
   constructor(
     private readonly ds: DataSource,
@@ -75,7 +75,7 @@ export class InvitesService {
     private readonly email: EmailChannel,
     config: ConfigService<AppConfig, true>,
   ) {
-    this.frontendOrigin = config.get('frontendOrigin', { infer: true });
+    this.appUrl = `${config.get('frontendOrigin', { infer: true })}${config.get('publicBasePath', { infer: true })}`;
   }
 
   async create(session: SessionContext, spaceId: string, dto: CreateInviteDto): Promise<CreateInviteResponseDto> {
@@ -137,7 +137,7 @@ export class InvitesService {
    * address may be read by someone else (privacy over convenience).
    */
   private async sendInviteEmail(to: string, token: string): Promise<void> {
-    const link = `${this.frontendOrigin}/tham-gia/?token=${encodeURIComponent(token)}`;
+    const link = `${this.appUrl}/tham-gia/?token=${encodeURIComponent(token)}`;
     try {
       await this.email.send({
         to,

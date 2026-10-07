@@ -53,7 +53,7 @@ function exposable(row: StoredRow): boolean {
 
 @Injectable()
 export class IcsService {
-  private readonly apiOrigin: string;
+  private readonly apiUrl: string;
 
   constructor(
     private readonly ds: DataSource,
@@ -61,7 +61,7 @@ export class IcsService {
     config: ConfigService<AppConfig, true>,
     @Inject(CLOCK) private readonly clock: Clock,
   ) {
-    this.apiOrigin = config.get('apiOrigin', { infer: true });
+    this.apiUrl = `${config.get('apiOrigin', { infer: true })}${config.get('publicBasePath', { infer: true })}`;
   }
 
   async create(session: SessionContext, spaceId: string, dto: CreateIcsFeedDto): Promise<IcsFeedCreatedDto> {
@@ -100,7 +100,7 @@ export class IcsService {
       include_child_names: dto.include_child_names === true,
       created_at: now.toISOString(),
       last_used_at: null,
-      url: `${this.apiOrigin}/api/v1/ics/${token}.ics`,
+      url: `${this.apiUrl}/api/v1/ics/${token}.ics`,
     };
   }
 

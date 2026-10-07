@@ -15,7 +15,7 @@ export class EmailDeliveryChannel implements DeliveryChannel {
     private readonly email: EmailChannel,
     config: ConfigService<AppConfig, true>,
   ) {
-    this.appUrl = `${config.get('frontendOrigin', { infer: true })}/`;
+    this.appUrl = `${config.get('frontendOrigin', { infer: true })}${config.get('publicBasePath', { infer: true })}/`;
   }
 
   async send(target: DeliveryTarget, ctx: DeliveryContext): Promise<DeliveryResult> {

@@ -36,6 +36,7 @@ const LAST_SEEN_THROTTLE_MS = 5 * 60_000;
 export class SessionsService {
   private readonly ttlMs: number;
   private readonly cookieSecure: boolean;
+  private readonly cookiePath: string;
 
   constructor(
     private readonly ds: DataSource,
@@ -43,10 +44,11 @@ export class SessionsService {
   ) {
     this.ttlMs = config.get('sessionTtlDays', { infer: true }) * 86_400_000;
     this.cookieSecure = config.get('cookieSecure', { infer: true });
+    this.cookiePath = `${config.get('publicBasePath', { infer: true })}/`;
   }
 
-  get cookieOptions(): { secure: boolean; maxAgeMs: number } {
-    return { secure: this.cookieSecure, maxAgeMs: this.ttlMs };
+  get cookieOptions(): { secure: boolean; path: string; maxAgeMs: number } {
+    return { secure: this.cookieSecure, path: this.cookiePath, maxAgeMs: this.ttlMs };
   }
 
   /** Creates a session row for an existing device; raw tokens are returned once and never stored. */
@@ -145,7 +147,7 @@ export class SessionsService {
           httpOnly: true,
           sameSite: 'lax',
           secure: this.cookieSecure,
-          path: '/',
+          path: this.cookiePath,
           maxAge: this.ttlMs,
         });
       }

@@ -33,6 +33,6 @@ export class SessionController {
   async logout(@Req() req: SessionRequest, @Res({ passthrough: true }) res: Response): Promise<void> {
     const s = requireSession(req);
     await this.sessions.revokeSession(s.sessionId);
-    clearSessionCookies(res, this.sessions.cookieOptions.secure);
+    clearSessionCookies(res, this.sessions.cookieOptions);
   }
 }
