@@ -52,7 +52,8 @@ Mỗi phiên ssh về sau chạy lại hai dòng `export NVM_DIR=...` / `source 
 
 ### 2. Cơ sở dữ liệu
 
-MariaDB trên server ở cổng **3307** (kiểm: `ss -ltnp | grep 330`). Tạo DB và user riêng:
+MariaDB trên server ở cổng **3306** (khác máy dev; kiểm: `sudo ss -ltnp | grep 330` phải thấy `mariadbd`).
+DB dùng chung server với các site khác, nên tạo database và user riêng, chỉ có quyền trên database đó (`sudo mariadb`):
 
 ```sql
 CREATE DATABASE family_calendar CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -71,7 +72,7 @@ API_ORIGIN=https://lpc.vn
 FRONTEND_ORIGIN=https://lpc.vn
 PUBLIC_BASE_PATH=/lich-gia-dinh
 DB_HOST=127.0.0.1
-DB_PORT=3307
+DB_PORT=3306
 DB_USER=family_calendar
 DB_PASSWORD=<mật khẩu ở bước 2>
 DB_NAME=family_calendar
