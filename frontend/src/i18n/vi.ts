@@ -14,6 +14,7 @@ import { storageVi } from "./sections/storage";
 import { timetableVi } from "./sections/timetable";
 import { todayVi } from "./sections/today";
 import { upcomingVi } from "./sections/upcoming";
+import { landingVi } from "./sections/landing";
 
 export const vi = {
   appName: "Lịch Gia Đình",
@@ -166,6 +167,7 @@ export const vi = {
   storage: storageVi,
   finance: financeVi,
   health: healthVi,
+  landing: landingVi,
 } as const;
 
 // Arrays are allowed for ordered lists (steps); they are indexed like objects: t("onboarding.steps.0").

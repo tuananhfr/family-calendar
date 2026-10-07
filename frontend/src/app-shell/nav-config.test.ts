@@ -41,7 +41,7 @@ describe("nav-config", () => {
 
   it("every screen route in the spec exists", () => {
     const required = [
-      "/", "/lich", "/sap-den-han", "/viec", "/nhac", "/thoi-khoa-bieu", "/ngay-dac-biet", "/thanh-vien", "/thanh-vien/them",
+      "/", "/hom-nay", "/lich", "/sap-den-han", "/viec", "/nhac", "/thoi-khoa-bieu", "/ngay-dac-biet", "/thanh-vien", "/thanh-vien/them",
       "/nhom", "/quyen", "/bao-cao", "/tai-chinh", "/suc-khoe", "/kho-luu-tru", "/tro-ly", "/cai-dat", "/mau-ke-hoach",
       "/bat-dau", "/tham-gia", "/sos", "/thong-bao", "/tim-kiem",
       "/gioi-thieu", "/dieu-khoan", "/quyen-rieng-tu", "/lien-he", "/tro-giup",

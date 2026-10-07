@@ -32,7 +32,7 @@ function TodaySkeleton() {
   );
 }
 
-/** `/` (IMG-A): greeting, six counters, member day board and the four rails; Senior devices get the short version. */
+/** Today: greeting, six counters, member day board and four rails; Senior devices get the short version. */
 export function TodayScreen() {
   const now = useClock();
   const data = useTodayData(now);

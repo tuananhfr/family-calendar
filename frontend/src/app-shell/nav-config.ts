@@ -41,7 +41,8 @@ export interface NavItem {
 }
 
 export const ROUTES = {
-  today: "/",
+  landing: "/",
+  today: "/hom-nay/",
   calendar: "/lich/",
   upcoming: "/sap-den-han/",
   tasks: "/viec/",

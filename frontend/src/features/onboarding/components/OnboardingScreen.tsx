@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ROUTES } from "@/app-shell/nav-config";
 import { ArrowLeft, ArrowRight, History } from "lucide-react";
 import { newId } from "@/core/ids";
 import { profileForRelationship } from "@/core/model/common";
@@ -37,7 +38,7 @@ export function OnboardingScreen() {
 
   // Opening /bat-dau with a family already on this device (bookmark, back button) goes to Today instead.
   useEffect(() => {
-    if (!loading && spaces.length > 0 && !finished.current) router.replace("/");
+    if (!loading && spaces.length > 0 && !finished.current) router.replace(ROUTES.today);
   }, [loading, spaces.length, router]);
 
   useEffect(() => {
@@ -79,7 +80,7 @@ export function OnboardingScreen() {
         // ui-ux.md "Chế độ Senior": a device bound to a SENIOR member starts in large-text mode.
         if (profileForRelationship(people[idx].relationship) === "SENIOR") setSeniorMode(true);
       }
-      router.replace("/");
+      router.replace(ROUTES.today);
     } catch {
       setStepError(t("onboarding.device.error"));
       setCreating(false);
