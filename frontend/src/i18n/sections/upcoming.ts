@@ -1,0 +1,21 @@
+export const upcomingVi = {
+  title: "Sắp đến hạn",
+  subtitle: "Giấy tờ, thanh toán, lịch hẹn và việc sắp tới hạn, gom một chỗ để không lỡ hạn nào.",
+  add: "Thêm hạn",
+  tabsLabel: "Loại hạn",
+  tabs: { ALL: "Tất cả", DOCUMENT: "Giấy tờ", PAYMENT: "Thanh toán", APPOINTMENT: "Lịch hẹn", TASK: "Việc" },
+  kinds: { DOCUMENT: "Giấy tờ", PAYMENT: "Thanh toán", APPOINTMENT: "Lịch hẹn", TASK: "Việc cần làm" },
+  groups: { overdue: "Quá hạn", next7: "7 ngày tới", next30: "30 ngày tới", later: "Sau đó" },
+  groupEmpty: { overdue: "Không có hạn nào bị trễ.", next7: "Tuần này thong thả.", next30: "Chưa có hạn nào trong tháng tới.", later: "Chưa có hạn nào xa hơn." },
+  laterHint: "Tính trong 2 năm tới",
+  summaryLabel: "Số hạn theo nhóm",
+  jumpTo: "Tới nhóm {group}: {n} mục",
+  overdueBy: "Trễ {n} ngày",
+  overdueMore: "Còn {n} lần trước chưa xong",
+  open: "Xem “{title}”",
+  empty: {
+    ALL: "Chưa có hạn nào sắp tới",
+    tab: "Không có hạn nào trong nhóm này",
+    body: "Thêm ngày hết hạn giấy tờ, hóa đơn hay lịch hẹn để được nhắc trước.",
+  },
+};

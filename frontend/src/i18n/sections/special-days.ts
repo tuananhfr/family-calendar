@@ -1,0 +1,20 @@
+export const specialDaysVi = {
+  title: "Ngày đặc biệt",
+  subtitle: "Sinh nhật, kỷ niệm, ngày giỗ và ngày lễ. Âm lịch được đổi sang ngày dương mỗi năm.",
+  add: "Thêm ngày đặc biệt",
+  tabsLabel: "Loại ngày",
+  tabs: { ALL: "Tất cả", BIRTHDAY: "Sinh nhật", ANNIVERSARY: "Kỷ niệm", DEATH_ANNIVERSARY: "Ngày giỗ", HOLIDAY: "Ngày lễ", SPECIAL_DAY: "Khác" },
+  nextUp: "Gần nhất",
+  inMonth: "{n} ngày trong 30 ngày tới",
+  lunar: "Âm lịch",
+  age: "Tròn {n} tuổi",
+  years: "Tròn {n} năm",
+  open: "Xem “{title}”",
+  pastTitle: "Đã qua",
+  pastHint: "Những ngày chỉ diễn ra một lần và đã qua.",
+  empty: {
+    ALL: "Chưa có ngày đặc biệt nào",
+    tab: "Chưa có ngày nào thuộc loại này",
+    body: "Thêm sinh nhật, ngày cưới hay ngày giỗ. Ngày âm lịch được đổi sang dương lịch mỗi năm.",
+  },
+};

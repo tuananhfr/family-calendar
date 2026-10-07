@@ -1,0 +1,126 @@
+/* Values sampled from docs/UI-UX mockups (scripts/sample-colors.mjs), adjusted to pass WCAG AA (scripts/check-contrast.mjs). */
+:root {
+  color-scheme: light;
+  --color-primary: #1a5fd8;
+  --color-primary-hover: #1656c9;
+  --color-primary-soft: #e4effd;
+  --color-primary-strong: #0f4fc2;
+  --color-on-primary: #ffffff;
+  --color-bg: #f4f7fc;
+  --color-surface: #ffffff;
+  --color-surface-2: #f8fafe;
+  --color-border: #e3e9f3;
+  --color-border-strong: #c9d4e6;
+  --color-text: #13235b;
+  --color-text-body: #26324d;
+  --color-text-muted: #5b6987;
+  --color-accent-script: #d7263d;
+  --color-success: #157049;
+  --color-success-soft: #e3f6ec;
+  --color-warning: #8f5400;
+  --color-warning-soft: #fff4dc;
+  --color-danger: #b8262d;
+  --color-danger-soft: #fde8e8;
+  --color-info-soft: #e7f1ff;
+  --color-focus: #1a5fd8;
+  --color-disabled-bg: #edf1f7;
+  --color-disabled-text: #8b97ad;
+  --color-overlay: rgb(19 35 91 / 40%);
+
+  /* Category colors: background for event cards, dot/text for legends. Always paired with icon + label. */
+  --cat-study-bg: #e2effd;
+  --cat-study-dot: #2f6fe0;
+  --cat-housework-bg: #ece7fb;
+  --cat-housework-dot: #7650d8;
+  --cat-family-bg: #e9e6f8;
+  --cat-family-dot: #6656c8;
+  --cat-health-bg: #fde6ee;
+  --cat-health-dot: #d33b6b;
+  --cat-finance-bg: #def5f2;
+  --cat-finance-dot: #13897b;
+  --cat-shopping-bg: #fdebdc;
+  --cat-shopping-dot: #c9601a;
+  --cat-document-bg: #e5ebf3;
+  --cat-document-dot: #4b6283;
+  --cat-activity-bg: #e2f7ea;
+  --cat-activity-dot: #1f8c4e;
+  --cat-sport-bg: #e0f4f8;
+  --cat-sport-dot: #0f7f99;
+  --cat-special-bg: #fdf3d9;
+  --cat-special-dot: #b86e00;
+  --cat-other-bg: #eef1f5;
+  --cat-other-dot: #66748c;
+  /* Kho lưu trữ folder tiles (IMG-F); decorative, always paired with the folder name. */
+  --folder-fill: #f6bf3c;
+
+  --radius-card: 16px;
+  --radius-control: 10px;
+  --radius-chip: 999px;
+  --shadow-sm: 0 1px 2px rgb(20 33 61 / 6%);
+  --shadow-md: 0 4px 16px rgb(20 33 61 / 7%);
+  --shadow-lg: 0 12px 32px rgb(20 33 61 / 12%);
+  --text-scale: 1;
+  --touch-min: 44px;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-primary: #6a9ef8;
+  --color-primary-hover: #7aa8f9;
+  --color-primary-soft: #1d2f55;
+  --color-primary-strong: #8db5fb;
+  --color-on-primary: #0b1426;
+  --color-bg: #0f1626;
+  --color-surface: #172036;
+  --color-surface-2: #1b2640;
+  --color-border: #26314a;
+  --color-border-strong: #364463;
+  --color-text: #e6ecf7;
+  --color-text-body: #d2dbec;
+  --color-text-muted: #9aa8c3;
+  --color-accent-script: #ff6b7a;
+  --color-success: #4cc68b;
+  --color-success-soft: #173a2b;
+  --color-warning: #f2b04a;
+  --color-warning-soft: #3d2f15;
+  --color-danger: #ff7a7f;
+  --color-danger-soft: #3f1d22;
+  --color-info-soft: #1b2b4a;
+  --color-focus: #7aa8f9;
+  --color-disabled-bg: #1f2940;
+  --color-disabled-text: #6b7893;
+  --color-overlay: rgb(0 0 0 / 55%);
+
+  --cat-study-bg: #1d2f52;
+  --cat-study-dot: #7aa8f9;
+  --cat-housework-bg: #2b2450;
+  --cat-housework-dot: #b39cf5;
+  --cat-family-bg: #29264c;
+  --cat-family-dot: #a99cf0;
+  --cat-health-bg: #43202f;
+  --cat-health-dot: #f08bab;
+  --cat-finance-bg: #163a37;
+  --cat-finance-dot: #5ed1c2;
+  --cat-shopping-bg: #432a18;
+  --cat-shopping-dot: #f2a067;
+  --cat-document-bg: #222d40;
+  --cat-document-dot: #9db0cc;
+  --cat-activity-bg: #173a27;
+  --cat-activity-dot: #6fd398;
+  --cat-sport-bg: #15363f;
+  --cat-sport-dot: #63c6dd;
+  --cat-special-bg: #3d3115;
+  --cat-special-dot: #f2c35a;
+  --cat-other-bg: #232b3b;
+  --cat-other-dot: #a3afc4;
+  --folder-fill: #d9a83f;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 30%);
+  --shadow-md: 0 4px 16px rgb(0 0 0 / 35%);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 45%);
+}
+
+:root[data-senior="true"] {
+  --text-scale: 1.25;
+  --touch-min: 56px;
+}

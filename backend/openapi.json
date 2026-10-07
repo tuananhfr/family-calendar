@@ -1,0 +1,4796 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "operationId": "HealthController_check",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "system"
+        ]
+      }
+    },
+    "/api/v1/meta": {
+      "get": {
+        "operationId": "MetaController_meta",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetaDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "system"
+        ]
+      }
+    },
+    "/api/v1/devices": {
+      "post": {
+        "operationId": "DevicesController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDeviceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Sets fc_sid (HttpOnly) and fc_csrf cookies.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterDeviceResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "devices"
+        ]
+      },
+      "get": {
+        "operationId": "DevicesController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceListDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "devices"
+        ]
+      }
+    },
+    "/api/v1/devices/{id}/revoke": {
+      "post": {
+        "operationId": "DevicesController_revoke",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "devices"
+        ]
+      }
+    },
+    "/api/v1/session": {
+      "get": {
+        "operationId": "SessionController_current",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "session"
+        ]
+      }
+    },
+    "/api/v1/session/logout": {
+      "post": {
+        "operationId": "SessionController_logout",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "session"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/recovery-codes": {
+      "post": {
+        "operationId": "RecoveryController_issue",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Active member of a SHARED Space; the previous code dies.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecoveryCodeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "recovery"
+        ]
+      }
+    },
+    "/api/v1/recovery/redeem": {
+      "post": {
+        "operationId": "RecoveryController_redeem",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RedeemRecoveryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sets fc_sid and fc_csrf for the new device. 422 RECOVERY_INVALID for any wrong, used or mismatched code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RedeemRecoveryResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "recovery"
+        ]
+      }
+    },
+    "/api/v1/auth/magic-link": {
+      "post": {
+        "operationId": "MagicLinkController_request",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MagicLinkRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Same answer whether or not the address has an account.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MagicLinkAcceptedDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/v1/auth/magic-link/verify": {
+      "post": {
+        "operationId": "MagicLinkController_verify",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MagicLinkVerifyDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "422 VALIDATION_FAILED fields.token=INVALID if used, expired or not yours.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MagicLinkVerifiedDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/v1/account": {
+      "get": {
+        "operationId": "AccountController_status",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountStatusDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/v1/account/unlink": {
+      "post": {
+        "operationId": "AccountController_unlink",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Devices stay signed in.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountStatusDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/v1/push-subscriptions": {
+      "post": {
+        "operationId": "PushSubscriptionsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePushSubscriptionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Upsert by endpoint: the same browser endpoint keeps its id and moves to the calling device.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushSubscriptionCreatedDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "notifications"
+        ]
+      },
+      "get": {
+        "operationId": "PushSubscriptionsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PushSubscriptionListDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/push-subscriptions/{id}": {
+      "delete": {
+        "operationId": "PushSubscriptionsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "404 NOT_FOUND for an id that is not the caller own."
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/sync/operations": {
+      "post": {
+        "operationId": "OperationsController_apply",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SyncOperationsRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "One result per operation, in order. 413 PAYLOAD_TOO_LARGE above 50 operations or 512 KB; 401/403 when the session, device or membership no longer allows writing to the Space.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SyncOperationsResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "sync"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/sync/changes": {
+      "get": {
+        "operationId": "ChangesController_changes",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Last next_cursor (or snapshot watermark); default 0.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "1-500, default 500.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "409 RESYNC_REQUIRED when the cursor is ahead of the Space or older than the offline horizon.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangesResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "sync"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/sync/snapshot": {
+      "get": {
+        "operationId": "ChangesController_snapshot",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "413 SNAPSHOT_TOO_LARGE above the record cap.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SnapshotResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "sync"
+        ]
+      }
+    },
+    "/api/v1/spaces": {
+      "get": {
+        "operationId": "SpacesController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Spaces with an ACTIVE membership; INITIALIZING ones only for their creator.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpaceListDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "spaces"
+        ]
+      }
+    },
+    "/api/v1/spaces/bootstrap": {
+      "post": {
+        "operationId": "SpacesController_start",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BootstrapSpaceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Creates the Space INITIALIZING with default roles and the caller as owner; a retry by the creator answers the same. 409 ID_COLLISION when the id belongs to someone else.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BootstrapSpaceResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "spaces"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}": {
+      "get": {
+        "operationId": "SpacesController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpaceSummaryDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "spaces"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/bootstrap/chunks": {
+      "post": {
+        "operationId": "SpacesController_chunk",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BootstrapChunkDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "All-or-nothing per chunk. Errors carry fields.chunk_id + fields.index (+ records.<i>.<field>).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BootstrapChunkResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "spaces"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/bootstrap/activate": {
+      "post": {
+        "operationId": "SpacesController_activate",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActivateSpaceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "422 COUNT_MISMATCH per type keeps the Space INITIALIZING.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivateSpaceResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "spaces"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/invites": {
+      "post": {
+        "operationId": "InvitesController_create",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInviteDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Needs members EDIT; 403 otherwise.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateInviteResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
+        ]
+      },
+      "get": {
+        "operationId": "InvitesController_list",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InviteListDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/invites/{iid}/revoke": {
+      "post": {
+        "operationId": "InvitesController_revoke",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "iid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Waiting requests on this invite become REJECTED.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InviteSummaryDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
+        ]
+      }
+    },
+    "/api/v1/invites/{token}/preview": {
+      "get": {
+        "operationId": "InvitesController_preview",
+        "parameters": [
+          {
+            "name": "token",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "404 INVITE_INVALID for unknown, revoked, expired or used-up invites.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitePreviewDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
+        ]
+      }
+    },
+    "/api/v1/invites/{token}/join-requests": {
+      "post": {
+        "operationId": "InvitesController_join",
+        "parameters": [
+          {
+            "name": "token",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJoinRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Idempotent per invite and Actor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JoinRequestCreatedDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
+        ]
+      }
+    },
+    "/api/v1/join-requests/{rid}": {
+      "get": {
+        "operationId": "InvitesController_status",
+        "parameters": [
+          {
+            "name": "rid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Own requests only; 404 otherwise.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JoinRequestStatusDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
+        ]
+      }
+    },
+    "/api/v1/join-requests/{rid}/guardian-confirm": {
+      "post": {
+        "operationId": "InvitesController_guardianConfirm",
+        "parameters": [
+          {
+            "name": "rid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Caller must be a Family guardian of the requester.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JoinRequestDecisionDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
+        ]
+      }
+    },
+    "/api/v1/me/guardian-requests": {
+      "get": {
+        "operationId": "InvitesController_guardianInbox",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuardianRequestListDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/join-requests": {
+      "get": {
+        "operationId": "InvitesController_listRequests",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JoinRequestListDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/join-requests/{rid}/approve": {
+      "post": {
+        "operationId": "InvitesController_approve",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApproveJoinRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "409 INVITE_INVALID when the invite expired, was revoked or is used up.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JoinRequestDecisionDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/join-requests/{rid}/reject": {
+      "post": {
+        "operationId": "InvitesController_reject",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JoinRequestDecisionDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
+        ]
+      }
+    },
+    "/api/v1/me/invitations": {
+      "get": {
+        "operationId": "MeInvitationsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Open invites sent to a verified email linked to the caller.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyInvitationListDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
+        ]
+      }
+    },
+    "/api/v1/me/invitations/{iid}/accept": {
+      "post": {
+        "operationId": "MeInvitationsController_accept",
+        "parameters": [
+          {
+            "name": "iid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJoinRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "404 INVITE_INVALID if the invite is not addressed to the caller.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JoinRequestCreatedDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
+        ]
+      }
+    },
+    "/api/v1/me/invitations/{iid}/decline": {
+      "post": {
+        "operationId": "MeInvitationsController_decline",
+        "parameters": [
+          {
+            "name": "iid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationDeclinedDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/files/{fileId}/blob": {
+      "post": {
+        "operationId": "BlobController_upload",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fileId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Content-SHA256",
+            "in": "header",
+            "description": "Lowercase hex SHA-256 of the raw body.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Raw body (any Content-Type). Needs storage EDIT on the file. 422 fields.sha256 INVALID|MISMATCH or fields.size MISMATCH (must equal the file record); 413 above the per-kind cap; 404 if the file is not in this Space.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlobStoredDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      },
+      "get": {
+        "operationId": "BlobController_download",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fileId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Decrypted bytes as an attachment, Cache-Control private, no-store. 500 BLOB_CORRUPT if the stored copy fails authentication."
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/api/v1/notifications": {
+      "get": {
+        "operationId": "NotificationsController_list",
+        "parameters": [
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "next_cursor of the previous page.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationListDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/notifications/read": {
+      "post": {
+        "operationId": "NotificationsController_read",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarkNotificationsReadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "422 VALIDATION_FAILED unless exactly one of ids / all.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnreadCountDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/emergencies": {
+      "post": {
+        "operationId": "EmergencyController_create",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEmergencyDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmergencyAcceptedDto"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "201 when new, 200 when the id already exists (reconcile; a stored terminal state never reopens). Every route here answers 404 NOT_FOUND for a GROUP Space.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmergencyAcceptedDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED with Retry-After: more than 10 new SOS per hour per device."
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "emergency"
+        ]
+      },
+      "get": {
+        "operationId": "EmergencyController_list",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Only events the caller created or currently receives.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmergencyListDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "emergency"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/emergencies/{eid}": {
+      "get": {
+        "operationId": "EmergencyController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "eid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "403 unless creator or a current recipient.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmergencyViewDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "emergency"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/emergencies/{eid}/responses": {
+      "post": {
+        "operationId": "EmergencyController_respond",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "eid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyResponseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "403 unless a current recipient (the creator cannot respond); 409 EMERGENCY_CLOSED once closed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmergencyRecipientStateDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "emergency"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/emergencies/{eid}/close": {
+      "post": {
+        "operationId": "EmergencyController_close",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "eid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloseEmergencyDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Creator only. An already closed event is returned unchanged (first close wins).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmergencyAcceptedDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "emergency"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/emergencies/{eid}/location": {
+      "post": {
+        "operationId": "EmergencyController_location",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "eid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyLocationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Creator only; 409 EMERGENCY_CLOSED once the event is closed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationAcceptedDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "emergency"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/emergency-recipients": {
+      "get": {
+        "operationId": "EmergencyController_recipientList",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmergencyRecipientsViewDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "emergency"
+        ]
+      },
+      "put": {
+        "operationId": "EmergencyController_replaceRecipients",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyRecipientsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "members EDIT (OWNER/ADULT by default); 422 if a member is not in this Space.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmergencyRecipientsViewDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "emergency"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/ai/status": {
+      "get": {
+        "operationId": "AiController_status",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Needs `ai` VIEW.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiStatusDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 NOT_FOUND when the Space is unknown to the server (LOCAL_ONLY), not shared, or not yours."
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "ai"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/ai/consent": {
+      "post": {
+        "operationId": "AiController_consent",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AiConsentRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Needs `ai` EDIT. Per person and Space.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiConsentDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 NOT_FOUND when the Space is unknown to the server (LOCAL_ONLY), not shared, or not yours."
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "ai"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/ai/messages": {
+      "post": {
+        "operationId": "AiController_send",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AiMessageRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Drafts only; nothing is saved to the family data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiMessageResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "FORBIDDEN without `ai` EDIT; AI_CONSENT_REQUIRED before consent."
+          },
+          "404": {
+            "description": "404 NOT_FOUND when the Space is unknown to the server (LOCAL_ONLY), not shared, or not yours."
+          },
+          "429": {
+            "description": "RATE_LIMITED with Retry-After: more than 30 messages per hour."
+          },
+          "503": {
+            "description": "AI_NOT_CONFIGURED (no provider on the server) or TEMPORARILY_UNAVAILABLE (provider failed)."
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "ai"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/ai/conversations": {
+      "get": {
+        "operationId": "AiController_conversations",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Only the conversations of the caller.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiConversationListDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 NOT_FOUND when the Space is unknown to the server (LOCAL_ONLY), not shared, or not yours."
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "ai"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/ai/conversations/{cid}": {
+      "get": {
+        "operationId": "AiController_conversation",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "404 for a conversation of someone else.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiConversationDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404 NOT_FOUND when the Space is unknown to the server (LOCAL_ONLY), not shared, or not yours."
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "ai"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/automations/runs": {
+      "get": {
+        "operationId": "AutomationsController_runs",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Needs `ai` VIEW; 404 like the AI routes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutomationRunListDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "ai"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/ics-feeds": {
+      "post": {
+        "operationId": "IcsController_create",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIcsFeedDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Needs `backup` EDIT; 404 for a Space the server does not hold. The URL is returned only here.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IcsFeedCreatedDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "ics"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/ics-feeds/{fid}": {
+      "delete": {
+        "operationId": "IcsController_revoke",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Revoked (also when it already was). Needs `backup` EDIT."
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "ics"
+        ]
+      }
+    },
+    "/api/v1/ics/{file}": {
+      "get": {
+        "operationId": "IcsController_feed",
+        "parameters": [
+          {
+            "name": "file",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription feed, no cookie: `/api/v1/ics/<token>.ics`. Cache-Control private, max-age=900. Only NORMAL items with audience FAMILY_ALL / GROUP_MEMBERS, no health items, next 3 years (lunar repeats expanded)."
+          },
+          "404": {
+            "description": "Unknown or revoked link, Space no longer shared, or the creator left."
+          }
+        },
+        "tags": [
+          "ics"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/integrations": {
+      "get": {
+        "operationId": "IntegrationsController_status",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Needs `settings` VIEW; 404 for a Space the server does not hold.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntegrationsDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "integrations"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Lịch Gia Đình API",
+    "description": "",
+    "version": "1",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "cookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "fc_sid"
+      }
+    },
+    "schemas": {
+      "HealthDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok"
+            ]
+          },
+          "db": {
+            "type": "string",
+            "enum": [
+              "ok"
+            ]
+          }
+        },
+        "required": [
+          "status",
+          "db"
+        ]
+      },
+      "MetaChannelsDto": {
+        "type": "object",
+        "properties": {
+          "in_app": {
+            "type": "boolean"
+          },
+          "push": {
+            "type": "boolean",
+            "description": "False when the server has no VAPID keys."
+          },
+          "email": {
+            "type": "boolean"
+          },
+          "sms": {
+            "type": "boolean",
+            "description": "No SMS provider in v1."
+          }
+        },
+        "required": [
+          "in_app",
+          "push",
+          "email",
+          "sms"
+        ]
+      },
+      "MetaFeaturesDto": {
+        "type": "object",
+        "properties": {
+          "ai": {
+            "type": "boolean",
+            "description": "An AI provider key is configured on the server."
+          }
+        },
+        "required": [
+          "ai"
+        ]
+      },
+      "MetaDto": {
+        "type": "object",
+        "properties": {
+          "api_version": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "vapid_public_key": {
+            "type": "string",
+            "nullable": true
+          },
+          "channels": {
+            "$ref": "#/components/schemas/MetaChannelsDto"
+          },
+          "features": {
+            "$ref": "#/components/schemas/MetaFeaturesDto"
+          }
+        },
+        "required": [
+          "api_version",
+          "vapid_public_key",
+          "channels",
+          "features"
+        ]
+      },
+      "RegisterDeviceDto": {
+        "type": "object",
+        "properties": {
+          "actorId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Actor id generated by the client; stable across mode upgrades."
+          },
+          "deviceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "required": [
+          "actorId",
+          "deviceId"
+        ]
+      },
+      "RegisterDeviceResponseDto": {
+        "type": "object",
+        "properties": {
+          "actorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "deviceId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "actorId",
+          "deviceId"
+        ]
+      },
+      "DeviceDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "REVOKED"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "revokedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastSeenAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "current": {
+            "type": "boolean",
+            "description": "True for the device making this request."
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "status",
+          "createdAt",
+          "revokedAt",
+          "lastSeenAt",
+          "current"
+        ]
+      },
+      "DeviceListDto": {
+        "type": "object",
+        "properties": {
+          "devices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeviceDto"
+            }
+          }
+        },
+        "required": [
+          "devices"
+        ]
+      },
+      "SessionDto": {
+        "type": "object",
+        "properties": {
+          "actorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "deviceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "accountId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "csrfToken": {
+            "type": "string",
+            "description": "Echo in the X-CSRF-Token header on every write request."
+          }
+        },
+        "required": [
+          "actorId",
+          "deviceId",
+          "accountId",
+          "csrfToken"
+        ]
+      },
+      "RecoveryCodeDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "K7QM-2X9D-…",
+            "description": "24 symbols in 6 groups of 4; shown once."
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "RecoveryDeviceDto": {
+        "type": "object",
+        "properties": {
+          "actor_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "If given, must be the Actor of the code."
+          },
+          "device_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "required": [
+          "device_id"
+        ]
+      },
+      "RedeemRecoveryDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Case, spaces and dashes are ignored."
+          },
+          "device": {
+            "$ref": "#/components/schemas/RecoveryDeviceDto"
+          }
+        },
+        "required": [
+          "code",
+          "device"
+        ]
+      },
+      "RedeemRecoveryResponseDto": {
+        "type": "object",
+        "properties": {
+          "actor_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "device_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string",
+            "description": "Replacement code (the used one is dead); shown once."
+          }
+        },
+        "required": [
+          "actor_id",
+          "device_id",
+          "code"
+        ]
+      },
+      "MagicLinkRequestDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "MagicLinkAcceptedDto": {
+        "type": "object",
+        "properties": {
+          "accepted": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        },
+        "required": [
+          "accepted"
+        ]
+      },
+      "MagicLinkVerifyDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "MagicLinkVerifiedDto": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string"
+          },
+          "actor_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "account_id",
+          "email",
+          "actor_id"
+        ]
+      },
+      "AccountStatusDto": {
+        "type": "object",
+        "properties": {
+          "linked": {
+            "type": "boolean"
+          },
+          "email": {
+            "type": "string"
+          },
+          "account_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "linked"
+        ]
+      },
+      "PushKeysDto": {
+        "type": "object",
+        "properties": {
+          "p256dh": {
+            "type": "string",
+            "description": "base64url P-256 public key from PushSubscription.getKey(\"p256dh\")."
+          },
+          "auth": {
+            "type": "string",
+            "description": "base64url 16-byte auth secret."
+          }
+        },
+        "required": [
+          "p256dh",
+          "auth"
+        ]
+      },
+      "CreatePushSubscriptionDto": {
+        "type": "object",
+        "properties": {
+          "endpoint": {
+            "type": "string",
+            "description": "https URL of a push service (no IP literal, no localhost, default port)."
+          },
+          "keys": {
+            "$ref": "#/components/schemas/PushKeysDto"
+          },
+          "show_details": {
+            "type": "boolean",
+            "description": "Show NORMAL titles on this device lock screen. Default false on create, unchanged on update; never applies to SENSITIVE."
+          }
+        },
+        "required": [
+          "endpoint",
+          "keys"
+        ]
+      },
+      "PushSubscriptionCreatedDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "show_details": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "show_details"
+        ]
+      },
+      "PushSubscriptionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "device_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "current_device": {
+            "type": "boolean"
+          },
+          "show_details": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "device_id",
+          "current_device",
+          "show_details",
+          "created_at"
+        ]
+      },
+      "PushSubscriptionListDto": {
+        "type": "object",
+        "properties": {
+          "subscriptions": {
+            "description": "The caller own subscriptions; endpoints and keys are never returned.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PushSubscriptionDto"
+            }
+          }
+        },
+        "required": [
+          "subscriptions"
+        ]
+      },
+      "OperationDto": {
+        "type": "object",
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Client UUID; unchanged across retries."
+          },
+          "resource_type": {
+            "type": "string",
+            "enum": [
+              "space_settings",
+              "member",
+              "role",
+              "item",
+              "item_exception",
+              "occurrence_state",
+              "checklist_item",
+              "checklist_state",
+              "participation",
+              "reminder_rule",
+              "finance_account",
+              "finance_txn",
+              "finance_budget",
+              "finance_saving",
+              "finance_loan",
+              "finance_goal",
+              "health_profile",
+              "health_metric",
+              "health_note",
+              "folder",
+              "file",
+              "automation",
+              "template"
+            ]
+          },
+          "resource_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "create",
+              "update",
+              "delete",
+              "occurrence_action"
+            ]
+          },
+          "base_revision": {
+            "type": "string",
+            "nullable": true,
+            "description": "Server revision the edit started from; null on create."
+          },
+          "payload": {
+            "type": "object",
+            "additionalProperties": true,
+            "nullable": true,
+            "description": "Full record (camelCase, frontend schema) for create/update/occurrence_action; null for delete."
+          },
+          "client_created_at": {
+            "type": "string",
+            "description": "ISO instant of the user action; informational only."
+          },
+          "schema_version": {
+            "type": "number",
+            "enum": [
+              1
+            ]
+          }
+        },
+        "required": [
+          "operation_id",
+          "resource_type",
+          "resource_id",
+          "action",
+          "base_revision",
+          "payload",
+          "client_created_at",
+          "schema_version"
+        ]
+      },
+      "SyncOperationsRequestDto": {
+        "type": "object",
+        "properties": {
+          "operations": {
+            "maxItems": 50,
+            "description": "At most 50 operations and 512 KB per request.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OperationDto"
+            }
+          }
+        },
+        "required": [
+          "operations"
+        ]
+      },
+      "OperationErrorDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "fields": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "OperationResultDto": {
+        "type": "object",
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "APPLIED",
+              "REJECTED"
+            ]
+          },
+          "revision": {
+            "type": "string",
+            "description": "APPLIED: new server revision."
+          },
+          "record": {
+            "type": "object",
+            "additionalProperties": true,
+            "nullable": true,
+            "description": "APPLIED: canonical record as the caller may see it (null after delete or when no longer readable)."
+          },
+          "error": {
+            "$ref": "#/components/schemas/OperationErrorDto"
+          },
+          "current": {
+            "type": "object",
+            "additionalProperties": true,
+            "nullable": true,
+            "description": "REVISION_CONFLICT / FORBIDDEN: current server record if the caller may read it, else null."
+          }
+        },
+        "required": [
+          "operation_id",
+          "status"
+        ]
+      },
+      "SyncOperationsResponseDto": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OperationResultDto"
+            }
+          },
+          "policy_version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "results",
+          "policy_version"
+        ]
+      },
+      "ChangeDto": {
+        "type": "object",
+        "properties": {
+          "seq": {
+            "type": "string",
+            "description": "change_seq of the entry, as a string."
+          },
+          "resource_type": {
+            "type": "string",
+            "enum": [
+              "space_settings",
+              "member",
+              "role",
+              "item",
+              "item_exception",
+              "occurrence_state",
+              "checklist_item",
+              "checklist_state",
+              "participation",
+              "reminder_rule",
+              "finance_account",
+              "finance_txn",
+              "finance_budget",
+              "finance_saving",
+              "finance_loan",
+              "finance_goal",
+              "health_profile",
+              "health_metric",
+              "health_note",
+              "folder",
+              "file",
+              "automation",
+              "template"
+            ]
+          },
+          "resource_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "op": {
+            "type": "string",
+            "enum": [
+              "UPSERT",
+              "DELETE"
+            ]
+          },
+          "revision": {
+            "type": "string",
+            "description": "UPSERT: revision of `record`; DELETE: revision of the delete."
+          },
+          "record": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "UPSERT only: current record (camelCase, frontend schema) as the caller may see it."
+          }
+        },
+        "required": [
+          "seq",
+          "resource_type",
+          "resource_id",
+          "op",
+          "revision"
+        ]
+      },
+      "ChangesResponseDto": {
+        "type": "object",
+        "properties": {
+          "changes": {
+            "description": "Only entries the caller may read now, latest per record.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChangeDto"
+            }
+          },
+          "next_cursor": {
+            "type": "string",
+            "description": "Pass as `cursor` next time; advances past hidden entries too."
+          },
+          "has_more": {
+            "type": "boolean"
+          },
+          "policy_version": {
+            "type": "string",
+            "description": "Differs from the cached value: reload the snapshot and drop records missing from it."
+          }
+        },
+        "required": [
+          "changes",
+          "next_cursor",
+          "has_more",
+          "policy_version"
+        ]
+      },
+      "MembershipDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "actorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roleId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "id",
+          "actorId",
+          "roleId"
+        ]
+      },
+      "SnapshotAccessDto": {
+        "type": "object",
+        "properties": {
+          "actorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roleKey": {
+            "type": "string"
+          },
+          "matrix": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "enum": [
+                "NONE",
+                "VIEW",
+                "EDIT"
+              ]
+            }
+          },
+          "restrictions": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "representedMemberIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "guardianOfMemberIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "actorId",
+          "roleKey",
+          "matrix",
+          "restrictions",
+          "representedMemberIds",
+          "guardianOfMemberIds"
+        ]
+      },
+      "SnapshotResponseDto": {
+        "type": "object",
+        "properties": {
+          "watermark": {
+            "type": "string",
+            "description": "change_seq the snapshot reflects; pull changes from here."
+          },
+          "policy_version": {
+            "type": "string"
+          },
+          "space": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "The space_settings record."
+          },
+          "records": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "description": "Every live record the caller may read, keyed by resource type (space_settings excluded)."
+          },
+          "memberships": {
+            "description": "ACTIVE memberships of the Space.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MembershipDto"
+            }
+          },
+          "access": {
+            "$ref": "#/components/schemas/SnapshotAccessDto"
+          }
+        },
+        "required": [
+          "watermark",
+          "policy_version",
+          "space",
+          "records",
+          "memberships",
+          "access"
+        ]
+      },
+      "SpaceSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "FAMILY",
+              "GROUP"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "timeZone": {
+            "type": "string"
+          },
+          "sharingState": {
+            "type": "string",
+            "enum": [
+              "INITIALIZING",
+              "SHARED"
+            ]
+          },
+          "roleKey": {
+            "type": "string"
+          },
+          "policyVersion": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "timeZone",
+          "sharingState",
+          "roleKey",
+          "policyVersion"
+        ]
+      },
+      "SpaceListDto": {
+        "type": "object",
+        "properties": {
+          "spaces": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SpaceSummaryDto"
+            }
+          }
+        },
+        "required": [
+          "spaces"
+        ]
+      },
+      "BootstrapSpaceInputDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The local Space id; kept as the server id."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "FAMILY",
+              "GROUP"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "time_zone": {
+            "type": "string",
+            "example": "Asia/Ho_Chi_Minh"
+          },
+          "settings": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "SpaceSettings (camelCase, frontend schema)."
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "time_zone",
+          "settings"
+        ]
+      },
+      "BootstrapSpaceDto": {
+        "type": "object",
+        "properties": {
+          "space": {
+            "$ref": "#/components/schemas/BootstrapSpaceInputDto"
+          }
+        },
+        "required": [
+          "space"
+        ]
+      },
+      "BootstrapSpaceResponseDto": {
+        "type": "object",
+        "properties": {
+          "space_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "INITIALIZING",
+              "SHARED"
+            ]
+          }
+        },
+        "required": [
+          "space_id",
+          "state"
+        ]
+      },
+      "BootstrapRecordDto": {
+        "type": "object",
+        "properties": {
+          "resource_type": {
+            "type": "string",
+            "enum": [
+              "member",
+              "role",
+              "item",
+              "item_exception",
+              "occurrence_state",
+              "checklist_item",
+              "checklist_state",
+              "participation",
+              "reminder_rule",
+              "finance_account",
+              "finance_txn",
+              "finance_budget",
+              "finance_saving",
+              "finance_loan",
+              "finance_goal",
+              "health_profile",
+              "health_metric",
+              "health_note",
+              "folder",
+              "file",
+              "automation",
+              "template"
+            ]
+          },
+          "resource_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "payload": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Same payload as a sync create."
+          }
+        },
+        "required": [
+          "resource_type",
+          "resource_id",
+          "payload"
+        ]
+      },
+      "BootstrapChunkDto": {
+        "type": "object",
+        "properties": {
+          "chunk_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Client UUID; resending the same chunk is a no-op."
+          },
+          "records": {
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BootstrapRecordDto"
+            }
+          }
+        },
+        "required": [
+          "chunk_id",
+          "records"
+        ]
+      },
+      "BootstrapChunkResponseDto": {
+        "type": "object",
+        "properties": {
+          "accepted": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "accepted"
+        ]
+      },
+      "ActivateSpaceDto": {
+        "type": "object",
+        "properties": {
+          "expected_counts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "description": "Records uploaded per resource type (system roles excluded); omitted types count as 0."
+          },
+          "self_member_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The uploaded Member that is the creator (SELF link)."
+          }
+        },
+        "required": [
+          "expected_counts"
+        ]
+      },
+      "ActivateSpaceResponseDto": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "SHARED"
+            ]
+          },
+          "watermark": {
+            "type": "string",
+            "description": "change_seq after activation; equals the snapshot watermark."
+          }
+        },
+        "required": [
+          "state",
+          "watermark"
+        ]
+      },
+      "CreateInviteDto": {
+        "type": "object",
+        "properties": {
+          "max_uses": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "expires_in_hours": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 168
+          },
+          "approval_policy": {
+            "type": "string",
+            "enum": [
+              "APPROVAL_REQUIRED"
+            ]
+          },
+          "proposed_role": {
+            "type": "string",
+            "description": "Role key suggested to the approver (not OWNER/ORGANIZER)."
+          },
+          "email": {
+            "type": "string",
+            "description": "Addressee; the invite then shows in their GET /me/invitations."
+          }
+        },
+        "required": [
+          "max_uses",
+          "expires_in_hours",
+          "approval_policy"
+        ]
+      },
+      "CreateInviteResponseDto": {
+        "type": "object",
+        "properties": {
+          "invite_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "token": {
+            "type": "string",
+            "description": "Shown once; only its hash is stored."
+          },
+          "url": {
+            "type": "string",
+            "example": "/tham-gia/?token=…"
+          },
+          "expires_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "invite_id",
+          "token",
+          "url",
+          "expires_at"
+        ]
+      },
+      "InviteSummaryDto": {
+        "type": "object",
+        "properties": {
+          "invite_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "EXPIRED",
+              "USED_UP",
+              "REVOKED"
+            ]
+          },
+          "max_uses": {
+            "type": "number"
+          },
+          "uses": {
+            "type": "number"
+          },
+          "expires_at": {
+            "type": "string"
+          },
+          "proposed_role": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "invite_id",
+          "status",
+          "max_uses",
+          "uses",
+          "expires_at",
+          "proposed_role",
+          "email",
+          "created_at"
+        ]
+      },
+      "InviteListDto": {
+        "type": "object",
+        "properties": {
+          "invites": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InviteSummaryDto"
+            }
+          }
+        },
+        "required": [
+          "invites"
+        ]
+      },
+      "InvitePreviewDto": {
+        "type": "object",
+        "properties": {
+          "space_name": {
+            "type": "string"
+          },
+          "space_kind": {
+            "type": "string",
+            "enum": [
+              "FAMILY",
+              "GROUP"
+            ]
+          },
+          "inviter_display_name": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "space_name",
+          "space_kind",
+          "inviter_display_name",
+          "expires_at"
+        ]
+      },
+      "CreateJoinRequestDto": {
+        "type": "object",
+        "properties": {
+          "display_name": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "proposed_profile": {
+            "type": "string",
+            "enum": [
+              "PARENT",
+              "SENIOR",
+              "CHILD"
+            ]
+          },
+          "member_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Existing Member the requester says they are."
+          }
+        },
+        "required": [
+          "display_name"
+        ]
+      },
+      "JoinRequestCreatedDto": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "PENDING_GUARDIAN",
+              "APPROVED",
+              "REJECTED",
+              "EXPIRED"
+            ]
+          }
+        },
+        "required": [
+          "request_id",
+          "status"
+        ]
+      },
+      "JoinRequestStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "PENDING_GUARDIAN",
+              "APPROVED",
+              "REJECTED",
+              "EXPIRED"
+            ]
+          },
+          "space_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Only once APPROVED."
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "JoinRequestDecisionDto": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "APPROVED",
+              "REJECTED"
+            ]
+          },
+          "member_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "request_id",
+          "status"
+        ]
+      },
+      "GuardianRequestDto": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "space_name": {
+            "type": "string"
+          },
+          "space_kind": {
+            "type": "string",
+            "enum": [
+              "FAMILY",
+              "GROUP"
+            ]
+          },
+          "created_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "display_name",
+          "space_name",
+          "space_kind",
+          "created_at"
+        ]
+      },
+      "GuardianRequestListDto": {
+        "type": "object",
+        "properties": {
+          "requests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GuardianRequestDto"
+            }
+          }
+        },
+        "required": [
+          "requests"
+        ]
+      },
+      "JoinRequestSummaryDto": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "invite_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "proposed_profile": {
+            "type": "string",
+            "nullable": true
+          },
+          "member_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "proposed_role": {
+            "type": "string",
+            "nullable": true
+          },
+          "device_label": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "PENDING_GUARDIAN",
+              "APPROVED",
+              "REJECTED",
+              "EXPIRED"
+            ]
+          },
+          "created_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "invite_id",
+          "display_name",
+          "proposed_profile",
+          "member_id",
+          "proposed_role",
+          "device_label",
+          "status",
+          "created_at"
+        ]
+      },
+      "JoinRequestListDto": {
+        "type": "object",
+        "properties": {
+          "requests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JoinRequestSummaryDto"
+            }
+          }
+        },
+        "required": [
+          "requests"
+        ]
+      },
+      "NewMemberDto": {
+        "type": "object",
+        "properties": {
+          "display_name": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "relationship": {
+            "type": "string",
+            "enum": [
+              "FATHER",
+              "MOTHER",
+              "SON",
+              "DAUGHTER",
+              "GRANDFATHER",
+              "GRANDMOTHER",
+              "GUARDIAN",
+              "OTHER"
+            ]
+          },
+          "profile": {
+            "type": "string",
+            "enum": [
+              "PARENT",
+              "SENIOR",
+              "CHILD"
+            ]
+          }
+        },
+        "required": [
+          "display_name",
+          "relationship",
+          "profile"
+        ]
+      },
+      "ApproveJoinRequestDto": {
+        "type": "object",
+        "properties": {
+          "role_key": {
+            "type": "string"
+          },
+          "member_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Link to this existing Member (exclusive with new_member)."
+          },
+          "new_member": {
+            "description": "Create a Member for the requester (exclusive with member_id).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NewMemberDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "role_key"
+        ]
+      },
+      "MyInvitationDto": {
+        "type": "object",
+        "properties": {
+          "invite_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "space_name": {
+            "type": "string"
+          },
+          "space_kind": {
+            "type": "string",
+            "enum": [
+              "FAMILY",
+              "GROUP"
+            ]
+          },
+          "inviter_display_name": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "invite_id",
+          "space_name",
+          "space_kind",
+          "inviter_display_name",
+          "expires_at"
+        ]
+      },
+      "MyInvitationListDto": {
+        "type": "object",
+        "properties": {
+          "invitations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MyInvitationDto"
+            }
+          }
+        },
+        "required": [
+          "invitations"
+        ]
+      },
+      "InvitationDeclinedDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "DECLINED"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "BlobStoredDto": {
+        "type": "object",
+        "properties": {
+          "blob_state": {
+            "type": "string",
+            "enum": [
+              "SYNCED"
+            ]
+          }
+        },
+        "required": [
+          "blob_state"
+        ]
+      },
+      "NotificationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "space_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "REMINDER_DUE",
+              "INVITE",
+              "JOIN_REQUEST",
+              "SOS",
+              "SYNC_CONFLICT",
+              "BUDGET_ALERT",
+              "AUTOMATION",
+              "SYSTEM"
+            ]
+          },
+          "resource_ref": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": true,
+            "description": "References only (e.g. item_id, occurrence_key); open the record to read it."
+          },
+          "title_safe": {
+            "type": "string",
+            "description": "Already privacy-filtered: generic text for PRIVATE/SENSITIVE records."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "read_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "space_id",
+          "type",
+          "resource_ref",
+          "title_safe",
+          "created_at",
+          "read_at"
+        ]
+      },
+      "NotificationListDto": {
+        "type": "object",
+        "properties": {
+          "notifications": {
+            "description": "Newest first.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NotificationDto"
+            }
+          },
+          "next_cursor": {
+            "type": "string",
+            "nullable": true
+          },
+          "unread_count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "notifications",
+          "next_cursor",
+          "unread_count"
+        ]
+      },
+      "MarkNotificationsReadDto": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "maxItems": 200,
+            "description": "Exactly one of ids / all.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "all": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        }
+      },
+      "UnreadCountDto": {
+        "type": "object",
+        "properties": {
+          "unread_count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "unread_count"
+        ]
+      },
+      "CreateEmergencyDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Client-generated; the idempotency key of this SOS."
+          },
+          "client_triggered_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the user triggered it on the device (not trusted for access)."
+          },
+          "lifecycle": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "CLOSED_SAFE",
+              "CLOSED_ENDED"
+            ],
+            "description": "Latest local state; a terminal state here stores the event without alerting anyone."
+          },
+          "closed_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "operation_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "id",
+          "client_triggered_at",
+          "lifecycle",
+          "operation_id"
+        ]
+      },
+      "EmergencyAcceptedDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "lifecycle": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "CLOSED_SAFE",
+              "CLOSED_ENDED"
+            ]
+          },
+          "client_triggered_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "server_received_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "closed_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "revision": {
+            "type": "string",
+            "description": "Decimal string."
+          },
+          "delivery": {
+            "type": "string",
+            "enum": [
+              "SERVER_ACCEPTED"
+            ],
+            "description": "Stored on the server; says nothing about anyone seeing it."
+          }
+        },
+        "required": [
+          "id",
+          "lifecycle",
+          "client_triggered_at",
+          "server_received_at",
+          "closed_at",
+          "revision",
+          "delivery"
+        ]
+      },
+      "EmergencyRecipientStateDto": {
+        "type": "object",
+        "properties": {
+          "member_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "response": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "ACKNOWLEDGED",
+              "RESPONDING"
+            ]
+          },
+          "responded_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "required": [
+          "member_id",
+          "response",
+          "responded_at"
+        ]
+      },
+      "EmergencyLocationViewDto": {
+        "type": "object",
+        "properties": {
+          "lat": {
+            "type": "number"
+          },
+          "lng": {
+            "type": "number"
+          },
+          "accuracy": {
+            "type": "number"
+          },
+          "captured_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "provenance": {
+            "type": "string",
+            "enum": [
+              "CURRENT",
+              "LAST_KNOWN"
+            ]
+          }
+        },
+        "required": [
+          "lat",
+          "lng",
+          "accuracy",
+          "captured_at",
+          "received_at",
+          "provenance"
+        ]
+      },
+      "EmergencyViewDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "lifecycle": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "CLOSED_SAFE",
+              "CLOSED_ENDED"
+            ]
+          },
+          "client_triggered_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "server_received_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "closed_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "revision": {
+            "type": "string",
+            "description": "Decimal string."
+          },
+          "delivery": {
+            "type": "string",
+            "enum": [
+              "SERVER_ACCEPTED"
+            ],
+            "description": "Stored on the server; says nothing about anyone seeing it."
+          },
+          "created_by_actor_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "created_by_member_id": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "SELF Member of the creator, if any."
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "recipients": {
+            "description": "Current recipients only.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmergencyRecipientStateDto"
+            }
+          },
+          "push_submitted": {
+            "type": "number",
+            "description": "Push requests accepted by a push service; not proof that anyone saw them."
+          },
+          "last_location": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EmergencyLocationViewDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "lifecycle",
+          "client_triggered_at",
+          "server_received_at",
+          "closed_at",
+          "revision",
+          "delivery",
+          "created_by_actor_id",
+          "created_by_member_id",
+          "reason",
+          "recipients",
+          "push_submitted",
+          "last_location"
+        ]
+      },
+      "EmergencyListDto": {
+        "type": "object",
+        "properties": {
+          "emergencies": {
+            "description": "ACTIVE ones plus those closed in the last 24 hours.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmergencyViewDto"
+            }
+          }
+        },
+        "required": [
+          "emergencies"
+        ]
+      },
+      "EmergencyResponseDto": {
+        "type": "object",
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "ACKNOWLEDGED",
+              "RESPONDING"
+            ]
+          }
+        },
+        "required": [
+          "operation_id",
+          "kind"
+        ]
+      },
+      "CloseEmergencyDto": {
+        "type": "object",
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "lifecycle": {
+            "type": "string",
+            "enum": [
+              "CLOSED_SAFE",
+              "CLOSED_ENDED"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "closed_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Local close time when it was closed offline."
+          }
+        },
+        "required": [
+          "operation_id",
+          "lifecycle"
+        ]
+      },
+      "EmergencyLocationDto": {
+        "type": "object",
+        "properties": {
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "lng": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "accuracy": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100000,
+            "description": "Metres."
+          },
+          "captured_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of the position itself, not of the callback."
+          },
+          "provenance": {
+            "type": "string",
+            "enum": [
+              "CURRENT",
+              "LAST_KNOWN"
+            ]
+          }
+        },
+        "required": [
+          "lat",
+          "lng",
+          "accuracy",
+          "captured_at",
+          "provenance"
+        ]
+      },
+      "LocationAcceptedDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "received_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "received_at"
+        ]
+      },
+      "EmergencyRecipientsViewDto": {
+        "type": "object",
+        "properties": {
+          "member_ids": {
+            "description": "Effective recipients (configured, or the default when not configured).",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "configured": {
+            "type": "boolean",
+            "description": "False: nobody configured a list; the default (other OWNER/ADULT members) applies."
+          }
+        },
+        "required": [
+          "member_ids",
+          "configured"
+        ]
+      },
+      "EmergencyRecipientsDto": {
+        "type": "object",
+        "properties": {
+          "member_ids": {
+            "description": "Member ids of this Family; empty = default recipients.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "member_ids"
+        ]
+      },
+      "AiConsentDto": {
+        "type": "object",
+        "properties": {
+          "accepted": {
+            "type": "boolean"
+          },
+          "allow_health": {
+            "type": "boolean"
+          },
+          "accepted_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "description": "Consent text version the user agreed to."
+          }
+        },
+        "required": [
+          "accepted",
+          "allow_health",
+          "accepted_at",
+          "version"
+        ]
+      },
+      "AiStatusDto": {
+        "type": "object",
+        "properties": {
+          "configured": {
+            "type": "boolean",
+            "description": "False: no provider is configured on the server (\"Chưa cấu hình trợ lý\")."
+          },
+          "consent": {
+            "nullable": true,
+            "description": "The caller's consent in this Space, if any.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AiConsentDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "configured",
+          "consent"
+        ]
+      },
+      "AiConsentRequestDto": {
+        "type": "object",
+        "properties": {
+          "accepted": {
+            "type": "boolean",
+            "description": "true agrees (or updates the health choice); false withdraws the consent."
+          },
+          "allow_health": {
+            "type": "boolean",
+            "description": "Include health/SENSITIVE items in what is sent to the assistant. Default off."
+          }
+        },
+        "required": [
+          "accepted",
+          "allow_health"
+        ]
+      },
+      "AiMessageRequestDto": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Omit to start a new conversation (the server picks the id)."
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "AiDraftDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "ITEM",
+              "TIMETABLE",
+              "SUMMARY"
+            ],
+            "description": "ITEM: kind, preset, title, date (YYYY-MM-DD), time/end_time (HH:mm or null = no time chosen), all_day, category, member_id (resolved from member_name, or null), member_name, note. TIMETABLE: member_id, member_name, entries[{weekday 1=Mon…7=Sun, start, end, subject, room}]. SUMMARY: from, to, summary. Drafts are never saved by the server."
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "AiMessageResponseDto": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reply": {
+            "type": "string"
+          },
+          "drafts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AiDraftDto"
+            }
+          }
+        },
+        "required": [
+          "conversation_id",
+          "reply",
+          "drafts"
+        ]
+      },
+      "AiConversationSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "preview": {
+            "type": "string",
+            "description": "Start of the first question (≤ 80 characters); only its author can list it."
+          },
+          "message_count": {
+            "type": "number"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "preview",
+          "message_count",
+          "created_at",
+          "updated_at"
+        ]
+      },
+      "AiConversationListDto": {
+        "type": "object",
+        "properties": {
+          "conversations": {
+            "description": "Newest first, at most 50.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AiConversationSummaryDto"
+            }
+          }
+        },
+        "required": [
+          "conversations"
+        ]
+      },
+      "AiConversationMessageDto": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "assistant"
+            ]
+          },
+          "text": {
+            "type": "string"
+          },
+          "drafts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AiDraftDto"
+            }
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "role",
+          "text",
+          "drafts",
+          "created_at"
+        ]
+      },
+      "AiConversationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AiConversationMessageDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "messages"
+        ]
+      },
+      "AutomationRunDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "automation_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rule_key": {
+            "type": "string",
+            "enum": [
+              "PAYMENT_DUE_REMINDER",
+              "WEEKLY_SUMMARY",
+              "EXAM_REVIEW_TASK"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DONE",
+              "FAILED"
+            ]
+          },
+          "result_count": {
+            "type": "number",
+            "description": "Notifications sent or tasks created by this run."
+          },
+          "ran_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "automation_id",
+          "rule_key",
+          "status",
+          "result_count",
+          "ran_at"
+        ]
+      },
+      "AutomationRunListDto": {
+        "type": "object",
+        "properties": {
+          "runs": {
+            "description": "Newest first, at most 50.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AutomationRunDto"
+            }
+          }
+        },
+        "required": [
+          "runs"
+        ]
+      },
+      "CreateIcsFeedDto": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "Where the link is used, e.g. \"Google Calendar của bố\"."
+          },
+          "include_child_names": {
+            "type": "boolean",
+            "description": "Show names of CHILD members in event descriptions. Default false."
+          }
+        }
+      },
+      "IcsFeedCreatedDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "include_child_names": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_used_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Last time a calendar fetched it."
+          },
+          "url": {
+            "type": "string",
+            "description": "Subscription URL with the secret token. Shown only now: the server keeps just a hash of it."
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "include_child_names",
+          "created_at",
+          "last_used_at",
+          "url"
+        ]
+      },
+      "IntegrationStatusDto": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "GOOGLE_CALENDAR",
+              "GOOGLE_DRIVE",
+              "ZALO",
+              "GMAIL",
+              "SMS",
+              "OPEN_API"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "NOT_CONFIGURED",
+              "AVAILABLE",
+              "CONNECTED",
+              "ERROR"
+            ],
+            "description": "V1: OPEN_API is AVAILABLE through the ICS link; every other provider is NOT_CONFIGURED."
+          },
+          "can_connect": {
+            "type": "boolean",
+            "description": "False in V1: there is no connect flow yet."
+          },
+          "message": {
+            "type": "string",
+            "description": "Vietnamese explanation shown on the card."
+          }
+        },
+        "required": [
+          "provider",
+          "status",
+          "can_connect",
+          "message"
+        ]
+      },
+      "IcsFeedDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "include_child_names": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_used_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Last time a calendar fetched it."
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "include_child_names",
+          "created_at",
+          "last_used_at"
+        ]
+      },
+      "IntegrationsDto": {
+        "type": "object",
+        "properties": {
+          "integrations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IntegrationStatusDto"
+            }
+          },
+          "can_manage_ics": {
+            "type": "boolean",
+            "description": "Caller has `backup` EDIT: may create and revoke ICS links."
+          },
+          "ics_feeds": {
+            "description": "Active ICS links (empty unless can_manage_ics).",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IcsFeedDto"
+            }
+          }
+        },
+        "required": [
+          "integrations",
+          "can_manage_ics",
+          "ics_feeds"
+        ]
+      }
+    }
+  }
+}

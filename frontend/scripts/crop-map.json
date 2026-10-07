@@ -1,0 +1,243 @@
+{
+  "sources": {
+    "A": "2aOboR3bf9BCIcDcRKpGQg7ref0GaQLfQvhRDtSq.jpg",
+    "B": "2aOboR3bjC26sXqf1m50HnWhsji9xjO7EmI0sqLA.jpg",
+    "C": "2aOboR3bm4lBV1lityTlQUiYkCqJvfURoAWWy8DQ.jpg",
+    "D": "2aOboR3bhbUhCMel212oRNFVdUCQgfmaghrjEvZY.jpg",
+    "E": "2aOboR3biMUN24g5F0nEa0qeIiKX0LIUgqtfNnPs.jpg",
+    "F": "2aOboR3bkkda4yZhHl9CZp203OFrONTPMlYhlDTE.jpg"
+  },
+  "assets": {
+    "logo": {
+      "src": "A",
+      "rect": [
+        30,
+        8,
+        330,
+        92
+      ]
+    },
+    "logo-mark": {
+      "src": "A",
+      "rect": [
+        32,
+        10,
+        112,
+        110
+      ],
+      "round": true
+    },
+    "hero-today": {
+      "src": "A",
+      "rect": [
+        705,
+        90,
+        528,
+        232
+      ],
+      "erase": [
+        [
+          503,
+          28,
+          25,
+          50,
+          "#f4f7ff"
+        ]
+      ]
+    },
+    "corner-calendar": {
+      "src": "D",
+      "rect": [
+        714,
+        70,
+        86,
+        78
+      ]
+    },
+    "corner-settings": {
+      "src": "C",
+      "rect": [
+        620,
+        56,
+        103,
+        80
+      ]
+    },
+    "corner-add-member": {
+      "src": "C",
+      "rect": [
+        628,
+        615,
+        120,
+        88
+      ]
+    },
+    "corner-ai": {
+      "src": "C",
+      "rect": [
+        1442,
+        642,
+        81,
+        68
+      ]
+    },
+    "corner-groups": {
+      "src": "E",
+      "rect": [
+        664,
+        92,
+        109,
+        94
+      ]
+    },
+    "corner-reports": {
+      "src": "E",
+      "rect": [
+        1468,
+        112,
+        42,
+        36
+      ]
+    },
+    "corner-finance": {
+      "src": "F",
+      "rect": [
+        570,
+        64,
+        76,
+        89
+      ]
+    },
+    "corner-health": {
+      "src": "F",
+      "rect": [
+        1148,
+        72,
+        100,
+        57
+      ]
+    },
+    "corner-timetable": {
+      "src": "F",
+      "rect": [
+        537,
+        692,
+        106,
+        60
+      ]
+    },
+    "corner-storage": {
+      "src": "F",
+      "rect": [
+        1193,
+        688,
+        112,
+        64
+      ]
+    },
+    "corner-reminder-modal": {
+      "src": "B",
+      "rect": [
+        612,
+        184,
+        135,
+        101
+      ]
+    },
+    "corner-add": {
+      "src": "B",
+      "rect": [
+        1352,
+        112,
+        133,
+        138
+      ]
+    },
+    "footer-tasks": {
+      "src": "D",
+      "rect": [
+        985,
+        470,
+        240,
+        85
+      ]
+    },
+    "footer-members": {
+      "src": "D",
+      "rect": [
+        1135,
+        868,
+        220,
+        152
+      ]
+    },
+    "avatar-father": {
+      "src": "D",
+      "rect": [
+        1013,
+        692,
+        54,
+        54
+      ],
+      "round": true
+    },
+    "avatar-mother": {
+      "src": "D",
+      "rect": [
+        1140,
+        692,
+        56,
+        54
+      ],
+      "round": true
+    },
+    "avatar-boy": {
+      "src": "D",
+      "rect": [
+        1274,
+        692,
+        56,
+        54
+      ],
+      "round": true
+    },
+    "avatar-girl": {
+      "src": "D",
+      "rect": [
+        1418,
+        692,
+        56,
+        54
+      ],
+      "round": true
+    },
+    "avatar-grandparent": {
+      "src": "C",
+      "rect": [
+        307,
+        792,
+        32,
+        32
+      ],
+      "round": true
+    },
+    "avatar-guardian": {
+      "src": "C",
+      "rect": [
+        388,
+        792,
+        32,
+        32
+      ],
+      "round": true
+    }
+  },
+  "aliases": {
+    "corner-tasks": "footer-tasks",
+    "corner-reminders": "corner-reminder-modal",
+    "corner-members": "footer-members",
+    "corner-permissions": "corner-settings",
+    "avatar-grandfather": "avatar-grandparent",
+    "avatar-grandmother": "avatar-grandparent"
+  }
+}

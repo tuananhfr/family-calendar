@@ -1,0 +1,46 @@
+export const onboardingVi = {
+  stepOf: "Bước {n}/3",
+  steps: ["Nhà mình có ai?", "Bắt đầu với gì?", "Dùng trên máy này"],
+  back: "Quay lại",
+  restore: {
+    open: "Khôi phục từ bản sao lưu",
+    title: "Khôi phục gia đình",
+  },
+  next: "Tiếp tục",
+  familyName: "Tên gia đình",
+  familyNameDefault: "Nhà mình",
+  members: {
+    title: "Nhà mình có ai?",
+    body: "Chọn những người trong nhà. Chỉ cần tên gọi, thông tin khác bổ sung sau.",
+    addLabel: "Bấm để thêm người",
+    nameLabel: "Tên gọi của {role}",
+    remove: "Bỏ {name}",
+    empty: "Chọn ít nhất một người ở trên.",
+    needName: "Hãy nhập tên cho từng người.",
+  },
+  start: {
+    title: "Bắt đầu với gì?",
+    body: "Chọn việc nhà mình muốn sắp xếp trước. Đổi lúc nào cũng được.",
+    options: {
+      CALENDAR: { label: "Lịch gia đình", body: "Hẹn, họp, đưa đón" },
+      TASKS: { label: "Việc cần làm", body: "Việc nhà, mua sắm" },
+      REMINDERS: { label: "Nhắc nhở", body: "Thuốc, giấy tờ, thanh toán" },
+      TIMETABLE: { label: "Thời khóa biểu", body: "Lịch học, ngoại khóa" },
+      SPECIAL_DAYS: { label: "Ngày đặc biệt", body: "Sinh nhật, ngày giỗ" },
+    },
+  },
+  device: {
+    title: "Dùng trên máy này",
+    body: "Mọi thứ được lưu ngay trên trình duyệt này. Không cần tài khoản, không gửi dữ liệu đi đâu.",
+    points: [
+      "Dữ liệu nằm trên máy này, kể cả khi mất mạng.",
+      "Muốn dùng chung với người nhà, bật Chia sẻ gia đình trong Cài đặt bất cứ lúc nào.",
+      "Nên sao lưu định kỳ trong Cài đặt › Dữ liệu & Sao lưu.",
+    ],
+    whoLabel: "Máy này chủ yếu ai dùng?",
+    whoLater: "Để sau",
+    finish: "Dùng trên máy này",
+    creating: "Đang tạo…",
+    error: "Chưa tạo được gia đình. Dữ liệu chưa bị ghi dở, hãy thử lại.",
+  },
+} as const;

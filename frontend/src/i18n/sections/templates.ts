@@ -1,0 +1,15 @@
+export const templatesVi = {
+  title: "Mẫu kế hoạch",
+  subtitle: "Chọn một mẫu: tiêu đề, việc cần chuẩn bị và lời nhắc được điền sẵn, bạn chỉ chỉnh ngày giờ.",
+  use: "Dùng mẫu",
+  useLabel: "Dùng mẫu “{title}”",
+  allDay: "Cả ngày",
+  duration: { minutes: "{m} phút", hours: "{h} giờ", hoursMinutes: "{h} giờ {m} phút" },
+  reminders: "Nhắc",
+  noReminder: "Không nhắc",
+  checklist: "Cần chuẩn bị",
+  checklistMore: "+{n} mục",
+  private: "Chỉ mình bạn xem",
+  note: "Mẫu không tự lưu gì: chỉ khi bạn bấm Lưu, mục mới được thêm vào lịch.",
+  listLabel: "Danh sách mẫu kế hoạch",
+};

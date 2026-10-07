@@ -1,0 +1,79 @@
+@import "tailwindcss";
+@import "../design/tokens.css";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme inline {
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+  --font-script: var(--font-script), cursive;
+
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-soft: var(--color-primary-soft);
+  --color-primary-strong: var(--color-primary-strong);
+  --color-on-primary: var(--color-on-primary);
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-surface-2: var(--color-surface-2);
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+  --color-text: var(--color-text);
+  --color-body: var(--color-text-body);
+  --color-muted: var(--color-text-muted);
+  --color-script: var(--color-accent-script);
+  --color-success: var(--color-success);
+  --color-success-soft: var(--color-success-soft);
+  --color-warning: var(--color-warning);
+  --color-warning-soft: var(--color-warning-soft);
+  --color-danger: var(--color-danger);
+  --color-danger-soft: var(--color-danger-soft);
+  --color-info-soft: var(--color-info-soft);
+  --color-focus: var(--color-focus);
+  --color-disabled: var(--color-disabled-bg);
+  --color-disabled-text: var(--color-disabled-text);
+
+  --radius-card: var(--radius-card);
+  --radius-control: var(--radius-control);
+  --radius-chip: var(--radius-chip);
+  --shadow-card: var(--shadow-md);
+  --shadow-pop: var(--shadow-lg);
+
+  /* Scale multiplies by --text-scale so Senior mode enlarges every size at once. */
+  --text-xs: calc(0.75rem * var(--text-scale));
+  --text-sm: calc(0.875rem * var(--text-scale));
+  --text-base: calc(1rem * var(--text-scale));
+  --text-lg: calc(1.25rem * var(--text-scale));
+  --text-xl: calc(1.75rem * var(--text-scale));
+  --text-2xl: calc(2rem * var(--text-scale));
+}
+
+@layer base {
+  html {
+    /* Keeps focused fields (validation jumps, Tab) clear of the sticky 64/72px header. */
+    scroll-padding-top: 5.5rem;
+    background: var(--color-bg);
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-text-body);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-size: var(--text-base);
+    line-height: 1.5;
+  }
+  h1, h2, h3, h4 {
+    color: var(--color-text);
+    line-height: 1.25;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

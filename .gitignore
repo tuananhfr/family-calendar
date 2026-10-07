@@ -1,0 +1,27 @@
+node_modules/
+dist/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+.env
+.env.local
+.env.e2e
+.env.*.local
+backend/var/
+e2e/test-results/
+e2e/playwright-report/
+e2e/.auth/
+qa-output/
+.DS_Store
+Thumbs.db
+
+# Specs, mockups, plans and QA notes stay local; the repository carries code only.
+docs/
+# End-to-end tests run locally only.
+e2e/
+CLAUDE.md
+AGENTS.md
+*.zip
+.playwright-mcp/
+test-results/
