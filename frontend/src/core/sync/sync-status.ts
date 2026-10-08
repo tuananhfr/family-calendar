@@ -1,3 +1,4 @@
+import { readMediaStatus } from "./media-status";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useSyncExternalStore } from "react";
 import { db, type SyncCursorRow } from "../db/db";
@@ -17,6 +18,7 @@ export interface SyncStatusInput {
   ops: Array<Pick<OutboxOp, "state">>;
   halt?: SyncCursorRow["halt"];
   syncing: boolean;
+  mediaPending?: number;
   /** Last request reached the server; `navigator.onLine` alone is no proof of that. */
   reachable: boolean;
   lastSyncedAt?: string;
@@ -27,7 +29,7 @@ const ATTENTION_STATES = new Set(["CONFLICT", "INVALID"]);
 
 /** Honest badge state: anything not acknowledged keeps it away from SYNCED. */
 export function computeSyncStatus(input: SyncStatusInput): SyncStatus {
-  const pending = input.ops.filter((o) => PENDING_STATES.has(o.state)).length;
+  const pending = input.ops.filter((o) => PENDING_STATES.has(o.state)).length + (input.mediaPending ?? 0);
   const conflicts = input.ops.filter((o) => ATTENTION_STATES.has(o.state)).length;
   const base = { pending, conflicts, ...(input.lastSyncedAt ? { lastSyncedAt: input.lastSyncedAt } : {}) };
   if (input.sharingState !== "SHARED") return { mode: "LOCAL", state: "SYNCED", ...base };
@@ -92,7 +94,8 @@ function subscribe(listener: () => void): () => void {
 
 async function loadInputs(spaceId: string) {
   const [space, ops, row] = await Promise.all([db.spaces.get(spaceId), db.outbox.where("spaceId").equals(spaceId).toArray(), db.syncCursors.get(spaceId)]);
-  return { sharingState: space?.sharingState ?? "LOCAL", ops: ops.map((o) => ({ state: o.state })), halt: row?.halt ?? null, lastSyncedAt: row?.lastSyncedAt };
+  const media = space?.sharingState === "SHARED" ? await readMediaStatus(spaceId) : { pending: 0 };
+  return { mediaPending: media.pending, sharingState: space?.sharingState ?? "LOCAL", ops: ops.map((o) => ({ state: o.state })), halt: row?.halt ?? null, lastSyncedAt: row?.lastSyncedAt };
 }
 
 export async function readSyncStatus(spaceId: string): Promise<SyncStatus> {

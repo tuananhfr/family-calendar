@@ -1,3 +1,4 @@
+import { sharingVi } from "./sections/sharing";
 import { calendarVi } from "./sections/calendar";
 import { remindersVi } from "./sections/reminders";
 import { tasksVi } from "./sections/tasks";
@@ -18,6 +19,7 @@ import { landingVi } from "./sections/landing";
 import { preferencesVi } from "./sections/preferences";
 
 export const vi = {
+  sharing: sharingVi,
   appName: "Lịch Gia Đình",
   tagline: "Hôm nay nhà mình có gì?",
   script: {
@@ -81,6 +83,7 @@ export const vi = {
     help: "Trợ giúp",
   },
   dataMode: {
+    authRequired: "Cần đăng nhập",
     local: "Trên thiết bị",
     shared: "Đã chia sẻ",
     synced: "Đã đồng bộ",

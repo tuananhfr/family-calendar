@@ -34,6 +34,7 @@ export class CreateInviteDto {
 }
 
 export class CreateInviteResponseDto {
+  @ApiPropertyOptional({ enum: ["SENT", "NOT_CONFIGURED", "FAILED"] }) email_delivery?: string;
   @ApiProperty({ format: 'uuid' }) invite_id: string;
   @ApiProperty({ description: 'Shown once; only its hash is stored.' }) token: string;
   @ApiProperty({ example: '/tham-gia/?token=…' }) url: string;

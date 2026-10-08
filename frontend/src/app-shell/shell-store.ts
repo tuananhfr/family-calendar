@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type DataMode = "local" | "shared" | "synced" | "pending" | "conflict" | "offline" | "blocked" | "accountBacked";
+export type DataMode = "local" | "shared" | "synced" | "pending" | "conflict" | "offline" | "blocked" | "authRequired" | "accountBacked";
 
 interface ShellState {
   quickAddOpen: boolean;

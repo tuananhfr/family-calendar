@@ -5,11 +5,13 @@ import { RESOURCE_STORE, RESOURCE_TYPES, type BaseRecord } from "./resource-type
 import { applySnapshot, fromWire, pendingResourceKeys } from "./snapshot-apply";
 import type { ChangesPage, SyncTransport } from "./transport";
 
+import { recordMedia } from "./drafts";
+
 const MAX_PAGES = 1000;
 
 async function applyPage(spaceId: string, page: ChangesPage): Promise<number> {
   const stores = [...new Set(RESOURCE_TYPES.map((t) => RESOURCE_STORE[t]))];
-  return db.transaction("rw", [...stores, "outbox", "syncCursors"], async () => {
+  return db.transaction("rw", [...stores, "outbox", "syncCursors", "blobs"], async () => {
     const pending = await pendingResourceKeys(spaceId);
     let applied = 0;
     for (const change of page.changes) {
@@ -19,10 +21,16 @@ async function applyPage(spaceId: string, page: ChangesPage): Promise<number> {
       if (local && local.spaceId !== spaceId) continue;
       if (change.op === "UPSERT" && change.record) {
         const next = fromWire(change.record, change.revision);
+        if (local) {
+          const prior = local as BaseRecord & { avatar?: string; audioAssetId?: string };
+          if ((change.resource_type === "member" && prior.avatar !== change.record.avatar) || (["item", "reminder_rule"].includes(change.resource_type) && prior.audioAssetId !== change.record.audioAssetId))
+            for (const blob of await recordMedia(change.resource_type, prior)) await db.blobs.delete(blob.id);
+        }
         // The space row also carries local-only fields (sharingState) the wire copy may not repeat.
         await table.put(change.resource_type === "space_settings" && local ? { ...local, ...next, sharingState: "SHARED" } as BaseRecord : next);
         applied += 1;
       } else if (change.op === "DELETE" && local) {
+        for (const blob of await recordMedia(change.resource_type, local)) await db.blobs.delete(blob.id);
         await table.put({ ...local, deletedAt: local.deletedAt ?? new Date().toISOString(), revision: change.revision, syncState: "SYNCED" });
         applied += 1;
       }

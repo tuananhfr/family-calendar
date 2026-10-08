@@ -34,7 +34,7 @@ describe("exportBackup", () => {
     expect(m).toMatchObject({
       format: BACKUP_FORMAT,
       formatVersion: 1,
-      dbSchemaVersion: 1,
+      dbSchemaVersion: 2,
       spaceIds: [s.spaceId],
       timeZone: "Asia/Ho_Chi_Minh",
       includesAudio: true,

@@ -1,3 +1,4 @@
+import { seedVerifiedAccount } from "../helpers/verified-account";
 import { randomUUID } from 'node:crypto';
 import { AccessService } from '../../src/modules/access/access.service';
 import { withTransaction } from '../../src/database/transaction';
@@ -30,6 +31,8 @@ describe('space bootstrap (int)', () => {
     owner = await registerDevice(t.app, { ip: '10.40.0.1' });
     other = await registerDevice(t.app, { ip: '10.40.0.2' });
     spaceId = randomUUID();
+    await seedVerifiedAccount(t.ds, owner.actorId);
+    await seedVerifiedAccount(t.ds, other.actorId);
   });
 
   afterAll(async () => {

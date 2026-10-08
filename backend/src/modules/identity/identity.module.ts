@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { RateLimitService } from '../../common/http/rate-limit';
 import { AccessModule } from '../access/access.module';
 import { DeliveryModule } from '../delivery/delivery.module';
+import { AccountLoginController } from './account-login.controller';
+import { AccountLoginService } from './account-login.service';
 import { AccountController } from './account.controller';
 import { AccountService } from './account.service';
 import { DevicesController } from './devices.controller';
@@ -15,8 +17,8 @@ import { SessionsService } from './sessions.service';
 
 @Module({
   imports: [AccessModule, DeliveryModule],
-  controllers: [DevicesController, SessionController, RecoveryController, MagicLinkController, AccountController],
-  providers: [SessionsService, DevicesService, RecoveryService, MagicLinkService, AccountService, RateLimitService],
+  controllers: [AccountLoginController, DevicesController, SessionController, RecoveryController, MagicLinkController, AccountController],
+  providers: [AccountLoginService, SessionsService, DevicesService, RecoveryService, MagicLinkService, AccountService, RateLimitService],
   exports: [SessionsService],
 })
 export class IdentityModule {}

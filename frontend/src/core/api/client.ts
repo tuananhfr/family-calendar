@@ -108,3 +108,9 @@ export async function api<T>(method: HttpMethod, path: string, body?: unknown, o
     throw error;
   }
 }
+
+export async function apiBlob(path: string, opts: ApiOptions = {}): Promise<Blob> {
+  const response = await send("GET", path, undefined, opts, null);
+  if (!response.ok) throw toError(response, await readBody(response));
+  return response.blob();
+}

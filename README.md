@@ -84,7 +84,7 @@ RUN_WORKER_IN_PROCESS=false
 `STORAGE_MASTER_KEY` sinh bằng `node scripts/gen-keys.mjs`, khóa web push bằng `node scripts/gen-vapid.mjs`.
 **Giữ bản sao `STORAGE_MASTER_KEY`**: mất khóa là mất mọi tệp đã lưu. Không đặt `ANTHROPIC_API_KEY` thì trợ lý AI không dùng được.
 Mặc định `MAIL_TRANSPORT=file` chỉ ghi thư ra `var/mail`; muốn gửi thật (link đăng nhập, lời mời) thì đặt
-`MAIL_TRANSPORT=smtp` và `SMTP_URL`.
+`MAIL_TRANSPORT=smtp`, `SMTP_URL` và `MAIL_FROM` thuộc domain đã xác minh. Sender mặc định `.local` chỉ dùng cho local/test.
 
 `frontend/.env.local`:
 
@@ -187,3 +187,7 @@ Sitemap: https://lpc.vn/lich-gia-dinh/sitemap.xml
 Do not block /lich-gia-dinh/ in robots.txt: crawlers need to read page-level noindex and social metadata. A robots.txt served inside /lich-gia-dinh/ would not govern the domain. Do not replace the domain's existing file with an app-only robots file.
 
 After deployment, verify the landing and each public canonical URL return 200 over HTTPS, the OG image returns image/png at 1200x630, and sitemap.xml returns application/xml with only the six public URLs. Test raw HTML with social crawler user agents as well as a browser. Confirm noindex on app, onboarding, invite, SOS, print and UI-kit routes. Social platforms may retain cached previews; request a re-scrape where supported.
+
+## Gia đình cùng sử dụng
+
+Cách mời, duyệt thành viên, quản lý thiết bị/quyền, đồng bộ và yêu cầu SMTP production: [docs/family-sharing.md](docs/family-sharing.md).

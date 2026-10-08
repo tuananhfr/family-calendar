@@ -25,7 +25,7 @@ function latestMail(): string {
 function tokenFrom(mail: string): string {
   // Quoted-printable may wrap long lines with "=\n" and encode "=" as "=3D".
   const flat = mail.replace(/=\r?\n/g, '').replace(/=3D/g, '=');
-  const m = /\/xac-thuc\/\?token=([A-Za-z0-9_-]+)/.exec(flat);
+  const m = /\/xac-thuc\/#purpose=link&token=([A-Za-z0-9_-]+)/.exec(flat);
   if (!m) throw new Error('no link in mail');
   return m[1];
 }
@@ -196,7 +196,7 @@ describe('recovery codes and email accounts (int)', () => {
     expect(inv.status).toBe(201);
     const mail = latestMail();
     expect(mail).toContain('khach@example.com');
-    expect(mail.replace(/=\r?\n/g, '').replace(/=3D/g, '=')).toContain(`/tham-gia/?token=${inv.body.token}`);
+    expect(mail.replace(/=\r?\n/g, '').replace(/=3D/g, '=')).toContain(`/tham-gia/#token=${inv.body.token}`);
     expect(logged.join('\n')).not.toContain(inv.body.token);
 
     const list = await guest.agent.get('/api/v1/me/invitations');

@@ -16,6 +16,7 @@ import {
   JoinRequestListDto,
   JoinRequestStatusDto,
 } from './dto/invite.dto';
+import { InviteTokenDto, JoinByTokenDto } from './dto/invite-token.dto';
 import { InvitesService } from './invites.service';
 import { JoinRequestsService } from './join-requests.service';
 
@@ -27,6 +28,21 @@ export class InvitesController {
     private readonly invites: InvitesService,
     private readonly requests: JoinRequestsService,
   ) {}
+
+  @Post('invites/preview')
+  @Public()
+  @HttpCode(200)
+  @RateLimit({ bucket: 'invite-preview', limit: 60, windowSeconds: 3600, by: 'ip' })
+  @ApiOkResponse({ type: InvitePreviewDto })
+  previewByBody(@Body() dto: InviteTokenDto): Promise<InvitePreviewDto> { return this.invites.preview(dto.token); }
+
+  @Post('invites/join')
+  @HttpCode(201)
+  @RateLimit({ bucket: 'join-requests', limit: 10, windowSeconds: 3600, by: 'ip' })
+  @ApiCreatedResponse({ type: JoinRequestCreatedDto })
+  joinByBody(@CurrentSession() session: SessionContext, @Body() dto: JoinByTokenDto): Promise<JoinRequestCreatedDto> {
+    return this.requests.create(session, dto.token, { display_name: dto.display_name, proposed_profile: dto.proposed_profile, member_id: dto.member_id });
+  }
 
   @Post('spaces/:id/invites')
   @HttpCode(201)

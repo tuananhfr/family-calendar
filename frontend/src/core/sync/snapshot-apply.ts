@@ -2,6 +2,8 @@ import { db } from "../db/db";
 import { RESOURCE_STORE, RESOURCE_TYPES, type BaseRecord, type ResourceType } from "./resource-types";
 import type { SnapshotWire } from "./transport";
 
+import { archiveDraft, removeProjectionRecord, recordMedia } from "./drafts";
+
 const recordKey = (type: string, id: string) => `${type}:${id}`;
 
 /** Records with an op not yet acknowledged: local drafts the server copy must not replace (sync-protocol.md invariant 7). */
@@ -18,11 +20,11 @@ const SYNCED_TYPES = RESOURCE_TYPES.filter((t): t is Exclude<ResourceType, "spac
 
 /**
  * Makes the local projection equal to the snapshot (TEC-20): rows the viewer can no longer see are removed,
- * except rows with pending ops, which stay as PENDING drafts. Callers hold the Space's sync lock.
+ * Only new unsent rows stay in the projection; edits to revoked rows are archived separately. Callers hold the Space's sync lock.
  */
 export async function applySnapshot(spaceId: string, snap: SnapshotWire): Promise<{ removed: number; upserted: number }> {
   const stores = [...new Set(SYNCED_TYPES.map((t) => RESOURCE_STORE[t]))];
-  return db.transaction("rw", [...stores, "spaces", "outbox", "syncCursors", "blobs"], async () => {
+  return db.transaction("rw", [...stores, "spaces", "outbox", "syncCursors", "blobs", "sharedDrafts", "notifications"], async () => {
     const pending = await pendingResourceKeys(spaceId);
     let removed = 0;
     let upserted = 0;
@@ -33,17 +35,23 @@ export async function applySnapshot(spaceId: string, snap: SnapshotWire): Promis
       const ids = new Set(incoming.map((r) => r.id as string));
       for (const local of await table.where("spaceId").equals(spaceId).toArray()) {
         if (ids.has(local.id)) continue;
-        if (pending.has(recordKey(type, local.id))) {
+        if (pending.has(recordKey(type, local.id)) && local.revision === null) {
           if (local.syncState !== "PENDING" && local.syncState !== "CONFLICT") await table.update(local.id, { syncState: "PENDING" });
           continue;
         }
-        await table.delete(local.id);
-        // Bytes of a file the viewer lost access to must not outlive its metadata.
-        if (type === "file") await db.blobs.where("fileId").equals(local.id).delete();
+        for (const op of await db.outbox.where("resourceId").equals(local.id).filter((o) => o.spaceId === spaceId && o.resourceType === type && o.state !== "ACKNOWLEDGED").toArray()) {
+          await archiveDraft(op, local); await db.outbox.delete(op.operationId);
+        }
+        await removeProjectionRecord(type, local);
+        await db.notifications.where("spaceId").equals(spaceId).filter((n) => n.resourceRef?.id === local.id).delete();
         removed += 1;
       }
       for (const record of incoming) {
         if (pending.has(recordKey(type, record.id as string))) continue;
+        const prior = await table.get(record.id as string) as (BaseRecord & { avatar?: string; audioAssetId?: string }) | undefined;
+        if (prior && ((type === "member" && prior.avatar !== record.avatar) || ((type === "item" || type === "reminder_rule") && prior.audioAssetId !== record.audioAssetId))) {
+          for (const blob of await recordMedia(type, prior)) await db.blobs.delete(blob.id);
+        }
         await table.put(fromWire(record));
         upserted += 1;
       }
@@ -58,6 +66,8 @@ export async function applySnapshot(spaceId: string, snap: SnapshotWire): Promis
       ...row,
       spaceId,
       cursor: snap.watermark,
+      halt: null,
+      haltCode: undefined,
       policyVersion: snap.policy_version,
       updatedAt: new Date().toISOString(),
       access: snap.access as unknown as Record<string, unknown>,

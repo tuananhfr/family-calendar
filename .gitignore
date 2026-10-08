@@ -17,9 +17,20 @@ qa-output/
 Thumbs.db
 
 # Specs, mockups, plans and QA notes stay local; the repository carries code only.
-docs/
-# End-to-end tests run locally only.
-e2e/
+docs/*
+!docs/family-sharing.md
+# Existing end-to-end suites stay local; track the sharing release profile.
+e2e/*
+!e2e/package.json
+!e2e/package-lock.json
+!e2e/tsconfig.json
+!e2e/sharing.config.ts
+!e2e/sharing/
+!e2e/helpers/
+e2e/helpers/*
+!e2e/helpers/db.ts
+!e2e/helpers/onboard.ts
+!e2e/helpers/items.ts
 CLAUDE.md
 AGENTS.md
 *.zip

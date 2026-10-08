@@ -16,6 +16,7 @@ const META: Record<DataMode, { icon: LucideIcon; tone: Tone }> = {
   conflict: { icon: TriangleAlert, tone: "danger" },
   offline: { icon: CloudOff, tone: "neutral" },
   blocked: { icon: CloudAlert, tone: "danger" },
+  authRequired: { icon: CloudAlert, tone: "warning" },
   accountBacked: { icon: ShieldCheck, tone: "success" },
 };
 

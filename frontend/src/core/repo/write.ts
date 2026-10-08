@@ -1,3 +1,4 @@
+import { currentOnlineIdentity } from "../db/online-identity";
 import { db } from "../db/db";
 import { isQuotaError, RepoError, StorageFullError } from "../db/errors";
 import { getLocalIdentity } from "../db/local-identity";
@@ -86,6 +87,7 @@ export async function saveResource<T extends BaseRecord>(
       const shared = space.sharingState === "SHARED";
       const next: T = {
         ...record,
+        createdByActorId: shared && action === "create" ? currentOnlineIdentity()?.actorId ?? record.createdByActorId : record.createdByActorId,
         createdAt: existing?.createdAt || record.createdAt || now,
         updatedAt: now,
         revision: existing?.revision ?? null,

@@ -67,7 +67,7 @@ export const SETTINGS_STORE = "settings";
 export const NEVER_BACKED_UP = ["localIdentity", "outbox", "syncCursors", "notifications", "firedReminders"] as const;
 
 /** Device-level settings keys that may hold secrets; skipped even if some future module stores them here. */
-export const SECRET_SETTING_KEY = /token|session|cookie|recovery|secret|credential|password|device|push/i;
+export const SECRET_SETTING_KEY = /token|session|cookie|recovery|secret|credential|password|device|push|^online\.|^bootstrap:|^media:/i;
 
 export const SPACE_STORES = [...RESOURCE_BACKUP_STORES.map((s) => s.store), ...EXTRA_BACKUP_STORES];
 

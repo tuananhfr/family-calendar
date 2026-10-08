@@ -51,7 +51,7 @@ export class MagicLinkService {
        VALUES (?, ?, ?, ?, ?, ?, NULL, UTC_TIMESTAMP(3))`,
       [randomUUID(), sha256Hex(token), email, PURPOSE, session.actorId, new Date(Date.now() + TOKEN_TTL_MS)],
     );
-    const link = `${this.appUrl}/xac-thuc/?token=${encodeURIComponent(token)}`;
+    const link = `${this.appUrl}/xac-thuc/#purpose=link&token=${encodeURIComponent(token)}`;
     try {
       const sent = await this.email.send({
         to: email,

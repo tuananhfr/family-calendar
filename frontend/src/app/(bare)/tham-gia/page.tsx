@@ -1,10 +1,3 @@
-import type { Metadata } from "next";
-import { t } from "@/i18n/vi";
-import { ComingSoonScreen } from "@/features/coming-soon/ComingSoonScreen";
-import { SCREENS } from "@/features/coming-soon/screens";
-
-export const metadata: Metadata = { title: t(SCREENS.join.titleKey) };
-
-export default function JoinPage() {
-  return <ComingSoonScreen screen="join" />;
-}
+import { JoinScreen } from "@/features/invites/components/JoinScreen";
+export const metadata = { title: "Tham gia gia đình", referrer: "no-referrer" as const };
+export default function JoinPage() { return <JoinScreen />; }

@@ -1,3 +1,4 @@
+import { SharedMedia1791301300000 } from "./1791301300000-shared-media";
 import type { MixedList } from 'typeorm';
 import { CoreIdentity1791300000000 } from './1791300000000-core-identity';
 import { RateLimits1791300100000 } from './1791300100000-rate-limits';
@@ -29,4 +30,5 @@ export const ALL_MIGRATIONS: MixedList<Function> = [
   Emergency1791301000000,
   Ai1791301100000,
   IcsIntegrations1791301200000,
+  SharedMedia1791301300000,
 ];

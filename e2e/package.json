@@ -1,0 +1,23 @@
+{
+  "name": "family-calendar-e2e",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=24.14 <25",
+    "npm": ">=11.11"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "install:browsers": "playwright install chromium webkit",
+    "report": "playwright show-report",
+    "test:sharing": "playwright test -c sharing.config.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.19.1",
+    "mysql2": "3.24.5",
+    "typescript": "5.9.3"
+  }
+}

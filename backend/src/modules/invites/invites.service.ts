@@ -80,7 +80,7 @@ export class InvitesService {
 
   async create(session: SessionContext, spaceId: string, dto: CreateInviteDto): Promise<CreateInviteResponseDto> {
     const created = await this.insert(session, spaceId, dto);
-    if (dto.email) await this.sendInviteEmail(normalizeInviteEmail(dto.email), created.token);
+    if (dto.email) created.email_delivery = await this.sendInviteEmail(normalizeInviteEmail(dto.email), created.token);
     return created;
   }
 
@@ -126,7 +126,7 @@ export class InvitesService {
       return {
         invite_id: id,
         token,
-        url: `/tham-gia/?token=${encodeURIComponent(token)}`,
+        url: `/tham-gia/#token=${encodeURIComponent(token)}`,
         expires_at: expiresAt.toISOString(),
       };
     });
@@ -136,8 +136,8 @@ export class InvitesService {
    * Sent after commit so a mail failure never undoes the invite; the text names no Space or person because the
    * address may be read by someone else (privacy over convenience).
    */
-  private async sendInviteEmail(to: string, token: string): Promise<void> {
-    const link = `${this.appUrl}/tham-gia/?token=${encodeURIComponent(token)}`;
+  private async sendInviteEmail(to: string, token: string): Promise<string> {
+    const link = `${this.appUrl}/tham-gia/#token=${encodeURIComponent(token)}`;
     try {
       await this.email.send({
         to,
@@ -151,8 +151,10 @@ export class InvitesService {
           'Nếu bạn không biết người mời, hãy bỏ qua thư này.',
         ].join('\n'),
       });
+      return this.email.writesFiles ? 'NOT_CONFIGURED' : 'SENT';
     } catch {
       this.logger.warn('invite email could not be sent');
+      return 'FAILED';
     }
   }
 

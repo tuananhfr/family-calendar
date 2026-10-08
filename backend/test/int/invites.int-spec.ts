@@ -56,7 +56,7 @@ describe('invites and join requests (int)', () => {
     expect(inv.body).toEqual({
       invite_id: expect.any(String),
       token: expect.any(String),
-      url: `/tham-gia/?token=${inv.body.token}`,
+      url: `/tham-gia/#token=${inv.body.token}`,
       expires_at: expect.any(String),
     });
     const anon = await t.app.getHttpServer();

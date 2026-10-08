@@ -1,4 +1,5 @@
 import { db, type FiredReminderRow } from "../db/db";
+import { currentOnlineIdentity } from "../db/online-identity";
 import { getLocalIdentity } from "../db/local-identity";
 import type { Item } from "../model/item";
 import type { ItemExceptionRecord, OccurrenceState } from "../model/occurrence";
@@ -139,12 +140,14 @@ export interface ScanOptions {
 /** One scan over every local Space: records each due trigger once (firedReminders) and adds a safe notification. */
 export async function scanOnce(opts: ScanOptions): Promise<DueTrigger[]> {
   const now = opts.now ?? new Date();
-  const { actorId } = await getLocalIdentity();
+  const local = await getLocalIdentity();
   const showDetails = opts.showDetails ?? ((await db.settings.get("notifications.showDetails"))?.value !== false);
   const fired = new Set((await db.firedReminders.toCollection().primaryKeys()) as string[]);
   const handled: DueTrigger[] = [];
 
   for (const space of await listSpaces()) {
+    const actorId = space.sharingState === "SHARED" ? currentOnlineIdentity()?.actorId : local.actorId;
+    if (!actorId) continue;
     // Another actor's PRIVATE reminder may sit in this device's cache of a shared Space; never surface it here.
     const items = (await listActive<Item>("item", space.id)).filter((i) => i.sharingScope !== "PRIVATE" || i.createdByActorId === actorId);
     const triggers = computeDueTriggers({

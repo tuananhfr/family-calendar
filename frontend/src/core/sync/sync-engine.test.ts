@@ -41,7 +41,7 @@ describe("startSyncEngine", () => {
     const first = await saveResource("item", makeItem({ spaceId, title: "Một" }), "create");
     start();
     await vi.waitFor(async () => expect((await db.items.get(first.id))?.syncState).toBe("SYNCED"));
-    expect((await readSyncStatus(spaceId)).state).toBe("SYNCED");
+    await vi.waitFor(async () => expect((await readSyncStatus(spaceId)).state).toBe("SYNCED"));
     expect((await readSyncStatus(spaceId)).lastSyncedAt).toBeDefined();
 
     const second = await saveResource("item", makeItem({ spaceId, title: "Hai" }), "create");

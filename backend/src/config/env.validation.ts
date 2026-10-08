@@ -47,6 +47,7 @@ export class EnvironmentVariables {
 
   @IsOptional() @IsIn(['file', 'smtp']) MAIL_TRANSPORT?: string;
   @IsOptional() @IsString() MAIL_DIR?: string;
+  @IsOptional() @IsString() @IsNotEmpty() MAIL_FROM?: string;
   @IsOptional() @IsString() SMTP_URL?: string;
 
   @IsOptional() @IsString() ANTHROPIC_API_KEY?: string;

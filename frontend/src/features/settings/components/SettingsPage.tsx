@@ -4,10 +4,12 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Settings } from "lucide-react";
 import { PageHeader, Tabs } from "@/design/components";
 import { t } from "@/i18n/vi";
+import { AccountPanel } from "@/features/identity/components/AccountPanel";
+import { SharingPanel } from "@/features/sharing/components/SharingPanel";
 import { DataTab } from "./DataTab";
 import { NotificationsTab } from "./NotificationsTab";
 
-const TABS = { notifications: "NOTIFICATIONS", data: "DATA" } as const;
+const TABS = { notifications: "NOTIFICATIONS", data: "DATA", account: "ACCOUNT", sharing: "SHARING" } as const;
 type TabParam = keyof typeof TABS;
 
 /** `/cai-dat` (modules.md §16); `?tab=` keeps deep links such as "Xuất lịch (ICS/PDF)" from the sidebar. */
@@ -25,9 +27,9 @@ export function SettingsPage() {
         label={t("settings.tabsLabel")}
         value={tab}
         onValueChange={(v) => router.replace(`${pathname}?tab=${v}`, { scroll: false })}
-        items={(Object.keys(TABS) as TabParam[]).map((k) => ({ value: k, label: t(`settings.tabs.${TABS[k]}`) }))}
+        items={(Object.keys(TABS) as TabParam[]).map((k) => ({ value: k, label: k === "account" ? t("sharing.account") : k === "sharing" ? t("sharing.title") : t(`settings.tabs.${TABS[k]}`) }))}
       />
-      {tab === "data" ? <DataTab /> : <NotificationsTab />}
+      {tab === "data" ? <DataTab /> : tab === "account" ? <AccountPanel /> : tab === "sharing" ? <SharingPanel /> : <NotificationsTab />}
     </div>
   );
 }

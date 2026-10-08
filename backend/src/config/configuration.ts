@@ -17,7 +17,7 @@ export interface AppConfig {
   /** Upload caps per blob (modules.md §9: 25 MB, video 200 MB); lowered in tests. */
   storageLimits: { fileBytes: number; videoBytes: number };
   vapid: { publicKey: string; privateKey: string; subject: string };
-  mail: { transport: 'file' | 'smtp'; dir: string; smtpUrl?: string };
+  mail: { transport: 'file' | 'smtp'; dir: string; smtpUrl?: string; from: string };
   /** provider 'fake' is the deterministic offline stand-in for tests and E2E; it never calls a network service. */
   ai: { apiKey?: string; model: string; provider: 'anthropic' | 'fake'; retentionDays: number };
   runWorkerInProcess: boolean;
@@ -70,6 +70,7 @@ export function configuration(): AppConfig {
       transport: env('MAIL_TRANSPORT', 'file') === 'smtp' ? 'smtp' : 'file',
       dir: env('MAIL_DIR', 'var/mail'),
       smtpUrl: process.env.SMTP_URL || undefined,
+      from: env('MAIL_FROM', 'Lich Gia Dinh <no-reply@lich-gia-dinh.local>'),
     },
     ai: {
       apiKey: process.env.ANTHROPIC_API_KEY || undefined,

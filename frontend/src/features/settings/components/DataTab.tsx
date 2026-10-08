@@ -1,5 +1,6 @@
 "use client";
 
+import { SharingPanel } from "@/features/sharing/components/SharingPanel";
 import { BackupPanel } from "./BackupPanel";
 import { DangerZone } from "./DangerZone";
 import { DataModeCard } from "./DataModeCard";
@@ -11,6 +12,7 @@ export function DataTab() {
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       <DataModeCard />
+      <SharingPanel />
       <ExportPanel />
       <BackupPanel />
       <RestoreWizard />

@@ -17,7 +17,6 @@ export interface EmailResult {
   file?: string;
 }
 
-const FROM = 'Lịch Gia Đình <no-reply@lich-gia-dinh.local>';
 
 /**
  * TEC-14: `file` transport (default, dev/test) renders the message and writes it under MAIL_DIR instead of sending;
@@ -28,11 +27,13 @@ export class EmailChannel {
   private readonly mode: 'file' | 'smtp';
   private readonly dir: string;
   private readonly transport: Transporter;
+  private readonly from: string;
 
   constructor(config: ConfigService<AppConfig, true>) {
     const mail = config.get('mail', { infer: true });
     this.mode = mail.transport === 'smtp' && mail.smtpUrl ? 'smtp' : 'file';
     this.dir = resolve(mail.dir);
+    this.from = mail.from;
     this.transport =
       this.mode === 'smtp'
         ? createTransport(mail.smtpUrl)
@@ -44,8 +45,11 @@ export class EmailChannel {
   }
 
   async send(message: EmailMessage): Promise<EmailResult> {
-    const info = (await this.transport.sendMail({ from: FROM, ...message })) as { message?: Buffer };
-    if (this.mode === 'smtp') return {};
+    const info = (await this.transport.sendMail({ from: this.from, ...message })) as { message?: Buffer; accepted?: unknown[] };
+    if (this.mode === 'smtp') {
+      if (!info.accepted?.length) throw new Error('SMTP_RECIPIENT_REJECTED');
+      return {};
+    }
     await mkdir(this.dir, { recursive: true });
     const file = join(this.dir, `${Date.now()}-${randomBytes(4).toString('hex')}.eml`);
     await writeFile(file, info.message ?? Buffer.alloc(0));

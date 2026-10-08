@@ -1,10 +1,3 @@
-import type { Metadata } from "next";
-import { t } from "@/i18n/vi";
-import { ComingSoonScreen } from "@/features/coming-soon/ComingSoonScreen";
-import { SCREENS } from "@/features/coming-soon/screens";
-
-export const metadata: Metadata = { title: t(SCREENS.permissions.titleKey) };
-
-export default function PermissionsPage() {
-  return <ComingSoonScreen screen="permissions" />;
-}
+import { PermissionsScreen } from "@/features/permissions/components/PermissionsScreen";
+export const metadata = { title: "Quyền gia đình" };
+export default function PermissionsPage() { return <PermissionsScreen />; }

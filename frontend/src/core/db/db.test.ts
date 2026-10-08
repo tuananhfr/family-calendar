@@ -44,16 +44,16 @@ describe("FamilyDb", () => {
     v1.close();
 
     // Simulates a future release that only adds an index (no data migration).
-    class FamilyDbV2 extends FamilyDb {
+    class FamilyDbV3 extends FamilyDb {
       constructor() {
         super(name);
-        this.version(2).stores({ items: `${DB_SCHEMA_V1.items}, title` });
+        this.version(3).stores({ items: `${DB_SCHEMA_V1.items}, title` });
       }
     }
-    const v2 = new FamilyDbV2();
+    const v2 = new FamilyDbV3();
     opened.push(v2);
     await v2.open();
-    expect(v2.verno).toBe(2);
+    expect(v2.verno).toBe(3);
     expect(await v2.table("items").get("i1")).toMatchObject({ title: "Họp phụ huynh" });
     expect(await v2.table("items").where("title").equals("Họp phụ huynh").count()).toBe(1);
     expect(await v2.outbox.get("op1")).toMatchObject({ state: "QUEUED" });

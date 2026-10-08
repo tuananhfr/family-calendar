@@ -1,3 +1,5 @@
+import { syncMedia } from "./media-sync";
+import { purgeSharedProjection } from "./purge";
 import { liveQuery, type Subscription } from "dexie";
 import { ApiRequestError } from "../api/errors";
 import { db } from "../db/db";
@@ -34,12 +36,18 @@ async function markHalt(spaceId: string, halt: "AUTH_REQUIRED" | "BLOCKED" | nul
 }
 
 /** Push then pull one SHARED Space; API failures end up in the status (OFFLINE / AUTH_REQUIRED / BLOCKED), not thrown. */
-export async function syncSpace(spaceId: string, t: SyncTransport, now: () => Date = () => new Date()): Promise<void> {
+export async function syncSpace(spaceId: string, t: SyncTransport, now: () => Date = () => new Date(), includeMedia = false): Promise<void> {
+  if ((await db.syncCursors.get(spaceId))?.halt === "AUTH_REQUIRED") return;
   setSyncing(spaceId, true);
   try {
     const pushed = await processOutbox(spaceId, t, now);
-    if (pushed.blocked) return;
+    if (pushed.blocked) {
+      const row = await db.syncCursors.get(spaceId);
+      if (["DEVICE_REVOKED", "SPACE_ACCESS_REVOKED"].includes(row?.haltCode ?? "")) await purgeSharedProjection(spaceId, row?.haltCode);
+      return;
+    }
     await pullChanges(spaceId, t);
+    if (includeMedia) { await syncMedia(spaceId); await pullChanges(spaceId, t); }
     setReachable(true);
     await markHalt(spaceId, null);
     const row = await db.syncCursors.get(spaceId);
@@ -48,7 +56,7 @@ export async function syncSpace(spaceId: string, t: SyncTransport, now: () => Da
     if (!(error instanceof ApiRequestError)) throw error;
     if (error.code === "NETWORK") setReachable(false);
     else if (error.code === "AUTH_REQUIRED" || error.code === "SESSION_EXPIRED") await markHalt(spaceId, "AUTH_REQUIRED", error.code);
-    else if (error.code === "DEVICE_REVOKED" || error.code === "SPACE_ACCESS_REVOKED" || error.code === "FORBIDDEN") await markHalt(spaceId, "BLOCKED", error.code);
+    else if (error.code === "DEVICE_REVOKED" || error.code === "SPACE_ACCESS_REVOKED" || error.code === "FORBIDDEN") { await markHalt(spaceId, "BLOCKED", error.code); if (error.code !== "FORBIDDEN") await purgeSharedProjection(spaceId, error.code); }
   } finally {
     setSyncing(spaceId, false);
   }
@@ -98,7 +106,7 @@ export function startSyncEngine(opts: SyncEngineOptions = {}): () => void {
       const ids = await sharedSpaceIds();
       for (const id of ids) {
         if (stopped) return;
-        await syncSpace(id, t, now);
+        await syncSpace(id, t, now, !opts.transport);
       }
       clearTimeout(retryTimer);
       const at = await nextRetryAt(ids);
@@ -132,14 +140,16 @@ export function startSyncEngine(opts: SyncEngineOptions = {}): () => void {
   const interval = setInterval(trigger, intervalMs);
 
   // Queued op ids, not just a count: an op acked while another is queued leaves the count unchanged.
-  let first = true;
-  const sub: Subscription = liveQuery(() => db.outbox.where("state").equals("QUEUED").primaryKeys()).subscribe({
-    next: () => {
-      if (first) {
-        first = false;
-        return;
-      }
-      debounced();
+  let signature: string | undefined;
+  const sub: Subscription = liveQuery(async () => {
+    const ids = await sharedSpaceIds();
+    const options = await db.settings.bulkGet(ids.map((id) => "media-options:" + id));
+    return JSON.stringify([await db.outbox.where("state").equals("QUEUED").primaryKeys(), ids, options]);
+  }).subscribe({
+    next: (next) => {
+      const changed = signature !== undefined && signature !== next;
+      signature = next;
+      if (changed) debounced();
     },
     error: onError,
   });

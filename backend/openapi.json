@@ -43,6 +43,120 @@
         ]
       }
     },
+    "/api/v1/auth/options": {
+      "get": {
+        "operationId": "AccountLoginController_options",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdentityOptionsDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "AccountLoginController_request",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MagicLinkRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MagicLinkAcceptedDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/v1/auth/login/preview": {
+      "post": {
+        "operationId": "AccountLoginController_preview",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginPreviewDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/v1/auth/login/verify": {
+      "post": {
+        "operationId": "AccountLoginController_verify",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginVerifyDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginCompletedDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "account"
+        ]
+      }
+    },
     "/api/v1/devices": {
       "post": {
         "operationId": "DevicesController_register",
@@ -365,6 +479,137 @@
         ],
         "tags": [
           "account"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/memberships": {
+      "get": {
+        "operationId": "AccessController_list",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MembershipListDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "access"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/memberships/{actorId}/role": {
+      "post": {
+        "operationId": "AccessController_assign",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "actorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignRoleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PolicyChangedDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "access"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/memberships/{actorId}/remove": {
+      "post": {
+        "operationId": "AccessController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "actorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PolicyChangedDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "access"
         ]
       }
     },
@@ -773,6 +1018,78 @@
         ],
         "tags": [
           "spaces"
+        ]
+      }
+    },
+    "/api/v1/invites/preview": {
+      "post": {
+        "operationId": "InvitesController_previewByBody",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InviteTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitePreviewDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
+        ]
+      }
+    },
+    "/api/v1/invites/join": {
+      "post": {
+        "operationId": "InvitesController_joinByBody",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JoinByTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JoinRequestCreatedDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "invites"
         ]
       }
     },
@@ -1384,6 +1701,174 @@
         "responses": {
           "200": {
             "description": "Decrypted bytes as an attachment, Cache-Control private, no-store. 500 BLOB_CORRUPT if the stored copy fails authentication."
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/media/{kind}/{recordId}/{assetId}/info": {
+      "get": {
+        "operationId": "MediaController_info",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "kind",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recordId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assetId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaInfoDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/api/v1/spaces/{id}/media/{kind}/{recordId}/{assetId}": {
+      "post": {
+        "operationId": "MediaController_upload",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "kind",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recordId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assetId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaStoredDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      },
+      "get": {
+        "operationId": "MediaController_download",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "kind",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recordId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "assetId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorized, decrypted bytes; private no-store."
           }
         },
         "security": [
@@ -2357,6 +2842,119 @@
           "features"
         ]
       },
+      "IdentityOptionsDto": {
+        "type": "object",
+        "properties": {
+          "email_configured": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "email_configured"
+        ]
+      },
+      "MagicLinkRequestDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "MagicLinkAcceptedDto": {
+        "type": "object",
+        "properties": {
+          "accepted": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          }
+        },
+        "required": [
+          "accepted"
+        ]
+      },
+      "LoginTokenDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "LoginActorDto": {
+        "type": "object",
+        "properties": {
+          "actor_id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "actor_id",
+          "label"
+        ]
+      },
+      "LoginPreviewDto": {
+        "type": "object",
+        "properties": {
+          "actors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LoginActorDto"
+            }
+          }
+        },
+        "required": [
+          "actors"
+        ]
+      },
+      "LoginVerifyDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "actor_id": {
+            "type": "string"
+          },
+          "device_id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token",
+          "actor_id",
+          "device_id"
+        ]
+      },
+      "LoginCompletedDto": {
+        "type": "object",
+        "properties": {
+          "actor_id": {
+            "type": "string"
+          },
+          "device_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "actor_id",
+          "device_id"
+        ]
+      },
       "RegisterDeviceDto": {
         "type": "object",
         "properties": {
@@ -2557,31 +3155,6 @@
           "code"
         ]
       },
-      "MagicLinkRequestDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "email"
-        ]
-      },
-      "MagicLinkAcceptedDto": {
-        "type": "object",
-        "properties": {
-          "accepted": {
-            "type": "boolean",
-            "enum": [
-              true
-            ]
-          }
-        },
-        "required": [
-          "accepted"
-        ]
-      },
       "MagicLinkVerifyDto": {
         "type": "object",
         "properties": {
@@ -2630,6 +3203,102 @@
         },
         "required": [
           "linked"
+        ]
+      },
+      "ManagedMembershipDto": {
+        "type": "object",
+        "properties": {
+          "actor_id": {
+            "type": "string"
+          },
+          "role_id": {
+            "type": "string"
+          },
+          "role_key": {
+            "type": "string"
+          },
+          "display_name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "actor_id",
+          "role_id",
+          "role_key",
+          "display_name"
+        ]
+      },
+      "ManagedRoleDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "role_key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "matrix": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "role_key",
+          "name",
+          "matrix"
+        ]
+      },
+      "MembershipListDto": {
+        "type": "object",
+        "properties": {
+          "memberships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManagedMembershipDto"
+            }
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManagedRoleDto"
+            }
+          },
+          "can_manage": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "memberships",
+          "roles",
+          "can_manage"
+        ]
+      },
+      "AssignRoleDto": {
+        "type": "object",
+        "properties": {
+          "role_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "role_id"
+        ]
+      },
+      "PolicyChangedDto": {
+        "type": "object",
+        "properties": {
+          "policy_version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "policy_version"
         ]
       },
       "PushKeysDto": {
@@ -3359,6 +4028,96 @@
           "watermark"
         ]
       },
+      "InviteTokenDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "InvitePreviewDto": {
+        "type": "object",
+        "properties": {
+          "space_name": {
+            "type": "string"
+          },
+          "space_kind": {
+            "type": "string",
+            "enum": [
+              "FAMILY",
+              "GROUP"
+            ]
+          },
+          "inviter_display_name": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "space_name",
+          "space_kind",
+          "inviter_display_name",
+          "expires_at"
+        ]
+      },
+      "JoinByTokenDto": {
+        "type": "object",
+        "properties": {
+          "display_name": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "proposed_profile": {
+            "type": "string",
+            "enum": [
+              "PARENT",
+              "SENIOR",
+              "CHILD"
+            ]
+          },
+          "member_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Existing Member the requester says they are."
+          },
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "display_name",
+          "token"
+        ]
+      },
+      "JoinRequestCreatedDto": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "PENDING_GUARDIAN",
+              "APPROVED",
+              "REJECTED",
+              "EXPIRED"
+            ]
+          }
+        },
+        "required": [
+          "request_id",
+          "status"
+        ]
+      },
       "CreateInviteDto": {
         "type": "object",
         "properties": {
@@ -3396,6 +4155,14 @@
       "CreateInviteResponseDto": {
         "type": "object",
         "properties": {
+          "email_delivery": {
+            "type": "string",
+            "enum": [
+              "SENT",
+              "NOT_CONFIGURED",
+              "FAILED"
+            ]
+          },
           "invite_id": {
             "type": "string",
             "format": "uuid"
@@ -3481,33 +4248,6 @@
           "invites"
         ]
       },
-      "InvitePreviewDto": {
-        "type": "object",
-        "properties": {
-          "space_name": {
-            "type": "string"
-          },
-          "space_kind": {
-            "type": "string",
-            "enum": [
-              "FAMILY",
-              "GROUP"
-            ]
-          },
-          "inviter_display_name": {
-            "type": "string"
-          },
-          "expires_at": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "space_name",
-          "space_kind",
-          "inviter_display_name",
-          "expires_at"
-        ]
-      },
       "CreateJoinRequestDto": {
         "type": "object",
         "properties": {
@@ -3531,29 +4271,6 @@
         },
         "required": [
           "display_name"
-        ]
-      },
-      "JoinRequestCreatedDto": {
-        "type": "object",
-        "properties": {
-          "request_id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "PENDING",
-              "PENDING_GUARDIAN",
-              "APPROVED",
-              "REJECTED",
-              "EXPIRED"
-            ]
-          }
-        },
-        "required": [
-          "request_id",
-          "status"
         ]
       },
       "JoinRequestStatusDto": {
@@ -3851,6 +4568,36 @@
         },
         "required": [
           "blob_state"
+        ]
+      },
+      "MediaInfoDto": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "number"
+          },
+          "mime": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "size",
+          "mime",
+          "sha256"
+        ]
+      },
+      "MediaStoredDto": {
+        "type": "object",
+        "properties": {
+          "stored": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "stored"
         ]
       },
       "NotificationDto": {

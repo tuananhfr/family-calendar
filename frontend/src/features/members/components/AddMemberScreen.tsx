@@ -9,12 +9,15 @@ import { useAccess } from "../hooks/useAccess";
 import { useActiveSpace } from "../hooks/useActiveSpace";
 import { useMember } from "../hooks/useMembers";
 import { useSpaceToday } from "../hooks/useSpaceToday";
-import { InviteNeedsSharing, InviteStepsPanel } from "./InviteStepsPanel";
+import { InviteStepsPanel } from "./InviteStepsPanel";
+import { InviteScreen } from "@/features/invites/components/InviteScreen";
+import { SharingPanel } from "@/features/sharing/components/SharingPanel";
 import { MemberForm } from "./MemberForm";
 
 /** `/thanh-vien/them/` adds; `?id=` edits the same form (static export has no dynamic segments). */
 export function AddMemberScreen() {
-  const id = useSearchParams().get("id");
+  const params = useSearchParams();
+  const id = params.get("id");
   const { space } = useActiveSpace();
   const access = useAccess();
   const today = useSpaceToday();
@@ -44,7 +47,7 @@ export function AddMemberScreen() {
 
   const invite = (
     <div className="grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1fr)_18rem]">
-      <InviteNeedsSharing />
+      <SharingPanel />
       <InviteStepsPanel />
     </div>
   );
@@ -53,6 +56,8 @@ export function AddMemberScreen() {
       {header}
       <Tabs
         label={t("members.form.addTitle")}
+        value={["link", "email"].includes(params.get("tab") ?? "") ? params.get("tab")! : "manual"}
+        onValueChange={(value) => { const url = new URL(location.href); url.searchParams.set("tab", value); history.replaceState(null, "", url.pathname + url.search); }}
         items={[
           {
             value: "manual",
@@ -62,12 +67,12 @@ export function AddMemberScreen() {
           {
             value: "link",
             label: t("members.form.tabs.link"),
-            content: invite,
+            content: space.sharingState === "SHARED" ? <InviteScreen spaceId={space.id} /> : invite,
           },
           {
             value: "email",
             label: t("members.form.tabs.email"),
-            content: invite,
+            content: space.sharingState === "SHARED" ? <InviteScreen spaceId={space.id} emailMode /> : invite,
           },
         ]}
       />

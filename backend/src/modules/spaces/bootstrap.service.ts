@@ -84,6 +84,7 @@ export class BootstrapService {
   ) {}
 
   async start(session: SessionContext, raw: Record<string, unknown>): Promise<BootstrapSpaceResponseDto> {
+    if (raw.kind === "FAMILY" && !session.accountId) throw new ApiError(ErrorCode.VALIDATION_FAILED, 422, undefined, { email: "VERIFICATION_REQUIRED" });
     const e = new FieldErrors();
     for (const key of Object.keys(raw)) {
       if (!['id', 'kind', 'name', 'time_zone', 'settings'].includes(key)) e.add(`space.${key}`, 'UNKNOWN_FIELD');

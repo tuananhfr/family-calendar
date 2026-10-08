@@ -134,6 +134,7 @@ export const DB_SCHEMA_V1 = {
 } as const;
 
 export class FamilyDb extends Dexie {
+  sharedDrafts!: Table<{ id: string; spaceId: string; record?: unknown; media?: BlobRow[]; operation: OutboxOp }, string>;
   localIdentity!: Table<LocalIdentityRow, string>;
   spaces!: Table<Space, string>;
   members!: Table<Member, string>;
@@ -170,6 +171,7 @@ export class FamilyDb extends Dexie {
   constructor(name: string = DB_NAME) {
     super(name);
     this.version(1).stores(DB_SCHEMA_V1);
+    this.version(2).stores({ ...DB_SCHEMA_V1, sharedDrafts: "id, spaceId" });
   }
 }
 

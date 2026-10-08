@@ -80,7 +80,7 @@ describe("validateBackup", () => {
     expect(await validateBackup(fixture("v99-future.zip.b64"))).toMatchObject({ ok: false, code: "NEWER_VERSION" });
     const { zip } = await seededZip();
     const newerDb = await rewrite(zip, (_f, m) => {
-      m.dbSchemaVersion = 2;
+      m.dbSchemaVersion = 3;
     });
     expect(await validateBackup(newerDb)).toMatchObject({ ok: false, code: "NEWER_VERSION" });
   });

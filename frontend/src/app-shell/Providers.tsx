@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster, TooltipProvider } from "@/design/components";
+import { SyncRuntime } from "@/features/sharing/components/SyncRuntime";
 import { useAppearanceSync } from "@/features/preferences/hooks/useAppearanceSync";
 
 export function Providers({ children }: { children: ReactNode }) {
@@ -20,6 +21,7 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={client}>
       <TooltipProvider>
+        <SyncRuntime />
         {children}
         <Toaster />
       </TooltipProvider>
