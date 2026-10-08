@@ -1,17 +1,17 @@
 "use client";
 
 import * as Menu from "@radix-ui/react-dropdown-menu";
-import { Check, Monitor, Moon, Sun } from "lucide-react";
+import { Check, Moon, Sun } from "lucide-react";
 import { t } from "@/i18n/vi";
 import { useAppStore, type ThemePreference } from "@/store/app.store";
 import styles from "../preferences.module.css";
 
-const THEMES = [{ value: "light", Icon: Sun }, { value: "dark", Icon: Moon }, { value: "system", Icon: Monitor }] as const;
+const THEMES = [{ value: "light", Icon: Sun }, { value: "dark", Icon: Moon }] as const;
 
 export function ThemePicker() {
   const theme = useAppStore((s) => s.theme);
   const setTheme = useAppStore((s) => s.setTheme);
-  const Icon = THEMES.find((option) => option.value === theme)?.Icon ?? Monitor;
+  const Icon = THEMES.find((option) => option.value === theme)?.Icon ?? Sun;
   const label = t("preferences.theme.current", { name: t(`preferences.theme.${theme}`) });
 
   return (

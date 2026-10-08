@@ -9,6 +9,5 @@ export const preferencesVi = {
     current: "Chọn giao diện: {name}",
     light: "Sáng",
     dark: "Tối",
-    system: "Theo hệ thống",
   },
 } as const;
