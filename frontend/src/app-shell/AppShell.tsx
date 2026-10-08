@@ -35,7 +35,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-30 hidden h-16 items-stretch border-b border-border bg-surface/95 pr-4 backdrop-blur md:flex">
         <div className="flex shrink-0 items-center gap-1 pl-2 lg:w-20 lg:justify-center lg:pl-0 xl:w-56 xl:justify-start xl:pl-4">
           <IconButton label={t("nav.openMenu")} icon={<Menu className="size-5" />} className="lg:hidden" onClick={() => setDrawerOpen(true)} />
-          <Link href={ROUTES.today} aria-label={t("appName")} className="flex items-center">
+          <Link href={ROUTES.landing} aria-label={t("appName")} className="flex items-center">
             <span className="xl:hidden"><BrandLogo compact /></span>
             <span className="hidden max-w-[12rem] xl:block"><BrandLogo /></span>
           </Link>
