@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { Plus } from "lucide-react";
 import { t } from "@/i18n/vi";
 import { cn } from "@/design/cn";
-import { ScriptText } from "@/design/components";
 import { QUICK_TOOLS, SIDEBAR_ITEMS, isActive, type NavItem } from "./nav-config";
 import { useShellStore } from "./shell-store";
 import { useVisibleNav } from "./useVisibleNav";
@@ -53,8 +52,15 @@ export function Sidebar({ collapsible = true, onNavigate }: { collapsible?: bool
   const setQuickAddOpen = useShellStore((s) => s.setQuickAddOpen);
   const sidebarItems = useVisibleNav(SIDEBAR_ITEMS);
   const quickTools = useVisibleNav(QUICK_TOOLS);
+  const coreKeys = ["today", "calendar", "tasks", "reminders", "upcoming", "timetable", "specialDays", "members"];
+  const primary = coreKeys.flatMap((key) => sidebarItems.filter((item) => item.key === key));
+  const secondary = sidebarItems.filter((item) => !coreKeys.includes(item.key) && item.key !== "settings");
+  const resourceKeys = ["health", "finance", "storage"];
+  const resources = secondary.filter((item) => resourceKeys.includes(item.key));
+  const utilities = secondary.filter((item) => !resourceKeys.includes(item.key));
+  const settings = sidebarItems.find((item) => item.key === "settings");
   return (
-    <nav aria-label={t("nav.mainNav")} className="flex h-full flex-col gap-1 px-3 py-4">
+    <nav aria-label={t("nav.mainNav")} className="flex h-full flex-col gap-1 px-3 py-5">
       <button
         type="button"
         onClick={() => {
@@ -63,25 +69,30 @@ export function Sidebar({ collapsible = true, onNavigate }: { collapsible?: bool
         }}
         title={t("nav.addNew")}
         className={cn(
-          "mb-3 flex min-h-[calc(var(--touch-min)+4px)] items-center gap-2 rounded-control bg-primary px-4 text-sm font-semibold text-on-primary shadow-sm hover:bg-primary-hover",
+          "mb-4 flex min-h-[calc(var(--touch-min)+4px)] items-center gap-2 rounded-control bg-primary px-4 text-sm font-semibold text-on-primary hover:bg-primary-hover",
           collapsible && "justify-center px-0 xl:justify-start xl:px-4",
         )}
       >
         <Plus aria-hidden className="size-5 shrink-0" />
         <span className={collapsible ? "sr-only xl:not-sr-only" : undefined}>{t("nav.addNew")}</span>
       </button>
-      {sidebarItems.map((item) => (
+      {primary.map((item) => (
         <NavLink key={item.key} item={item} collapsible={collapsible} onNavigate={onNavigate} />
       ))}
-      <div className={cn("mt-4 border-t border-border pt-4", collapsible && "hidden xl:block")}>
-        <p className="mb-1 px-3 text-xs font-bold uppercase tracking-wide text-muted">{t("nav.quickTools")}</p>
+      <div className="my-3 border-t border-border" />
+      {resources.map((item) => (
+        <NavLink key={item.key} item={item} collapsible={collapsible} onNavigate={onNavigate} />
+      ))}
+      {collapsible ? <div className="flex flex-col gap-1 xl:hidden">{utilities.map((item) => <NavLink key={item.key} item={item} collapsible onNavigate={onNavigate} />)}</div> : null}
+      <details className={cn("mt-4 border-t border-border pt-3", collapsible && "hidden xl:block")}>
+        <summary className="mb-1 cursor-pointer rounded-control px-3 py-2 text-xs font-semibold text-muted hover:text-primary">{t("nav.quickTools")}</summary>
+        {utilities.map((item) => <NavLink key={item.key} item={item} collapsible={false} onNavigate={onNavigate} />)}
+        <div className="my-2 border-t border-border" />
         {quickTools.map((item) => (
           <NavLink key={item.key} item={item} collapsible={false} shortcut onNavigate={onNavigate} />
         ))}
-      </div>
-      <div className={cn("mt-auto px-3 pt-6", collapsible && "hidden xl:block")}>
-        <ScriptText>{t("script.together")}</ScriptText>
-      </div>
+      </details>
+      {settings ? <div className="mt-auto border-t border-border pt-3"><NavLink item={settings} collapsible={collapsible} onNavigate={onNavigate} /></div> : null}
     </nav>
   );
 }

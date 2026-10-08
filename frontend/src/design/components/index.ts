@@ -2,6 +2,7 @@ export * from "./Avatar";
 export * from "./AvatarStack";
 export * from "./Badge";
 export * from "./Button";
+export * from "./BrandLogo";
 export * from "./Card";
 export * from "./CategoryTag";
 export * from "./Checkbox";

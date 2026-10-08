@@ -2,16 +2,17 @@
 
 import { ROUTES } from "@/app-shell/nav-config";
 import { CATEGORY_META } from "@/design/categories";
-import { Countdown, SectionCard } from "@/design/components";
+import { Countdown } from "@/design/components";
 import { useItemEditor } from "@/features/items";
 import type { UpcomingEntry } from "@/features/upcoming";
 import { t } from "@/i18n/vi";
+import { TodayRail } from "./TodayRail";
 
 /** v3.0 "Sắp đến hạn": overdue deadlines first, then the next 7 days. */
 export function DueSoonRail({ rows }: { rows: UpcomingEntry[] }) {
   const openDetail = useItemEditor((s) => s.openDetail);
   return (
-    <SectionCard title={t("today.dueSoon.title")} seeAllHref={ROUTES.upcoming}>
+    <TodayRail title={t("today.dueSoon.title")} seeAllHref={ROUTES.upcoming}>
       {rows.length === 0 ? (
         <p className="text-sm text-muted">{t("today.dueSoon.empty")}</p>
       ) : (
@@ -24,7 +25,7 @@ export function DueSoonRail({ rows }: { rows: UpcomingEntry[] }) {
                 <button
                   type="button"
                   onClick={() => openDetail(item.id, occurrence.occurrenceKey)}
-                  className="flex w-full min-w-0 items-center gap-3 rounded-control px-1 py-1.5 text-left hover:bg-primary-soft"
+                  className="flex min-h-12 w-full min-w-0 items-center gap-3 rounded-control px-1 py-2 text-left hover:bg-primary-soft"
                 >
                   <span aria-hidden className="flex size-8 shrink-0 items-center justify-center rounded-control" style={{ background: `var(${meta.bgVar})` }}>
                     <Icon className="size-4" style={{ color: `var(${meta.dotVar})` }} />
@@ -41,6 +42,6 @@ export function DueSoonRail({ rows }: { rows: UpcomingEntry[] }) {
           })}
         </ul>
       )}
-    </SectionCard>
+    </TodayRail>
   );
 }

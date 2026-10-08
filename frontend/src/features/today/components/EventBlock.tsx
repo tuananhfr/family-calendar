@@ -7,7 +7,7 @@ import type { ColumnBlock } from "../model/day-layout";
 
 /** Two lines need ~34px; shorter blocks fold the time onto the title line so nothing is clipped mid-glyph. */
 const TWO_LINE_MIN_PX = 34;
-const INSET_PX = 3;
+const INSET_PX = 5;
 
 export function blockTimeLabel(block: Pick<ColumnBlock, "occurrence">): string {
   const from = timePart(block.occurrence.start);
@@ -33,9 +33,9 @@ export function EventBlock({ block, done, dense, onOpen }: { block: ColumnBlock;
       data-testid="event-block"
       data-span={block.span}
       className={cn(
-        "absolute flex min-w-0 items-start gap-1.5 overflow-hidden rounded-control border-l-[3px] text-left shadow-sm transition-shadow hover:shadow-card focus-visible:z-20",
-        compact ? "py-0.5" : "py-1.5",
-        showIcon ? "px-2" : "px-1",
+        "absolute flex min-w-0 items-start gap-1.5 overflow-hidden rounded-[8px] border-l-[3px] text-left transition-shadow hover:shadow-card focus-visible:z-20",
+        compact ? "py-0.5" : "py-1",
+        showIcon ? "px-2.5" : "px-1",
         block.span > 1 && "z-10",
         done && "opacity-60",
       )}

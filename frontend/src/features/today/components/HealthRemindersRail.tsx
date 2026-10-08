@@ -4,10 +4,11 @@ import { Plus } from "lucide-react";
 import { ROUTES } from "@/app-shell/nav-config";
 import { timePart } from "@/core/time/zoned";
 import { CATEGORY_META } from "@/design/categories";
-import { SectionCard, Switch, toast } from "@/design/components";
+import { Switch, toast } from "@/design/components";
 import { useItemEditor } from "@/features/items";
 import { repeatLabel, setReminderEnabled, type ReminderView } from "@/features/reminders";
 import { t } from "@/i18n/vi";
+import { TodayRail } from "./TodayRail";
 
 /** IMG-A "Nhắc nhở sức khỏe": the switch only turns the reminder off; the item stays on the calendar. */
 export function HealthRemindersRail({ rows }: { rows: ReminderView[] }) {
@@ -21,7 +22,7 @@ export function HealthRemindersRail({ rows }: { rows: ReminderView[] }) {
     }
   };
   return (
-    <SectionCard title={t("today.health.title")} seeAllHref={ROUTES.health}>
+    <TodayRail title={t("today.health.title")} seeAllHref={ROUTES.health}>
       {rows.length === 0 ? <p className="text-sm text-muted">{t("today.health.empty")}</p> : null}
       <ul className="flex flex-col gap-1" data-testid="health-reminders">
         {rows.map((row) => {
@@ -29,7 +30,7 @@ export function HealthRemindersRail({ rows }: { rows: ReminderView[] }) {
           const Icon = meta.icon;
           const time = row.item.schedule.allDay ? null : timePart(row.item.schedule.start);
           return (
-            <li key={row.rule.id} className="flex min-w-0 items-center gap-3 py-1">
+            <li key={row.rule.id} className="flex min-w-0 items-center gap-3 rounded-control bg-surface-2 p-3">
               <span aria-hidden className="flex size-8 shrink-0 items-center justify-center rounded-control" style={{ background: `var(${meta.bgVar})` }}>
                 <Icon className="size-4" style={{ color: `var(${meta.dotVar})` }} />
               </span>
@@ -50,6 +51,6 @@ export function HealthRemindersRail({ rows }: { rows: ReminderView[] }) {
         <Plus aria-hidden className="size-4" />
         {t("today.health.add")}
       </button>
-    </SectionCard>
+    </TodayRail>
   );
 }

@@ -4,10 +4,11 @@ import Link from "next/link";
 import { ROUTES } from "@/app-shell/nav-config";
 import { parseLocalDate } from "@/core/time/local-date";
 import { CATEGORY_META } from "@/design/categories";
-import { Countdown, SectionCard } from "@/design/components";
+import { Countdown } from "@/design/components";
 import { useItemEditor } from "@/features/items";
 import { specialDayOccurrenceKey, type SpecialDayRow } from "@/features/special-days";
 import { t } from "@/i18n/vi";
+import { TodayRail } from "./TodayRail";
 
 function dmy(date: string): string {
   const { year, month, day } = parseLocalDate(date);
@@ -18,7 +19,7 @@ function dmy(date: string): string {
 export function UpcomingDaysRail({ rows }: { rows: SpecialDayRow[] }) {
   const openDetail = useItemEditor((s) => s.openDetail);
   return (
-    <SectionCard title={t("today.upcoming.title")} seeAllHref={ROUTES.specialDays}>
+    <TodayRail title={t("today.upcoming.title")} seeAllHref={ROUTES.specialDays}>
       {rows.length === 0 ? (
         <p className="text-sm text-muted">
           {t("today.upcoming.empty")}{" "}
@@ -36,7 +37,7 @@ export function UpcomingDaysRail({ rows }: { rows: SpecialDayRow[] }) {
                 <button
                   type="button"
                   onClick={() => openDetail(item.id, specialDayOccurrenceKey(item, countdown.date))}
-                  className="flex w-full min-w-0 items-center gap-3 rounded-control px-1 py-1.5 text-left hover:bg-primary-soft"
+                  className="flex min-h-12 w-full min-w-0 items-center gap-3 rounded-control px-1 py-2 text-left hover:bg-primary-soft"
                 >
                   <span aria-hidden className="flex size-9 shrink-0 items-center justify-center rounded-control" style={{ background: `var(${meta.bgVar})` }}>
                     <Icon className="size-4" style={{ color: `var(${meta.dotVar})` }} />
@@ -55,6 +56,6 @@ export function UpcomingDaysRail({ rows }: { rows: SpecialDayRow[] }) {
           })}
         </ul>
       )}
-    </SectionCard>
+    </TodayRail>
   );
 }

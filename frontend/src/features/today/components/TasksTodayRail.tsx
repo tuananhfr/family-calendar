@@ -5,11 +5,12 @@ import { ChevronRight, Plus } from "lucide-react";
 import { ROUTES } from "@/app-shell/nav-config";
 import type { LocalDate } from "@/core/time/local-date";
 import { timePart } from "@/core/time/zoned";
-import { CategoryTag, Checkbox, IconButton, SectionCard, toast } from "@/design/components";
+import { CategoryTag, Checkbox, IconButton, toast } from "@/design/components";
 import { newFormValues, useItemEditor, useItemMutations } from "@/features/items";
 import { useActiveSpace } from "@/features/members";
 import type { TaskView } from "@/features/tasks";
 import { t } from "@/i18n/vi";
+import { TodayRail } from "./TodayRail";
 
 /** IMG-A "Việc cần làm hôm nay": ticking writes the occurrence state, so it survives a reload and other tabs see it. */
 export function TasksTodayRail({ tasks, today, nowTime }: { tasks: TaskView[]; today: LocalDate; nowTime: string }) {
@@ -45,13 +46,13 @@ export function TasksTodayRail({ tasks, today, nowTime }: { tasks: TaskView[]; t
   };
 
   return (
-    <SectionCard title={t("today.tasks.title")} seeAllHref={ROUTES.tasks}>
+    <TodayRail title={t("today.tasks.title")} seeAllHref={ROUTES.tasks}>
       {tasks.length === 0 ? <p className="text-sm text-muted">{t("today.tasks.empty")}</p> : null}
-      <ul className="flex flex-col divide-y divide-border" data-testid="tasks-today">
+      <ul className="flex flex-col gap-2" data-testid="tasks-today">
         {tasks.map((task) => {
           const title = task.occurrence.title ?? task.item.title;
           return (
-            <li key={task.occurrence.occurrenceKey} className="flex min-w-0 items-center gap-1">
+            <li key={task.occurrence.occurrenceKey} className="flex min-w-0 items-center gap-1 rounded-control border border-border px-2">
               <Checkbox
                 checked={task.done}
                 onCheckedChange={(v) => toggle(task, v)}
@@ -97,6 +98,6 @@ export function TasksTodayRail({ tasks, today, nowTime }: { tasks: TaskView[]; t
           {t("common.add")}
         </button>
       </form>
-    </SectionCard>
+    </TodayRail>
   );
 }

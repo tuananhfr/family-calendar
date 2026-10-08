@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { t } from "@/i18n/vi";
-import { Illustration, ScriptText } from "@/design/components";
+import { BrandLogo } from "@/design/components";
 import { FOOTER_LINKS } from "./nav-config";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-surface px-4 py-5 md:px-6">
+    <footer className="border-t border-border bg-surface px-4 py-4 md:px-6">
       <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-4 md:flex-row md:justify-between">
         <div className="flex items-center gap-3">
-          <Illustration name="logo-mark" height={40} className="rounded-full" />
+          <BrandLogo compact className="[&>span]:size-9 [&_svg]:scale-90" />
           <div>
             <p className="text-sm font-bold text-text">{t("appName")}</p>
             <p className="whitespace-nowrap text-xs text-muted">{t("shell.footerTagline")}</p>
@@ -23,9 +23,6 @@ export function Footer() {
             </li>
           ))}
         </ul>
-        <div className="hidden xl:block">
-          <ScriptText className="whitespace-nowrap">{t("script.footer")}</ScriptText>
-        </div>
       </div>
     </footer>
   );

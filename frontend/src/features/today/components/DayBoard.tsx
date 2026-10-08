@@ -2,32 +2,26 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import * as Popover from "@radix-ui/react-popover";
-import * as Menu from "@radix-ui/react-dropdown-menu";
-import { CalendarPlus, ChevronLeft, ChevronRight, Ellipsis, ExternalLink, Filter, Plus, UserPlus } from "lucide-react";
-import { formatLunar, solarToLunar } from "@/core/lunar/lunar";
+import { CalendarDays } from "lucide-react";
 import type { Member } from "@/core/model/member";
-import { addDays, type LocalDate } from "@/core/time/local-date";
+import { type LocalDate } from "@/core/time/local-date";
 import { datePart } from "@/core/time/zoned";
 import { ROUTES } from "@/app-shell/nav-config";
-import { buttonClass, Card, EmptyState, IconButton } from "@/design/components";
-import { cn } from "@/design/cn";
+import { buttonClass, Card, EmptyState } from "@/design/components";
 import { occurrenceStatesByKey, useItemEditor, type OccurrenceEntry } from "@/features/items";
 import { MemberAvatar, MemberChips } from "@/features/members";
 import { t } from "@/i18n/vi";
 import { useAppStore } from "@/store/app.store";
 import { allDayOf, columnsFor, type LayoutOptions } from "../model/day-layout";
-import { boardDateVi } from "../model/date-label";
 import { entriesOn } from "../hooks/useTodayData";
 import { DayAgenda } from "./DayAgenda";
 import { MemberColumn } from "./MemberColumn";
+import { DayBoardToolbar } from "./DayBoardToolbar";
 
-const PX_PER_HOUR = 44;
+const PX_PER_HOUR = 56;
 const DEFAULT_START_HOUR = 6;
 const DEFAULT_END_HOUR = 22;
-// Sized so three members + "Thêm cột" fit beside the rail at 1280px without a horizontal scroll.
 const GUTTER = "3rem";
-const ADD_COLUMN = "7.5rem";
 const MIN_COLUMN = "9rem";
 
 /** IMG-A shows 06–21; the range widens instead of hiding an early or late event. */
@@ -50,59 +44,7 @@ function matchesFilter(entry: OccurrenceEntry, filter: string[] | "ALL"): boolea
   return filter === "ALL" || entry.item.memberIds.length === 0 || entry.item.memberIds.some((id) => filter.includes(id));
 }
 
-function ViewSwitch({ date }: { date: LocalDate }) {
-  const link = (view: string) => `${ROUTES.calendar}?view=${view}&date=${date}`;
-  const item = "inline-flex min-h-9 items-center rounded-[8px] px-3 text-sm font-semibold";
-  return (
-    <nav aria-label={t("today.board.label")} className="inline-flex rounded-control bg-primary-soft p-1">
-      <span aria-current="page" className={cn(item, "bg-primary text-on-primary")}>
-        {t("today.board.views.day")}
-      </span>
-      <Link href={link("week")} className={cn(item, "text-primary hover:bg-surface")}>
-        {t("today.board.views.week")}
-      </Link>
-      <Link href={link("month")} className={cn(item, "text-primary hover:bg-surface")}>
-        {t("today.board.views.month")}
-      </Link>
-    </nav>
-  );
-}
-
-/** "Thêm cột": brings back a member hidden by the filter; with everyone shown it points to adding a member. */
-function AddColumn({ hidden, onAdd }: { hidden: Member[]; onAdd: (id: string) => void }) {
-  return (
-    <Menu.Root>
-      <Menu.Trigger className={cn(buttonClass("secondary", "sm"), "w-full")}>
-        <Plus aria-hidden className="size-4" />
-        {t("today.board.addColumn")}
-      </Menu.Trigger>
-      <Menu.Portal>
-        <Menu.Content align="end" sideOffset={6} className="z-50 min-w-56 rounded-control border border-border bg-surface p-1 shadow-pop">
-          {hidden.map((m) => (
-            <Menu.Item
-              key={m.id}
-              onSelect={() => onAdd(m.id)}
-              className="flex min-h-10 cursor-default items-center gap-2 rounded-[8px] px-2 text-sm text-text outline-none data-[highlighted]:bg-primary-soft"
-            >
-              <MemberAvatar name={m.displayName} avatar={m.avatar} relationship={m.relationship} size="xs" />
-              {m.displayName}
-            </Menu.Item>
-          ))}
-          {hidden.length === 0 ? <p className="px-2 py-1.5 text-xs text-muted">{t("today.board.noHiddenMembers")}</p> : null}
-          <Menu.Separator className="my-1 h-px bg-border" />
-          <Menu.Item asChild>
-            <Link href={ROUTES.addMember} className="flex min-h-10 items-center gap-2 rounded-[8px] px-2 text-sm text-primary outline-none data-[highlighted]:bg-primary-soft">
-              <UserPlus aria-hidden className="size-4" />
-              {t("today.board.addMember")}
-            </Link>
-          </Menu.Item>
-        </Menu.Content>
-      </Menu.Portal>
-    </Menu.Root>
-  );
-}
-
-export function DayBoard({ entries, members, states, today }: { entries: OccurrenceEntry[]; members: Member[]; states: Parameters<typeof occurrenceStatesByKey>[0]; today: LocalDate }) {
+export function DayBoard({ entries, members, states, today, nowTime }: { entries: OccurrenceEntry[]; members: Member[]; states: Parameters<typeof occurrenceStatesByKey>[0]; today: LocalDate; nowTime?: string }) {
   const [date, setDate] = useState(today);
   const filter = useAppStore((s) => s.memberFilter);
   const setFilter = useAppStore((s) => s.setMemberFilter);
@@ -123,9 +65,10 @@ export function DayBoard({ entries, members, states, today }: { entries: Occurre
   const hidden = filter === "ALL" ? [] : active.filter((m) => !filter.includes(m.id));
   const hours = Array.from({ length: range.endHour - range.startHour }, (_, i) => range.startHour + i);
   const height = hours.length * PX_PER_HOUR;
-  const template = `${GUTTER} repeat(${columns.length}, minmax(${MIN_COLUMN}, 1fr)) ${ADD_COLUMN}`;
+  const template = `${GUTTER} repeat(${columns.length}, minmax(${MIN_COLUMN}, 1fr))`;
   const isToday = date === today;
-  const lunar = formatLunar(solarToLunar(date));
+  const currentMinutes = nowTime ? Number(nowTime.slice(0, 2)) * 60 + Number(nowTime.slice(3, 5)) : -1;
+  const showNow = isToday && currentMinutes >= range.startHour * 60 && currentMinutes < range.endHour * 60;
   const memberById = new Map(active.map((m) => [m.id, m]));
 
   const addColumn = (id: string) => {
@@ -135,88 +78,38 @@ export function DayBoard({ entries, members, states, today }: { entries: Occurre
   const addOnDate = () => openCreate({ type: "EVENT", initial: { date } });
 
   return (
-    <Card padded={false} className="@container flex min-w-0 flex-col" aria-label={t("today.board.label")} role="region">
-      <div className="flex flex-wrap items-center gap-2 border-b border-border p-3 md:gap-3 md:p-4">
-        <ViewSwitch date={date} />
-        <div className="flex items-center gap-1">
-          <IconButton label={t("today.board.prevDay")} icon={<ChevronLeft className="size-5" />} variant="outline" onClick={() => setDate(addDays(date, -1))} />
-          <button
-            type="button"
-            onClick={() => setDate(today)}
-            disabled={isToday}
-            className={cn(buttonClass("secondary", "sm"), "disabled:border-border-strong disabled:bg-surface disabled:text-text")}
-          >
-            {t("today.board.backToToday")}
-          </button>
-          <IconButton label={t("today.board.nextDay")} icon={<ChevronRight className="size-5" />} variant="outline" onClick={() => setDate(addDays(date, 1))} />
+    <Card padded={false} className="@container flex min-w-0 flex-col overflow-hidden shadow-none" aria-label={t("today.board.label")} role="region">
+      <DayBoardToolbar date={date} today={today} members={members} hidden={hidden} filter={filter} setFilter={setFilter} onDateChange={setDate} addColumn={addColumn} addOnDate={addOnDate} />
+      {active.length > 0 ? (
+        <div className="border-b border-border px-3 pt-2 pb-1 lg:hidden [&_button]:h-11">
+          <MemberChips members={members} value={filter} onChange={setFilter} />
         </div>
-        {/* The board is narrower than the viewport beside the rail, so the toolbar follows its own width. */}
-        <div className="order-last w-full text-center @3xl:order-none @3xl:w-auto @3xl:flex-1">
-          <h2 className="text-base font-bold text-text" aria-live="polite" data-testid="board-date">
-            {boardDateVi(date)}
-          </h2>
-          <p className="text-xs text-muted">{lunar}</p>
-        </div>
-        <div className="ml-auto flex items-center gap-1 @3xl:ml-0">
-          <Popover.Root>
-            <Popover.Trigger className={cn(buttonClass("secondary", "sm"), "hidden md:inline-flex")}>
-              <Filter aria-hidden className="size-4" />
-              {t("today.board.filter")}
-              {filter !== "ALL" ? <span className="rounded-chip bg-primary px-1.5 text-xs text-on-primary">{filter.length}</span> : null}
-            </Popover.Trigger>
-            <Popover.Portal>
-              <Popover.Content align="end" sideOffset={6} className="z-50 w-[min(22rem,calc(100vw-2rem))] rounded-control border border-border bg-surface p-3 shadow-pop">
-                <MemberChips members={members} value={filter} onChange={setFilter} />
-              </Popover.Content>
-            </Popover.Portal>
-          </Popover.Root>
-          <Menu.Root>
-            <Menu.Trigger asChild>
-              <IconButton label={t("today.board.more")} icon={<Ellipsis className="size-5" />} variant="outline" />
-            </Menu.Trigger>
-            <Menu.Portal>
-              <Menu.Content align="end" sideOffset={6} className="z-50 min-w-56 rounded-control border border-border bg-surface p-1 shadow-pop">
-                <Menu.Item onSelect={addOnDate} className="flex min-h-10 cursor-default items-center gap-2 rounded-[8px] px-2 text-sm text-text outline-none data-[highlighted]:bg-primary-soft">
-                  <CalendarPlus aria-hidden className="size-4 text-primary" />
-                  {t("today.board.addEvent")}
-                </Menu.Item>
-                <Menu.Item asChild>
-                  <Link
-                    href={`${ROUTES.calendar}?view=day&date=${date}`}
-                    className="flex min-h-10 items-center gap-2 rounded-[8px] px-2 text-sm text-text outline-none data-[highlighted]:bg-primary-soft"
-                  >
-                    <ExternalLink aria-hidden className="size-4 text-primary" />
-                    {t("today.board.openCalendar")}
-                  </Link>
-                </Menu.Item>
-              </Menu.Content>
-            </Menu.Portal>
-          </Menu.Root>
-        </div>
-      </div>
+      ) : null}
 
       {visible.length === 0 ? (
+        <div className="flex min-h-80 flex-col items-center justify-center px-4 py-10 md:min-h-96">
+        <span aria-hidden className="mb-2 flex size-16 items-center justify-center rounded-card bg-primary-soft text-primary"><CalendarDays className="size-8" strokeWidth={1.5} /></span>
         <EmptyState
           title={isToday ? t("today.board.emptyTitle") : t("today.board.emptyDayTitle")}
           body={t("today.board.emptyBody")}
-          illustration="corner-calendar"
           action={
             <button type="button" className={buttonClass("primary", "md")} onClick={addOnDate}>
               {t("today.board.add")}
             </button>
           }
         />
+        </div>
       ) : (
         <>
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <DayAgenda entries={visible} memberById={memberById} states={stateMap} />
           </div>
-          <div className="hidden overflow-x-auto md:block" data-testid="member-grid">
+          <div className="hidden overflow-x-auto lg:block" data-testid="member-grid">
             <div className="min-w-max">
               <div className="grid border-b border-border" style={{ gridTemplateColumns: template }}>
                 <span aria-hidden />
                 {columns.map((c) => (
-                  <div key={c.member === "SHARED" ? "shared" : c.member.id} className="flex min-w-0 items-center justify-center gap-2 border-l border-border px-2 py-2.5">
+                  <div key={c.member === "SHARED" ? "shared" : c.member.id} className="flex min-w-0 items-center justify-center gap-2 border-l border-border bg-surface-2 px-3 py-3">
                     {c.member === "SHARED" ? (
                       <span className="truncate text-sm font-bold text-text">{t("today.board.shared")}</span>
                     ) : (
@@ -229,9 +122,6 @@ export function DayBoard({ entries, members, states, today }: { entries: Occurre
                     )}
                   </div>
                 ))}
-                <div className="flex items-center border-l border-border px-1.5 py-2">
-                  <AddColumn hidden={hidden} onAdd={addColumn} />
-                </div>
               </div>
               {allDay.length > 0 ? (
                 <div className="grid border-b border-border bg-surface-2" style={{ gridTemplateColumns: `${GUTTER} 1fr` }}>
@@ -243,7 +133,7 @@ export function DayBoard({ entries, members, states, today }: { entries: Occurre
                   </ul>
                 </div>
               ) : null}
-              <div className="grid" style={{ gridTemplateColumns: template }}>
+              <div className="relative grid" style={{ gridTemplateColumns: template }}>
                 <div aria-hidden className="relative" style={{ height }}>
                   {hours.map((h, i) => (
                     <span key={h} className="absolute right-2 -translate-y-1/2 text-[0.6875rem] tabular-nums text-muted" style={{ top: i * PX_PER_HOUR + (i === 0 ? 8 : 0) }}>
@@ -261,7 +151,7 @@ export function DayBoard({ entries, members, states, today }: { entries: Occurre
                     states={stateMap}
                   />
                 ))}
-                <div aria-hidden className="border-l border-border" />
+                {showNow ? <div aria-hidden className="pointer-events-none absolute inset-x-0 z-10 border-t border-dashed border-primary" style={{ top: (currentMinutes / 60 - range.startHour) * PX_PER_HOUR }}><span className="absolute left-1 -translate-y-1/2 rounded bg-primary px-1 py-0.5 text-[10px] font-semibold tabular-nums text-on-primary">{nowTime}</span></div> : null}
               </div>
             </div>
           </div>

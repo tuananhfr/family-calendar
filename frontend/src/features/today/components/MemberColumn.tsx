@@ -24,7 +24,7 @@ export function MemberColumn({
     <div
       role="group"
       aria-label={label}
-      className="relative border-l border-border"
+      className="relative border-l border-border bg-surface"
       style={{
         height,
         backgroundImage: `repeating-linear-gradient(to bottom, var(--color-border) 0, var(--color-border) 1px, transparent 1px, transparent ${pxPerHour}px)`,

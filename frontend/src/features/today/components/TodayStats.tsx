@@ -4,7 +4,6 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { CalendarDays, Cake, FileText, ListChecks, Pill, Wallet } from "lucide-react";
 import { ROUTES } from "@/app-shell/nav-config";
-import { StatCard } from "@/design/components";
 import { t } from "@/i18n/vi";
 import type { TodayStats as Stats } from "../model/today-stats";
 
@@ -46,11 +45,16 @@ export function TodayStats({ stats }: { stats: Stats }) {
   ];
   return (
     <section aria-label={t("today.stats.label")}>
-      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 2xl:grid-cols-6">
+      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
         {tiles.map((tile) => (
           <li key={tile.key} className="min-w-0">
-            <Link href={tile.href} data-stat={tile.key} className="block h-full rounded-card transition-shadow hover:shadow-card">
-              <StatCard icon={tile.icon} value={tile.value} label={tile.label} sublabel={tile.sublabel} tone={tile.tone} className="h-full" />
+            <Link href={tile.href} data-stat={tile.key} title={tile.sublabel ? `${tile.label}: ${tile.sublabel}` : tile.label} className="flex h-full min-h-24 flex-col gap-2 rounded-card border border-border bg-surface p-3 transition-colors hover:border-primary focus-visible:outline-offset-2">
+              <span className="flex items-center gap-2.5">
+                <span aria-hidden className="flex size-8 shrink-0 items-center justify-center rounded-control [&_svg]:size-4" style={{ background: `var(--cat-${tile.tone}-bg)`, color: `var(--cat-${tile.tone}-dot)` }}>{tile.icon}</span>
+                <span className="text-2xl font-bold leading-none tabular-nums text-text">{tile.value}</span>
+              </span>
+              <span className="text-xs font-medium leading-snug text-body">{tile.label}</span>
+              {tile.sublabel ? <span className="sr-only">{tile.sublabel}</span> : null}
             </Link>
           </li>
         ))}

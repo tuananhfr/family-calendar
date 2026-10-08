@@ -1,5 +1,6 @@
 export const todayVi = {
   title: "Hôm nay nhà mình có gì?",
+  viewWeek: "Xem tuần",
   subtitle: "Cùng sắp xếp để mỗi ngày đều vui hơn!",
   longDate: "{weekday}, {day} tháng {month}, {year}",
   weekdays: { MO: "Thứ Hai", TU: "Thứ Ba", WE: "Thứ Tư", TH: "Thứ Năm", FR: "Thứ Sáu", SA: "Thứ Bảy", SU: "Chủ nhật" },

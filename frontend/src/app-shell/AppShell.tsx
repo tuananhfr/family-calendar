@@ -4,7 +4,7 @@ import { Suspense, type ReactNode } from "react";
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import { t } from "@/i18n/vi";
-import { IconButton, Illustration, Sheet } from "@/design/components";
+import { BrandLogo, IconButton, Sheet } from "@/design/components";
 import { FamilySheet } from "./FamilySheet";
 import { Footer } from "./Footer";
 import { HeaderActions } from "./HeaderActions";
@@ -16,7 +16,7 @@ import { QuickAddHost } from "./QuickAddHost";
 import { SpaceGate } from "./SpaceGate";
 import { TasksTodayBadge } from "./TasksTodayBadge";
 import { Sidebar } from "./Sidebar";
-import { TopNav } from "./TopNav";
+import { AppBreadcrumb } from "./AppBreadcrumb";
 import { ROUTES } from "./nav-config";
 import { useShellStore } from "./shell-store";
 
@@ -32,25 +32,25 @@ export function AppShell({ children }: { children: ReactNode }) {
         {t("nav.skipToContent")}
       </a>
       <MobileHeader />
-      <header className="sticky top-0 z-30 hidden h-[72px] items-stretch border-b border-border bg-surface/95 pr-4 backdrop-blur md:flex">
-        <div className="flex shrink-0 items-center gap-1 pl-2 lg:w-[88px] lg:justify-center lg:pl-0 xl:w-[248px] xl:justify-start xl:pl-5">
+      <header className="sticky top-0 z-30 hidden h-16 items-stretch border-b border-border bg-surface/95 pr-4 backdrop-blur md:flex">
+        <div className="flex shrink-0 items-center gap-1 pl-2 lg:w-20 lg:justify-center lg:pl-0 xl:w-56 xl:justify-start xl:pl-4">
           <IconButton label={t("nav.openMenu")} icon={<Menu className="size-5" />} className="lg:hidden" onClick={() => setDrawerOpen(true)} />
           <Link href={ROUTES.today} aria-label={t("appName")} className="flex items-center">
-            <Illustration name="logo-mark" height={48} className="rounded-full xl:hidden" priority />
-            <Illustration name="logo" height={56} className="hidden xl:block" priority />
+            <span className="xl:hidden"><BrandLogo compact /></span>
+            <span className="hidden max-w-[12rem] xl:block"><BrandLogo /></span>
           </Link>
         </div>
-        <TopNav />
+        <div className="flex min-w-0 flex-1 items-center px-4 xl:px-6"><AppBreadcrumb /></div>
         <div className="flex items-center pl-3">
           <HeaderActions />
         </div>
       </header>
       <div className="flex flex-1">
-        <aside className="sticky top-[72px] hidden h-[calc(100dvh-72px)] shrink-0 overflow-y-auto overflow-x-hidden border-r border-border bg-surface lg:block lg:w-[88px] xl:w-[248px]">
+        <aside className="sticky top-16 hidden h-[calc(100dvh-64px)] shrink-0 overflow-y-auto overflow-x-hidden border-r border-border bg-surface lg:block lg:w-20 xl:w-56">
           <Sidebar />
         </aside>
         <div className="flex min-w-0 flex-1 flex-col">
-          <main id="main" tabIndex={-1} className="mx-auto w-full max-w-[1400px] flex-1 px-4 pb-24 pt-5 focus:outline-none md:px-6 md:pb-8 md:pt-6 xl:px-8">
+          <main id="main" tabIndex={-1} className="mx-auto w-full max-w-[1400px] flex-1 px-4 pb-24 pt-6 focus:outline-none md:px-6 md:pb-8 md:pt-7 xl:px-7">
             <SpaceGate>{children}</SpaceGate>
           </main>
           <div className="pb-16 md:pb-0">

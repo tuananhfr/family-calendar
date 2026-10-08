@@ -99,6 +99,8 @@ export const SIDEBAR_ITEMS: NavItem[] = [
   item("groups", "nav.groupsShare", ROUTES.groups, Share2),
   item("storage", "nav.storage", ROUTES.storage, FolderOpen, { capability: "storage" }),
   item("assistant", "nav.assistant", ROUTES.assistant, Bot, { capability: "ai" }),
+  item("reports", "nav.reports", ROUTES.reports, ChartColumn),
+  item("permissions", "nav.permissions", ROUTES.permissions, ShieldCheck, { capability: "permissions" }),
   item("settings", "nav.settings", ROUTES.settings, Settings),
 ];
 
