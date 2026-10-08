@@ -90,6 +90,7 @@ Mặc định `MAIL_TRANSPORT=file` chỉ ghi thư ra `var/mail`; muốn gửi t
 
 ```ini
 NEXT_PUBLIC_BASE_PATH=/lich-gia-dinh
+NEXT_PUBLIC_SITE_ORIGIN=https://lpc.vn
 ```
 
 `PUBLIC_BASE_PATH` (backend) và `NEXT_PUBLIC_BASE_PATH` (frontend) phải giống nhau. Base path được đóng vào bản
@@ -170,3 +171,19 @@ cd ../frontend && npm ci && npm run deploy # build + restart frontend
 ```
 
 `deploy` gọi `sudo systemctl restart`, nên user chạy lệnh cần quyền sudo cho các unit đó.
+
+### SEO and social previews
+
+Set NEXT_PUBLIC_SITE_ORIGIN to the public HTTPS origin (no path) and NEXT_PUBLIC_BASE_PATH to the deployment prefix before building. These values are baked into canonical URLs, Open Graph, Twitter Cards, JSON-LD and sitemap.xml. Changing either value requires a rebuild.
+
+Only the landing, about, help, terms, privacy and contact pages are indexed. Other routes emit noindex, follow while keeping generic brand previews. No family data is included in metadata or structured data.
+
+For the current sub-path deployment, merge this line into the existing robots.txt at https://lpc.vn/robots.txt, preserving the Drupal site's existing rules:
+
+```text
+Sitemap: https://lpc.vn/lich-gia-dinh/sitemap.xml
+```
+
+Do not block /lich-gia-dinh/ in robots.txt: crawlers need to read page-level noindex and social metadata. A robots.txt served inside /lich-gia-dinh/ would not govern the domain. Do not replace the domain's existing file with an app-only robots file.
+
+After deployment, verify the landing and each public canonical URL return 200 over HTTPS, the OG image returns image/png at 1200x630, and sitemap.xml returns application/xml with only the six public URLs. Test raw HTML with social crawler user agents as well as a browser. Confirm noindex on app, onboarding, invite, SOS, print and UI-kit routes. Social platforms may retain cached previews; request a re-scrape where supported.

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro, Dancing_Script } from "next/font/google";
 import { Providers } from "@/app-shell/Providers";
 import { withBase } from "@/core/config";
+import { defaultMetadata } from "@/core/seo/metadata";
 import { ThemeScript } from "@/design/theme-script";
 import "./globals.css";
 
@@ -19,8 +20,7 @@ const script = Dancing_Script({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Lịch Gia Đình", template: "%s · Lịch Gia Đình" },
-  description: "Hôm nay nhà mình có gì? Lịch, việc, nhắc nhở và an toàn cho cả nhà.",
+  ...defaultMetadata,
   icons: {
     icon: [{ url: withBase("/icons/favicon-48.png"), sizes: "48x48", type: "image/png" }],
     apple: withBase("/icons/apple-touch-icon.png"),

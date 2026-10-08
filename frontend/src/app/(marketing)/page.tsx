@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { publicPageMetadata } from "@/core/seo/metadata";
+import { StructuredData } from "@/core/seo/StructuredData";
 import { LandingPage } from "@/features/landing/components/LandingPage";
-import { t } from "@/i18n/vi";
 
-export const metadata: Metadata = { title: { absolute: t("appName") }, description: t("landing.description") };
+export const metadata: Metadata = publicPageMetadata("home");
 
 export default function HomePage() {
-  return <LandingPage />;
+  return <><StructuredData /><LandingPage /></>;
 }
