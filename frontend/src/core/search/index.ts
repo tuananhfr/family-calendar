@@ -32,7 +32,7 @@ interface Doc {
 
 // Members have no capability of their own: only the PRIVATE-creator rule applies.
 function memberVisible(ctx: AccessContext, rec: BaseRecord): boolean {
-  return rec.sharingScope !== "PRIVATE" || rec.createdByActorId === ctx.actorId;
+  return (!ctx.spaceId || rec.spaceId === ctx.spaceId) && (rec.sharingScope !== "PRIVATE" || rec.createdByActorId === ctx.actorId);
 }
 
 /**

@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { t } from "@/i18n/vi";
-import { ComingSoonScreen } from "@/features/coming-soon/ComingSoonScreen";
-import { SCREENS } from "@/features/coming-soon/screens";
+import { ReportsScreen } from "@/features/reports/components/ReportsScreen";
 
-export const metadata: Metadata = { title: t(SCREENS.reports.titleKey) };
+export const metadata: Metadata = { title: t("reports.title") };
 
 export default function ReportsPage() {
-  return <ComingSoonScreen screen="reports" />;
+  return <ReportsScreen />;
 }

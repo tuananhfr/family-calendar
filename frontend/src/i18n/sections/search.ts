@@ -1,0 +1,4 @@
+export const searchVi = {
+  more: "Xem thêm kết quả",
+  title: "Tìm kiếm", subtitle: "Tìm trong không gian đang chọn, trên dữ liệu bạn được phép xem.", query: "Tìm lịch, thành viên, tệp và ghi chú", localHint: "Từ khoá chỉ được xử lý trên thiết bị này.", shortcut: "Ctrl / ⌘ + K", empty: "Bạn muốn tìm gì?", emptyBody: "Nhập từ khoá, có thể gõ tiếng Việt không dấu.", noResults: "Không có kết quả phù hợp", noResultsBody: "Thử từ khoá khác hoặc kiểm tra không gian đang chọn.", types: { item: "Lịch, việc và nhắc", member: "Thành viên", file: "Tệp", finance_txn: "Thu chi", health_note: "Ghi chú sức khoẻ" }, details: "Chi tiết", recordUnavailable: "Mục này không còn trên thiết bị hoặc bạn không còn quyền xem.", resultsCount: "{n} kết quả", start: "Bắt đầu", end: "Kết thúc", notes: "Ghi chú", amount: "Số tiền", date: "Ngày", sensitive: "Thông tin sức khoẻ cá nhân. Không thay thế tư vấn y tế.",
+};

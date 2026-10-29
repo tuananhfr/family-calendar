@@ -25,7 +25,7 @@ function whenLabel(date: LocalDate, time: string): string {
 /** IMG-D "Nhắc nhanh": the text is the title as typed; date/time and repeat come from the two controls. */
 export function QuickReminder() {
   const { space } = useActiveSpace();
-  const mutations = useItemMutations();
+  const mutations = useItemMutations(space);
   const [text, setText] = useState("");
   const [date, setDate] = useState<LocalDate | "">("");
   const [time, setTime] = useState("");
@@ -117,7 +117,7 @@ export function QuickReminder() {
               options={REPEATS.map((r) => ({ value: r, label: t(`reminders.repeatOptions.${r}`) }))}
             />
           </div>
-          <Button type="submit" loading={busy} icon={<Zap className="size-4" />}>
+          <Button type="submit" loading={busy} disabled={!space || !mutations.ready} icon={<Zap className="size-4" />}>
             {t("reminders.quick.submit")}
           </Button>
         </div>

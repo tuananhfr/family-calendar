@@ -5,6 +5,7 @@ import { Plus, ShieldCheck, UsersRound } from "lucide-react";
 import { hasLevel } from "@/core/access/evaluate";
 import { Button, buttonClass, ForbiddenState, Illustration, PageHeader, ScriptText, SectionCard, SkeletonList, toast } from "@/design/components";
 import { t } from "@/i18n/vi";
+import { PendingRequestsBanner } from "@/features/invites/components/PendingRequestsBanner";
 import { useAccess } from "../hooks/useAccess";
 import { useActiveSpace } from "../hooks/useActiveSpace";
 import { useMemberMutations } from "../hooks/useMemberMutations";
@@ -48,6 +49,7 @@ export function MembersScreen() {
           ) : null
         }
       />
+      {space?.sharingState === "SHARED" && canEdit ? <PendingRequestsBanner spaceId={space.id} /> : null}
       <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
         {active.map((m) => (
           <MemberCard key={m.id} member={m} today={today} />

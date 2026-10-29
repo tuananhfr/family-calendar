@@ -3,7 +3,7 @@ import { ApiRequestError, codeForStatus, isErrorCode } from "./errors";
 
 export { ApiRequestError, ErrorCode, isTransientError } from "./errors";
 
-export type HttpMethod = "GET" | "POST" | "PATCH" | "DELETE";
+export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 export interface ApiOptions {
   signal?: AbortSignal;

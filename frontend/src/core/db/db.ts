@@ -1,4 +1,5 @@
 import Dexie, { type Table } from "dexie";
+import type { EmergencyQueueRow, EmergencyRecord } from "../emergency/model";
 import type { Automation } from "../model/automation";
 import type {
   FinanceAccount,
@@ -134,6 +135,8 @@ export const DB_SCHEMA_V1 = {
 } as const;
 
 export class FamilyDb extends Dexie {
+  emergencyQueue!: Table<EmergencyQueueRow, string>;
+  emergencyDrafts!: Table<{ id: string; spaceId: string; event: EmergencyRecord; reason: string }, string>;
   sharedDrafts!: Table<{ id: string; spaceId: string; record?: unknown; media?: BlobRow[]; operation: OutboxOp }, string>;
   localIdentity!: Table<LocalIdentityRow, string>;
   spaces!: Table<Space, string>;
@@ -172,6 +175,7 @@ export class FamilyDb extends Dexie {
     super(name);
     this.version(1).stores(DB_SCHEMA_V1);
     this.version(2).stores({ ...DB_SCHEMA_V1, sharedDrafts: "id, spaceId" });
+    this.version(3).stores({ emergencyQueue: "id, spaceId, eventId, nextAttemptAt", emergencyDrafts: "id, spaceId" });
   }
 }
 

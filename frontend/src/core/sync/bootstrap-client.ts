@@ -94,8 +94,12 @@ async function finish(spaceId: string, journal: Journal, snapshot: SnapshotWire)
 export async function enableSharing(spaceId: string, options: ShareOptions, progress: (done: number, total: number) => void) {
   return withSpaceLock(spaceId, async () => {
     const session = await ensureLocalSession();
-    const account = await api<{ linked: boolean }>("GET", "/account");
-    if (!account.linked) throw new Error(t("sharing.requiresEmail"));
+    const space = await db.spaces.get(spaceId);
+    if (!space) throw new Error(t("sharing.error"));
+    if (space.kind === "FAMILY") {
+      const account = await api<{ linked: boolean }>("GET", "/account");
+      if (!account.linked) throw new Error(t("sharing.requiresEmail"));
+    }
     const journal = await makeJournal(spaceId, options);
     if (journal.space.createdByActorId !== session.actorId) throw new Error(t("sharing.wrongIdentity"));
     const base = "/spaces/" + spaceId;

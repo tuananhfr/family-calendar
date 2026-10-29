@@ -79,7 +79,15 @@ export async function exportBackup(spaceId: string, opts: ExportOptions): Promis
     const itemIds = new Set(items.map((i) => i.id));
     for (const store of ITEM_CHILD_STORES) data[store] = (data[store] as Array<BaseRecord & { itemId: string }>).filter((r) => itemIds.has(r.itemId));
 
-    for (const store of EXTRA_BACKUP_STORES) data[store] = await db.table(store).where("spaceId").equals(spaceId).toArray();
+    for (const store of EXTRA_BACKUP_STORES) {
+      const rows = await db.table(store).where("spaceId").equals(spaceId).toArray();
+      data[store] = store === "emergencyEvents" ? rows.filter((row) => !row.createdByActorId || row.createdByActorId === opts.actor.actorId).map((row) => {
+        const copy = { ...row };
+        delete copy.position;
+        delete copy.recipients;
+        return copy;
+      }) : rows;
+    }
     data[SETTINGS_STORE] = (await db.settings.toArray()).filter((s) => !SECRET_SETTING_KEY.test(s.key));
 
     const blobIds = new Set<string>();

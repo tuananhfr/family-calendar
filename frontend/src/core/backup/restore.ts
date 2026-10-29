@@ -23,7 +23,7 @@ export type RestoreReport =
   | BackupFailure;
 
 // Runtime stores tied to a Space that a REPLACE must clear so nothing stale (ops, alerts) refers to old rows.
-const SPACE_RUNTIME_STORES = ["outbox", "notifications", "firedReminders"] as const;
+const SPACE_RUNTIME_STORES = ["outbox", "emergencyQueue", "emergencyDrafts", "notifications", "firedReminders"] as const;
 
 async function clearSpace(spaceId: string): Promise<void> {
   const files = (await db.files.where("spaceId").equals(spaceId).toArray()) as StoredFile[];

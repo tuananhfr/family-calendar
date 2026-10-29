@@ -249,6 +249,14 @@ export class EmergencyService {
       if (ev.created_by_actor_id !== session.actorId) throw new ApiError(ErrorCode.FORBIDDEN, 403);
       if (ev.lifecycle !== 'ACTIVE') throw new ApiError(ErrorCode.EMERGENCY_CLOSED, 409);
       const now = this.clock.now();
+      const [latest]: Array<{ id: string; captured_at: Date; received_at: Date }> = await em.query(
+        'SELECT id, captured_at, received_at FROM emergency_locations WHERE event_id = ? ORDER BY captured_at DESC, id DESC LIMIT 1',
+        [eventId],
+      );
+      if (latest && new Date(latest.captured_at).getTime() > Date.parse(dto.captured_at)) {
+        await em.query('DELETE FROM emergency_locations WHERE event_id = ? AND id <> ?', [eventId, latest.id]);
+        return { id: String(latest.id), received_at: new Date(latest.received_at).toISOString() };
+      }
       const result: { insertId?: number | string } = await em.query(
         `INSERT INTO emergency_locations (event_id, actor_id, device_id, latitude, longitude, accuracy_m, captured_at,
            received_at, provenance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -264,6 +272,7 @@ export class EmergencyService {
           dto.provenance,
         ],
       );
+      await em.query('DELETE FROM emergency_locations WHERE event_id = ? AND id <> ?', [eventId, result.insertId]);
       return { id: String(result.insertId), received_at: now.toISOString() };
     });
   }
@@ -386,8 +395,10 @@ export class EmergencyService {
       provenance: 'CURRENT' | 'LAST_KNOWN';
     }> = await em.query(
       `SELECT latitude, longitude, accuracy_m, captured_at, received_at, provenance FROM emergency_locations
-        WHERE event_id = ? ORDER BY captured_at DESC, id DESC LIMIT 1`,
-      [ev.id],
+        WHERE event_id = ? AND EXISTS (
+          SELECT 1 FROM emergency_events e WHERE e.id = event_id AND (e.lifecycle = 'ACTIVE' OR e.updated_at > ?)
+        ) ORDER BY captured_at DESC, id DESC LIMIT 1`,
+      [ev.id, new Date(this.clock.now().getTime() - RECENT_CLOSED_MS)],
     );
     return {
       ...this.accepted(ev),

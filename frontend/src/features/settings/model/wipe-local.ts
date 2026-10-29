@@ -1,7 +1,7 @@
 import { db } from "@/core/db/db";
 
 // Keys of this app in localStorage (persisted UI store); the database holds everything else.
-const LOCAL_STORAGE_KEYS = ["fc.app"];
+const LOCAL_STORAGE_KEYS = ["fc.app", "fc.theme", "fc.senior", "fc.theme.system", "fc.fontSize"];
 
 /** Deletes this browser's copy of every Space. Nothing is sent anywhere, and other devices keep their data. */
 export async function wipeLocalData(): Promise<void> {
@@ -17,5 +17,5 @@ export async function wipeLocalData(): Promise<void> {
 
 /** Changes of shared Spaces the server has not confirmed yet; a wipe would lose them for good. */
 export async function pendingChangeCount(): Promise<number> {
-  return db.outbox.filter((op) => op.state !== "ACKNOWLEDGED" && op.state !== "INVALID").count();
+  return await db.outbox.filter((op) => op.state !== "ACKNOWLEDGED" && op.state !== "INVALID").count() + await db.emergencyQueue.count();
 }

@@ -17,8 +17,20 @@ import { todayVi } from "./sections/today";
 import { upcomingVi } from "./sections/upcoming";
 import { landingVi } from "./sections/landing";
 import { preferencesVi } from "./sections/preferences";
+import { pwaVi } from "./sections/pwa";
+import { emergencyVi } from "./sections/emergency";
+import { groupsVi } from "./sections/groups";
+import { searchVi } from "./sections/search";
+import { reportsVi } from "./sections/reports";
+import { settingsExtraVi } from "./sections/settings-extra";
 
 export const vi = {
+  emergency: emergencyVi,
+  groups: groupsVi,
+  search: searchVi,
+  reports: reportsVi,
+  settingsExtra: settingsExtraVi,
+  pwa: pwaVi,
   sharing: sharingVi,
   appName: "Lịch Gia Đình",
   tagline: "Hôm nay nhà mình có gì?",

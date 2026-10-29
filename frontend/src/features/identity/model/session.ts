@@ -41,7 +41,7 @@ export function deviceLabel() {
 }
 export function newOnlineDevice() { return { device_id: newId(), label: deviceLabel() }; }
 export async function logout() {
-  const pending = await db.outbox.filter((o) => o.state !== "ACKNOWLEDGED" && o.state !== "INVALID").count();
+  const pending = await db.outbox.filter((o) => o.state !== "ACKNOWLEDGED" && o.state !== "INVALID").count() + await db.emergencyQueue.count();
   if (pending) throw new Error(t("sharing.pendingLogout"));
   await db.settings.put({ key: "online.enabled", value: false });
   try { await api("POST", "/session/logout"); } catch (error) {

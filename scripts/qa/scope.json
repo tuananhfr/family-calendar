@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "approvedOn": "2026-10-13",
+  "ownerDecision": "Implement the remaining approved V1 plan; defer the AI assistant.",
+  "deferredRequirements": ["FAM-025", "GATE-AI-001", "EXT-AI-001"],
+  "deferredReason": "Owner explicitly deferred the AI assistant on 2026-10-13; existing AI privacy regression tests remain enabled.",
+  "runtimePolicy": "Keep LOCAL_ONLY, PRIVATE, SENSITIVE and FAMILY/GROUP isolation intact.",
+  "requiredManualEnvironments": ["Android physical device", "iPhone or iPad physical device"],
+  "phases": [
+    { "id": "scope", "status": "IN_PROGRESS" },
+    { "id": "pwa", "status": "IN_PROGRESS" },
+    { "id": "emergency", "status": "IN_PROGRESS", "policy": { "approvedOn": "2026-10-13", "liveMaxAgeSeconds": 60, "keepLastPositionOnly": true, "purgeHoursAfterServerClose": 24, "closePermission": "CREATOR_ONLY", "stopWatcherWhenHidden": true } },
+    { "id": "groups", "status": "IN_PROGRESS" },
+    { "id": "search-reports", "status": "IN_PROGRESS" },
+    { "id": "coverage", "status": "IN_PROGRESS", "pendingOwnerRules": ["minimal-onboarding-skip", "quiet-hours", "medication-on-time-threshold", "deleted-file-recovery"] },
+    { "id": "release-gate", "status": "IN_PROGRESS", "slo": { "approvedOn": "2026-10-13", "apiP95Ms": 1000, "apiConcurrency": 20, "localP95Ms": 1000, "localRecordCount": 5000, "additionalWorkloads": [1000, 20000], "unexpectedServerErrors": 0, "dataLoss": 0, "accessLeaks": 0 } },
+    { "id": "physical-devices", "status": "PENDING", "devicesAvailable": true }
+  ]
+}

@@ -37,6 +37,14 @@ function rec(
 }
 
 describe("DEFAULT_ROLE_MATRIX (modules.md §2.2)", () => {
+  it("a bound viewer context refuses records from another Space even for the creator", () => {
+    const viewer = ctx("OWNER", ["PARENT"], { spaceId: SPACE });
+    expect(canRead(viewer, rec(viewer.actorId, "FAMILY_ALL"), "calendar.view")).toBe(true);
+    const foreign = { ...rec(viewer.actorId, "FAMILY_ALL"), spaceId: newId() };
+    expect(canRead(viewer, foreign, "calendar.view")).toBe(false);
+    expect(canWrite(viewer, foreign, "calendar.view")).toBe(false);
+    expect(canDelete(viewer, foreign, "calendar.view")).toBe(false);
+  });
   it("matches the table for a few spot checks", () => {
     expect(DEFAULT_ROLE_MATRIX.OWNER.permissions).toBe("EDIT");
     expect(DEFAULT_ROLE_MATRIX.ADULT.permissions).toBe("NONE");

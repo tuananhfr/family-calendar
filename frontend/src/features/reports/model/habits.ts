@@ -2,6 +2,7 @@ import type { Item } from "@/core/model/item";
 import type { ItemExceptionRecord, OccurrenceState } from "@/core/model/occurrence";
 import { expandOccurrences } from "@/core/recurrence/expand";
 import { endOfMonth, type LocalDate } from "@/core/time/local-date";
+import type { DateWindow } from "@/core/recurrence/types";
 
 export interface HabitRate {
   itemId: string;
@@ -23,9 +24,9 @@ export function isDailyHabit(item: Item): boolean {
  * "Thói quen nổi bật" (modules.md §10): daily REMINDER/TASK series, days DONE / days with an occurrence in the month.
  * Pass `today` for the current month so days still ahead don't count as missed.
  */
-export function habitRates(items: Item[], states: OccurrenceState[], month: string, opts: { exceptions?: ItemExceptionRecord[]; today?: LocalDate } = {}): HabitRate[] {
-  const from = `${month}-01`;
-  let to = endOfMonth(from);
+export function habitRates(items: Item[], states: OccurrenceState[], month: string, opts: { exceptions?: ItemExceptionRecord[]; today?: LocalDate; window?: DateWindow } = {}): HabitRate[] {
+  const from = opts.window?.from ?? `${month}-01`;
+  let to = opts.window?.to ?? endOfMonth(from);
   if (opts.today && opts.today < to) to = opts.today;
   if (to < from) return [];
   const done = new Set(states.filter((s) => s.deletedAt === null && s.status === "DONE").map((s) => s.occurrenceKey));

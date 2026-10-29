@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3004",
-    "build": "next build",
+    "build": "next build && node scripts/build-service-worker.mjs",
     "preview": "node scripts/serve-prod.mjs",
     "start": "node --env-file-if-exists=.env.local scripts/serve-prod.mjs",
     "deploy": "npm run build && sudo systemctl restart family-calendar-frontend",

@@ -19,6 +19,7 @@ import { Sidebar } from "./Sidebar";
 import { AppBreadcrumb } from "./AppBreadcrumb";
 import { ROUTES } from "./nav-config";
 import { useShellStore } from "./shell-store";
+import { SearchShortcut } from "./SearchShortcut";
 
 /**
  * ≥1280 full sidebar · 1024–1279 icon rail · 768–1023 drawer · <768 mobile header + bottom nav (ui-ux.md "Khung ứng dụng").
@@ -28,6 +29,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const setDrawerOpen = useShellStore((s) => s.setDrawerOpen);
   return (
     <div className="flex min-h-dvh flex-col">
+      <SearchShortcut />
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-control focus:bg-surface focus:px-3 focus:py-2 focus:shadow-pop">
         {t("nav.skipToContent")}
       </a>
@@ -41,7 +43,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </Link>
         </div>
         <div className="flex min-w-0 flex-1 items-center px-4 xl:px-6"><AppBreadcrumb /></div>
-        <div className="flex items-center pl-3">
+        <div className="flex min-w-0 items-center pl-3">
           <HeaderActions />
         </div>
       </header>

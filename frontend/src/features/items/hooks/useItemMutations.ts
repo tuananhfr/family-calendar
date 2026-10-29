@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import type { Space } from "@/core/model/space";
 import type { EditScope } from "@/core/recurrence/edit-scope";
 import { useActiveSpace } from "@/features/members";
 import type { ItemFormValues } from "../model/form-to-item";
@@ -17,8 +18,9 @@ export interface ItemMutations {
 }
 
 /** Item writes bound to the active Space; throw ItemFormError / StorageFullError for the caller to show. */
-export function useItemMutations(): ItemMutations {
-  const { space } = useActiveSpace();
+export function useItemMutations(resolvedSpace?: Space): ItemMutations {
+  const { space: activeSpace } = useActiveSpace();
+  const space = resolvedSpace ?? activeSpace;
   return useMemo(() => {
     const ctx = (): WriteContext => {
       if (!space) throw new Error("NO_ACTIVE_SPACE");

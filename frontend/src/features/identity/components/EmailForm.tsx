@@ -8,7 +8,7 @@ import { t } from "@/i18n/vi";
 import { db } from "@/core/db/db";
 import { useAppStore } from "@/store/app.store";
 import { ensureLocalSession, refreshSession } from "../model/session";
-export function EmailForm({ mode }: { mode: "login" | "link" }) {
+export function EmailForm({ mode, onSent }: { mode: "login" | "link"; onSent?: () => void }) {
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string>();
@@ -25,6 +25,7 @@ export function EmailForm({ mode }: { mode: "login" | "link" }) {
       }
       await api("POST", mode === "link" ? "/auth/magic-link" : "/auth/login", { email });
       setMessage(t("sharing.sent"));
+      onSent?.();
     } catch (err) { setError(sharingError(err)); }
     finally { setBusy(false); }
   }}>

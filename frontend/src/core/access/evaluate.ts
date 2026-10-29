@@ -14,6 +14,7 @@ import {
 } from "./capabilities";
 
 export interface AccessContext {
+  spaceId?: string;
   actorId: string;
   roleMatrix: Record<Capability, Level>;
   representedMemberIds: string[];
@@ -76,6 +77,7 @@ function guardsAny(ctx: AccessContext, ids: string[]): boolean {
 }
 
 function inAudience(ctx: AccessContext, rec: AccessRecord): boolean {
+  if (ctx.spaceId && rec.spaceId !== ctx.spaceId) return false;
   // A scope from the other Space kind is invalid data; fail closed for everyone.
   if (!isScopeValidForSpace(rec.sharingScope, ctx.spaceKind)) return false;
   const isCreator = rec.createdByActorId === ctx.actorId;

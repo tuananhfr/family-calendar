@@ -55,8 +55,14 @@ export class MagicLinkService {
     try {
       const sent = await this.email.send({
         to: email,
-        subject: 'Lịch Gia Đình: xác nhận email',
-        text: `Mở liên kết sau trong 15 phút để gắn email này với thiết bị của bạn:\n\n${link}\n\nNếu bạn không yêu cầu, hãy bỏ qua thư này.`,
+        subject: 'Lịch Gia Đình: xác minh email để chia sẻ lịch',
+        text:
+          'Bạn vừa yêu cầu xác minh email này trong Lịch Gia Đình.\n\n' +
+          'Sau khi xác minh, bạn có thể bật chia sẻ để mời người thân dùng chung lịch, ' +
+          'và đăng nhập lại trên thiết bị khác bằng email này.\n\n' +
+          'Mở liên kết sau trong 15 phút, bằng đúng trình duyệt bạn đang dùng Lịch Gia Đình:\n\n' +
+          `${link}\n\n` +
+          'Nếu bạn không yêu cầu, hãy bỏ qua thư này. Email sẽ không được gắn với tài khoản nào.',
       });
       // File mode means nothing was delivered; warn (stderr, any log level) with the path, never the token.
       if (sent.file) console.warn(`magic link written to ${sent.file}`);

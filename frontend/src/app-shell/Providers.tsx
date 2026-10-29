@@ -5,6 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster, TooltipProvider } from "@/design/components";
 import { SyncRuntime } from "@/features/sharing/components/SyncRuntime";
 import { useAppearanceSync } from "@/features/preferences/hooks/useAppearanceSync";
+import { PwaRuntime } from "@/core/pwa/PwaRuntime";
+import { EmergencyRuntime } from "@/features/emergency/components/EmergencyRuntime";
+import { AppearanceRuntime } from "@/features/preferences/components/AppearanceRuntime";
 
 export function Providers({ children }: { children: ReactNode }) {
   useAppearanceSync();
@@ -22,6 +25,9 @@ export function Providers({ children }: { children: ReactNode }) {
     <QueryClientProvider client={client}>
       <TooltipProvider>
         <SyncRuntime />
+        <PwaRuntime />
+        <EmergencyRuntime />
+        <AppearanceRuntime />
         {children}
         <Toaster />
       </TooltipProvider>

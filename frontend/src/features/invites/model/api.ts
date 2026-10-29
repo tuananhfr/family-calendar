@@ -5,4 +5,5 @@ export interface Role { id: string; role_key: string; name: string; matrix: Reco
 export interface Membership { actor_id: string; role_id: string; role_key: string; display_name: string; }
 export interface MembershipList { memberships: Membership[]; roles: Role[]; can_manage: boolean; }
 export const spaceEndpoint = (id: string) => "/spaces/" + encodeURIComponent(id);
+export const getJoinRequests = (id: string) => api<{ requests: JoinRequest[] }>("GET", spaceEndpoint(id) + "/join-requests");
 export const getMemberships = (id: string) => api<MembershipList>("GET", spaceEndpoint(id) + "/memberships");

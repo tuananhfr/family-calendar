@@ -62,7 +62,7 @@ function focusFirstInvalid(root: HTMLElement | null) {
 
 export function ItemEditorDialog({ target, space, onClose }: { target: EditorTarget; space: Space; onClose: () => void }) {
   const members = useMembers(space.id) ?? [];
-  const mutations = useItemMutations();
+  const mutations = useItemMutations(space);
   const bodyRef = useRef<HTMLDivElement>(null);
   const [values, setValues] = useState<ItemFormValues | null>(() => (target.mode === "create" ? initialValues(target, space) : null));
   const [recurring, setRecurring] = useState(false);
@@ -117,7 +117,7 @@ export function ItemEditorDialog({ target, space, onClose }: { target: EditorTar
   };
 
   const save = async (scope?: EditScope) => {
-    if (!values) return;
+    if (!values || !mutations.ready) return;
     const found = validateItemForm(values, space.timeZone, space.kind);
     if (Object.keys(found).length > 0) {
       setErrors(found);
@@ -176,7 +176,7 @@ export function ItemEditorDialog({ target, space, onClose }: { target: EditorTar
               <Button variant="secondary" onClick={onClose} disabled={saving}>
                 {t("common.cancel")}
               </Button>
-              <Button onClick={() => void save()} loading={saving} icon={<TypeIcon className="size-4" />}>
+              <Button onClick={() => void save()} loading={saving} disabled={!mutations.ready} icon={<TypeIcon className="size-4" />}>
                 {saving ? t("items.saving") : isCreate ? t(`items.save.${type}`) : t("items.saveChanges")}
               </Button>
             </>

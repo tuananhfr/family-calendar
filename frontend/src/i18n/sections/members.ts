@@ -105,8 +105,8 @@ export const membersVi = {
     note: "Sẽ được thêm vào gia đình sau khi lưu.",
   },
   invite: {
-    stepsTitle: "Lời mời & chấp nhận",
-    steps: ["Gửi lời mời", "Thành viên nhận link/QR", "Xác nhận tham gia", "Bắt đầu sử dụng"],
+    stepsTitle: "Các bước mời người thân",
+    steps: ["Bật chia sẻ gia đình", "Tạo link hoặc mã QR", "Người nhà mở link và gửi yêu cầu", "Bạn duyệt, cả nhà dùng chung lịch"],
     needsSharingTitle: "Cần bật Chia sẻ gia đình",
     needsSharingBody:
       "Hiện dữ liệu chỉ nằm trên máy này. Muốn mời người khác qua link, QR hoặc email, hãy bật Chia sẻ gia đình trong Cài đặt › Dữ liệu & Sao lưu.",

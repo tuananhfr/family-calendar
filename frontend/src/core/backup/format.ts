@@ -64,7 +64,7 @@ export const SETTINGS_STORE = "settings";
  * Never written to a backup: identity/credentials, sync bookkeeping and delivery jobs (domain-model.md
  * Portability). Restoring an old outbox or fired-reminder log would replay stale operations and alerts.
  */
-export const NEVER_BACKED_UP = ["localIdentity", "outbox", "syncCursors", "notifications", "firedReminders"] as const;
+export const NEVER_BACKED_UP = ["localIdentity", "outbox", "emergencyQueue", "emergencyDrafts", "syncCursors", "notifications", "firedReminders"] as const;
 
 /** Device-level settings keys that may hold secrets; skipped even if some future module stores them here. */
 export const SECRET_SETTING_KEY = /token|session|cookie|recovery|secret|credential|password|device|push|^online\.|^bootstrap:|^media:/i;

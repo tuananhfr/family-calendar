@@ -46,7 +46,7 @@ export function AddMemberScreen() {
   }
 
   const invite = (
-    <div className="grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1fr)_18rem]">
+    <div className="grid min-w-0 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_18rem]">
       <SharingPanel />
       <InviteStepsPanel />
     </div>
@@ -67,12 +67,12 @@ export function AddMemberScreen() {
           {
             value: "link",
             label: t("members.form.tabs.link"),
-            content: space.sharingState === "SHARED" ? <InviteScreen spaceId={space.id} /> : invite,
+            content: space.sharingState === "SHARED" ? <InviteScreen spaceId={space.id} spaceKind={space.kind} /> : invite,
           },
           {
             value: "email",
             label: t("members.form.tabs.email"),
-            content: space.sharingState === "SHARED" ? <InviteScreen spaceId={space.id} emailMode /> : invite,
+            content: space.sharingState === "SHARED" ? <InviteScreen spaceId={space.id} emailMode spaceKind={space.kind} /> : invite,
           },
         ]}
       />

@@ -15,6 +15,7 @@ export const appConfig = {
   appName: "Lịch Gia Đình",
   defaultTimeZone: "Asia/Ho_Chi_Minh",
   buildId: process.env.NEXT_PUBLIC_BUILD_ID ?? "dev",
+  production: process.env.NODE_ENV === "production",
 } as const;
 
 /** Next only prefixes `<Link>`/router URLs; raw URLs (image src, icons, location.replace, notification targets) need this. */

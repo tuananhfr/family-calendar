@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import { Skeleton } from "@/design/components";
 import { t } from "@/i18n/vi";
-import { ComingSoonScreen } from "@/features/coming-soon/ComingSoonScreen";
-import { SCREENS } from "@/features/coming-soon/screens";
+import { EmergencyScreen } from "@/features/emergency/components/EmergencyScreen";
 
-export const metadata: Metadata = { title: t(SCREENS.sos.titleKey) };
+export const metadata: Metadata = { title: t("emergency.title") };
 
 export default function SosPage() {
-  return <ComingSoonScreen screen="sos" />;
+  return <Suspense fallback={<Skeleton className="h-48" />}><EmergencyScreen /></Suspense>;
 }

@@ -72,7 +72,9 @@ test("family sharing, new-device login and responsive screens under production b
   await guest.screenshot({ path: info.outputPath("join-pending.png"), fullPage: true });
   expect((await rows(guest, "members")).length).toBe(0);
   const decision = page.locator("div.rounded-control").filter({ has: page.getByRole("button", { name: "Duyệt tham gia", exact: true }) }).last();
-  await select(page, "Gắn với thành viên", "Mẹ", decision);
+  // Same-name profile is preselected so approving never creates a duplicate "Mẹ".
+  await expect(decision.getByRole("combobox", { name: "Gắn với thành viên", exact: true })).toContainText("Mẹ");
+  await expect(page.getByText("Đã chọn sẵn hồ sơ trùng tên với người gửi yêu cầu.")).toBeVisible();
   await decision.getByRole("button", { name: "Duyệt tham gia", exact: true }).click();
   await expect(guest.getByRole("button", { name: "Mở lịch gia đình" })).toBeVisible({ timeout: 15_000 });
   await guest.getByRole("button", { name: "Mở lịch gia đình" }).click();

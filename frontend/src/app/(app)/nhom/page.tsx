@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { t } from "@/i18n/vi";
-import { ComingSoonScreen } from "@/features/coming-soon/ComingSoonScreen";
-import { SCREENS } from "@/features/coming-soon/screens";
+import { GroupsScreen } from "@/features/groups/components/GroupsScreen";
 
-export const metadata: Metadata = { title: t(SCREENS.groups.titleKey) };
+export const metadata: Metadata = { title: t("groups.title") };
 
 export default function GroupsPage() {
-  return <ComingSoonScreen screen="groups" />;
+  return <GroupsScreen />;
 }

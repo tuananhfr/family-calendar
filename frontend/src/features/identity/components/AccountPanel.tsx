@@ -28,7 +28,7 @@ export function AccountPanel() {
   };
   return <div className="grid gap-4 lg:grid-cols-2">
     <SettingsPanel icon={<Mail />} title={t("sharing.account")}>
-      {account.data?.linked ? <p className="break-all text-sm text-primary">{t("sharing.emailVerified")}: {account.data.email}</p> : <EmailForm mode="link" />}
+      {account.data?.linked ? <><p className="break-all text-sm text-primary">{t("sharing.emailVerified")}: {account.data.email}</p><Button variant="ghost" disabled={busy} onClick={() => { if (window.confirm(t("settingsExtra.confirmUnlink"))) void run(async () => { await api("POST", "/account/unlink"); await client.invalidateQueries({ queryKey: ["account"] }); }); }}>{t("settingsExtra.unlink")}</Button></> : <EmailForm mode="link" />}
       <Link href="/dang-nhap/" className={buttonClass("secondary")}>{t("sharing.login")}</Link>
       {identity ? <><p className="text-xs text-muted">{t("sharing.logoutHint")}</p><Button disabled={busy} variant="ghost" onClick={() => void run(logout)}>{t("sharing.logout")}</Button></> : null}
     </SettingsPanel>

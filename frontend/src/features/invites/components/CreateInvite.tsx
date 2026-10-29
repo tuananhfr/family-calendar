@@ -7,12 +7,13 @@ import { withBase } from "@/core/config";
 import { Button, TextField, toast } from "@/design/components";
 import { t } from "@/i18n/vi";
 import { spaceEndpoint } from "../model/api";
-export function CreateInvite({ spaceId, emailMode }: { spaceId: string; emailMode: boolean }) {
+export function CreateInvite({ spaceId, emailMode, spaceKind = "FAMILY" }: { spaceId: string; emailMode: boolean; spaceKind?: "FAMILY" | "GROUP" }) {
   const client = useQueryClient();
   const [email, setEmail] = useState("");
   const [hours, setHours] = useState(48);
   const [uses, setUses] = useState(1);
   const [link, setLink] = useState("");
+  const [issued, setIssued] = useState<{ expiresAt: string; uses: number }>();
   const [qr, setQr] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
@@ -21,10 +22,10 @@ export function CreateInvite({ spaceId, emailMode }: { spaceId: string; emailMod
   return <form className="flex flex-col gap-4" onSubmit={async (e) => {
     e.preventDefault(); setBusy(true); setError(undefined);
     try {
-      const created = await api<{ url: string; email_delivery?: string }>("POST", spaceEndpoint(spaceId) + "/invites",
-        { expires_in_hours: hours, max_uses: uses, approval_policy: "APPROVAL_REQUIRED", proposed_role: "MEMBER", ...(emailMode ? { email } : {}) });
+      const created = await api<{ url: string; expires_at: string; email_delivery?: string }>("POST", spaceEndpoint(spaceId) + "/invites",
+        { expires_in_hours: hours, max_uses: uses, approval_policy: "APPROVAL_REQUIRED", proposed_role: spaceKind === "GROUP" ? "PARTICIPANT" : "MEMBER", ...(emailMode ? { email } : {}) });
       const absolute = new URL(withBase(created.url), location.origin).href;
-      setLink(absolute);
+      setLink(absolute); setIssued({ expiresAt: created.expires_at, uses });
       const QR = await import("qrcode");
       setQr(await QR.toDataURL(absolute, { width: 256, margin: 2 }));
       if (emailMode && created.email_delivery !== "SENT") setError(t(created.email_delivery === "NOT_CONFIGURED" ? "sharing.mailUnavailable" : "sharing.error"));
@@ -42,7 +43,9 @@ export function CreateInvite({ spaceId, emailMode }: { spaceId: string; emailMod
     {link ? <div className="flex flex-col items-start gap-3 rounded-control bg-primary-soft p-4">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       {qr ? <img src={qr} alt={t("sharing.linkTab")} width={200} height={200} className="max-w-full rounded-control" /> : null}
+      <p className="text-sm text-body">{t("sharing.recipientHint")}</p>
       <p className="break-all text-sm text-text">{link}</p>
+      {issued ? <p className="text-xs text-body">{t("sharing.inviteSummary", { time: new Date(issued.expiresAt).toLocaleString("vi-VN"), n: issued.uses })}</p> : null}
       <p className="text-xs text-muted">{t("sharing.once")}</p>
       <div className="flex flex-wrap gap-2">
         <Button variant="secondary" onClick={async () => { try { await navigator.clipboard.writeText(link); toast(t("sharing.copied"), "success"); } catch { setError(t("sharing.error")); } }}>{t("sharing.copy")}</Button>

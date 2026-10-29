@@ -16,6 +16,7 @@ export const spaceSettingsSchema = z.object({
   showUpcomingBirthdays: z.boolean(),
   weatherEnabled: z.boolean(),
   weatherCity: z.string().max(60).optional(),
+  groupType: z.enum(["CLASS", "RELATIVES", "ACTIVITY", "OTHER"]).optional(),
 });
 export type SpaceSettings = z.infer<typeof spaceSettingsSchema>;
 

@@ -9,6 +9,7 @@ import {
 import { GENERIC_TITLE } from '../../src/modules/delivery/safe-message';
 import { JobQueue } from '../../src/modules/jobs/job-queue';
 import { WorkerLoop } from '../../src/modules/jobs/worker-loop';
+import { EmergencyLocationRetention } from '../../src/modules/emergency/location-retention.service';
 import { FakeClock } from '../helpers/clock';
 import { truncateAll } from '../helpers/db';
 import type { RegisteredDevice } from '../helpers/session';
@@ -48,6 +49,34 @@ describe('family SOS (int)', () => {
   afterAll(() => t.close());
 
   const url = (sid: string, rest = '') => `/api/v1/spaces/${sid}/emergencies${rest}`;
+
+  it('keeps the latest sample and purges GPS 24 hours after server close, independently of client time', async () => {
+    const sos = await trigger(f.owner);
+    const eid = sos.body.id as string;
+    const location = (capturedAt: string, lat: number) => post(f.owner, url(spaceId, `/${eid}/location`), {
+      lat, lng: 106, accuracy: 15, captured_at: capturedAt, provenance: 'CURRENT',
+    });
+    expect((await location('2026-10-07T02:59:40.000Z', 10)).status).toBe(201);
+    expect((await location('2026-10-07T02:59:50.000Z', 11)).status).toBe(201);
+    expect((await location('2026-10-07T02:59:45.000Z', 12)).status).toBe(201);
+    expect(await t.ds.query('SELECT latitude FROM emergency_locations WHERE event_id = ?', [eid])).toEqual([{ latitude: '11.000000' }]);
+    await post(f.owner, url(spaceId, `/${eid}/close`), { operation_id: randomUUID(), lifecycle: 'CLOSED_SAFE', closed_at: '2026-01-01T00:00:00.000Z' });
+    const retention = t.app.get(EmergencyLocationRetention);
+    await retention.purge();
+    expect(await t.ds.query('SELECT id FROM emergency_locations WHERE event_id = ?', [eid])).toHaveLength(1);
+    clock.set('2026-10-08T02:59:59.999Z');
+    await retention.purge();
+    expect((await f.owner.agent.get(url(spaceId, `/${eid}`))).body.last_location.lat).toBe(11);
+    clock.set('2026-10-08T03:00:00.000Z');
+    expect((await f.owner.agent.get(url(spaceId, `/${eid}`))).body.last_location).toBeNull();
+    await retention.purge();
+    expect(await t.ds.query('SELECT id FROM emergency_locations WHERE event_id = ?', [eid])).toHaveLength(0);
+    const active = await trigger(f.owner);
+    await post(f.owner, url(spaceId, `/${active.body.id}/location`), { lat: 10, lng: 106, accuracy: 15, captured_at: NOW, provenance: 'LAST_KNOWN' });
+    clock.set('2026-10-10T03:00:00.000Z');
+    await retention.purge();
+    expect(await t.ds.query('SELECT id FROM emergency_locations WHERE event_id = ?', [active.body.id])).toHaveLength(1);
+  });
 
   function trigger(dev: RegisteredDevice, body: Record<string, unknown> = {}, sid = spaceId) {
     return dev.agent

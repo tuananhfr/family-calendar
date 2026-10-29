@@ -5,6 +5,8 @@ import { Check, Moon, Sun } from "lucide-react";
 import { t } from "@/i18n/vi";
 import { useAppStore, type ThemePreference } from "@/store/app.store";
 import styles from "../preferences.module.css";
+import { db } from "@/core/db/db";
+import { toast } from "@/design/components";
 
 const THEMES = [{ value: "light", Icon: Sun }, { value: "dark", Icon: Moon }] as const;
 
@@ -20,7 +22,7 @@ export function ThemePicker() {
       <Menu.Portal>
         <Menu.Content className={styles.menu} align="end" sideOffset={8} collisionPadding={12}>
           <Menu.Label className={styles.menuLabel}>{t("preferences.theme.title")}</Menu.Label>
-          <Menu.RadioGroup value={theme} onValueChange={(value) => setTheme(value as ThemePreference)} aria-label={t("preferences.theme.title")}>
+          <Menu.RadioGroup value={theme} onValueChange={(value) => { setTheme(value as ThemePreference); void db.settings.put({ key: "appearance.followSystem", value: false }).catch(() => toast(t("settingsExtra.failed"), "error")); }} aria-label={t("preferences.theme.title")}>
             {THEMES.map(({ value, Icon: ItemIcon }) => (
               <Menu.RadioItem className={styles.item} key={value} value={value}>
                 <span className={styles.indicator}><Menu.ItemIndicator><Check aria-hidden size={16} /></Menu.ItemIndicator></span>

@@ -1,5 +1,6 @@
 import { strFromU8, unzipSync } from "fflate";
 import { db, type SettingRow } from "../db/db";
+import { emergencyContactSchema, emergencyRecordSchema } from "../emergency/schema";
 import type { Item } from "../model/item";
 import type { Space } from "../model/space";
 import type { StoredFile } from "../model/storage";
@@ -134,6 +135,10 @@ function parseContents(manifest: BackupManifest, files: Record<string, Uint8Arra
   for (const store of EXTRA_BACKUP_STORES) {
     rows[store] = readRows(manifest, files, store);
     if (!rows[store].every((r) => typeof r.id === "string" && spaceIds.has(r.spaceId as string))) throw new Corrupted(store);
+    for (const row of rows[store]) {
+      if (store === "emergencyContacts" && !emergencyContactSchema.safeParse(row).success) throw new Corrupted(store);
+      if (store === "emergencyEvents" && (row.mode !== undefined || row.createdByActorId !== undefined || row.delivery !== undefined) && !emergencyRecordSchema.safeParse(row).success) throw new Corrupted(store);
+    }
   }
 
   // Relations: every child points at something inside the same backup.
@@ -199,6 +204,14 @@ export function restorableRows(backup: ParsedBackup, actorId: string, now: Date)
         r.status = "CLOSED_ENDED";
         r.closeReason = "RESTORED";
         r.closedAt = now.toISOString();
+      }
+      if (store === "emergencyEvents") {
+        r.mode = "LOCAL";
+        r.delivery = "LOCAL_PENDING";
+        delete r.position;
+        delete r.serverReceivedAt;
+        delete r.serverClosedConfirmedAt;
+        delete r.recipients;
       }
       return r;
     });

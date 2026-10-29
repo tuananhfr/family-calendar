@@ -29,6 +29,7 @@ const SETTINGS: Record<string, { codec: Codec; optional?: boolean }> = {
   showUpcomingBirthdays: { codec: bool },
   weatherEnabled: { codec: bool },
   weatherCity: { codec: text(60, 0), optional: true },
+  groupType: { codec: oneOf(['CLASS', 'RELATIVES', 'ACTIVITY', 'OTHER'] as const), optional: true },
 };
 
 export function parseSettings(v: unknown, e: FieldErrors): Record<string, unknown> | typeof INVALID {

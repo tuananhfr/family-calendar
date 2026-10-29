@@ -3,7 +3,10 @@ import type { Category } from "@/core/model/common";
 import type { Item } from "@/core/model/item";
 import { wallDurationMinutes } from "@/core/recurrence/floating";
 import { expandOccurrences } from "@/core/recurrence/expand";
-import type { Occurrence } from "@/core/recurrence/types";
+import type { DateWindow, Occurrence } from "@/core/recurrence/types";
+import type { ItemExceptionRecord } from "@/core/model/occurrence";
+import { instantToZoned } from "@/core/time/zoned";
+import { DEFAULT_TIME_ZONE } from "@/core/model/common";
 import type { LocalDataView } from "@/core/repo/data-view";
 import { normalizeVi } from "@/core/search/normalize";
 import { addDays, daysBetween, endOfMonth, type LocalDate } from "@/core/time/local-date";
@@ -39,18 +42,20 @@ const round2 = (n: number) => Math.round(n * 100) / 100;
  * Month report of modules.md §10, computed on the device from records `ctx` may read — another actor's PRIVATE
  * or health items the viewer can't open never reach a count.
  */
-export function reportForMonth(data: LocalDataView, month: string, ctx: AccessContext, opts: { today?: LocalDate } = {}): MonthReport {
+export function reportForMonth(data: LocalDataView, month: string, ctx: AccessContext, opts: { today?: LocalDate; window?: DateWindow; previousWindow?: DateWindow } = {}): MonthReport {
   const items = data.items.filter((i) => i.deletedAt === null && canReadItem(ctx, i));
-  const exceptionsOf = (id: string) => data.exceptions.filter((e) => e.itemId === id && e.deletedAt === null);
+  const exceptions = new Map<string, ItemExceptionRecord[]>();
+  for (const row of data.exceptions) if (!row.deletedAt) { const list = exceptions.get(row.itemId) ?? []; list.push(row); exceptions.set(row.itemId, list); }
+  const exceptionsOf = (id: string) => exceptions.get(id) ?? [];
   const expand = (from: LocalDate, to: LocalDate) =>
     items.flatMap((item) => expandOccurrences(item.id, item.schedule, { from, to }, exceptionsOf(item.id)).map((occ) => ({ item, occ })));
 
-  const from = `${month}-01`;
-  const to = endOfMonth(from);
+  const from = opts.window?.from ?? `${month}-01`;
+  const to = opts.window?.to ?? endOfMonth(from);
   const inMonth = expand(from, to);
-  const prevFrom = `${previousMonth(month)}-01`;
+  const prevFrom = opts.previousWindow?.from ?? `${previousMonth(month)}-01`;
   const events = inMonth.filter((x) => x.item.kind === "EVENT");
-  const prevEvents = expand(prevFrom, endOfMonth(prevFrom)).filter((x) => x.item.kind === "EVENT").length;
+  const prevEvents = expand(prevFrom, opts.previousWindow?.to ?? endOfMonth(prevFrom)).filter((x) => x.item.kind === "EVENT").length;
 
   const done = new Set(data.states.filter((s) => s.deletedAt === null && s.status === "DONE").map((s) => s.occurrenceKey));
   const isDone = (item: Item, occ: Occurrence) => done.has(occ.occurrenceKey) || (!item.schedule.rrule && !item.schedule.lunarRule && !!item.completedAt);
@@ -64,11 +69,12 @@ export function reportForMonth(data: LocalDataView, month: string, ctx: AccessCo
     .filter((r) => r.deletedAt === null && r.enabled !== false && readable.has(r.itemId))
     .reduce((n, r) => n + (occCount.get(r.itemId) ?? 0) * (r.offsetsMinutes.length + (r.offsetMonths?.length ?? 0)), 0);
 
-  const members = data.members.filter((m) => m.deletedAt === null && m.status === "ACTIVE" && (m.sharingScope !== "PRIVATE" || m.createdByActorId === ctx.actorId));
+  const members = data.members.filter((m) => m.deletedAt === null && m.status === "ACTIVE" && (!ctx.spaceId || m.spaceId === ctx.spaceId) && (m.sharingScope !== "PRIVATE" || m.createdByActorId === ctx.actorId));
   const involved = new Set(inMonth.flatMap((x) => x.item.memberIds));
+  const inPeriod = (instant: string) => { const date = instantToZoned(new Date(instant), data.space.timeZone ?? DEFAULT_TIME_ZONE).slice(0, 10); return date >= from && date <= to; };
   const actedInMonth = (actorId: string) =>
-    data.states.some((s) => s.actedByActorId === actorId && s.actedAt.slice(0, 7) === month) ||
-    items.some((i) => i.createdByActorId === actorId && i.createdAt.slice(0, 7) === month);
+    data.states.some((s) => !s.deletedAt && readable.has(s.itemId) && s.actedByActorId === actorId && inPeriod(s.actedAt)) ||
+    items.some((i) => i.createdByActorId === actorId && inPeriod(i.createdAt));
   const activeMembers = members.filter((m) => involved.has(m.id) || (!!m.linkedActorId && actedInMonth(m.linkedActorId))).length;
 
   const catCount = new Map<Category, number>();
@@ -125,7 +131,7 @@ export function reportForMonth(data: LocalDataView, month: string, ctx: AccessCo
     members: { active: activeMembers, total: members.length },
     byCategory,
     memberTime,
-    habits: habitRates(items, data.states, month, { exceptions: data.exceptions, today: opts.today }),
+    habits: habitRates(items, data.states, month, { exceptions: data.exceptions, today: opts.today, window: opts.window }),
     topEvents,
     daysSinceActivity: last ? daysBetween(last, ref) : null,
   };

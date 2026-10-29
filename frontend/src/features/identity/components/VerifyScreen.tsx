@@ -6,6 +6,7 @@ import { api, clearApiSession } from "@/core/api/client";
 import { Button, Select } from "@/design/components";
 import { t } from "@/i18n/vi";
 import { IdentityFrame } from "./IdentityFrame";
+import { takeAfterVerify } from "../model/after-verify";
 import { importSharedSpaces } from "../model/import-spaces";
 import { newOnlineDevice, refreshSession } from "../model/session";
 export function VerifyScreen() {
@@ -53,7 +54,7 @@ export function VerifyScreen() {
           router.replace("/hom-nay/");
         } else {
           await api("POST", "/auth/magic-link/verify", { token });
-          await refreshSession(); router.replace("/cai-dat/?tab=account");
+          await refreshSession(); router.replace(takeAfterVerify() ?? "/cai-dat/?tab=account");
         }
       } catch (err) { setError(sharingError(err)); }
       finally { setBusy(false); }

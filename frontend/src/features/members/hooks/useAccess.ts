@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { accessContextFor, type AccessContext } from "@/core/access/evaluate";
-import type { DefaultRoleKey } from "@/core/access/capabilities";
+import type { DefaultRoleKey, GroupRoleKey } from "@/core/access/capabilities";
 import { getLocalIdentity } from "@/core/db/local-identity";
 import { db } from "@/core/db/db";
 import type { Member } from "@/core/model/member";
@@ -23,15 +23,15 @@ export function useAccess(): AccessContext | undefined {
     if (!space || !actorId || usingMember === undefined) return undefined;
     if (space.sharingState === "SHARED") {
       const access = cursor?.access;
-      if (!access || !online || access.actorId !== online.actorId || cursor?.halt === "BLOCKED") return undefined;
+      if (!access || !online || cursor?.spaceId !== space.id || access.actorId !== online.actorId || cursor?.halt === "BLOCKED") return undefined;
       const represented = (access.representedMemberIds ?? []) as string[];
-      return { actorId: online.actorId, spaceKind: space.kind,
+      return { actorId: online.actorId, spaceKind: space.kind, spaceId: space.id,
         roleMatrix: access.matrix as AccessContext["roleMatrix"], restrictions: access.restrictions as AccessContext["restrictions"],
         representedMemberIds: represented, representedProfiles: (members ?? []).filter((m) => represented.includes(m.id)).map((m) => m.profile),
         guardedMemberIds: (access.guardianOfMemberIds ?? []) as string[], isManager: ["OWNER", "ORGANIZER"].includes(String(access.roleKey)) };
     }
     const member = usingMember && usingMember.spaceId === space.id ? usingMember : null;
-    const role: DefaultRoleKey = member?.profile === "CHILD" ? "MEMBER" : member?.profile === "SENIOR" ? "SENIOR" : "OWNER";
-    return accessContextFor(role, { actorId, spaceKind: space.kind, representedMemberIds: member ? [member.id] : [], representedProfiles: member ? [member.profile] : ["PARENT"] });
+    const role: DefaultRoleKey | GroupRoleKey = space.kind === "GROUP" ? "ORGANIZER" : member?.profile === "CHILD" ? "MEMBER" : member?.profile === "SENIOR" ? "SENIOR" : "OWNER";
+    return accessContextFor(role, { actorId, spaceId: space.id, spaceKind: space.kind, representedMemberIds: member ? [member.id] : [], representedProfiles: member ? [member.profile] : ["PARENT"] });
   }, [space, actorId, usingMember, cursor, online, members]);
 }
