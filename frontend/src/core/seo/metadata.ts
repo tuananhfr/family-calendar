@@ -3,7 +3,7 @@ import { appConfig, siteUrl } from "@/core/config";
 import { PUBLIC_PAGES, type PublicPageKey } from "./public-pages";
 
 const home = PUBLIC_PAGES.home;
-export const SHARE_IMAGE_PATH = "/social/family-calendar-v1.png";
+export const SHARE_IMAGE_PATH = "/social/family-calendar-20261031.png";
 const image = { url: siteUrl(SHARE_IMAGE_PATH), width: 1200, height: 630, type: "image/png", alt: appConfig.appName };
 
 export const defaultMetadata: Metadata = {

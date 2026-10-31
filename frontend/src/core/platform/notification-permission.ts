@@ -43,7 +43,7 @@ export async function requestNotificationPermission(now: Date = new Date()): Pro
  */
 export async function showSystemNotification(text: { title?: string; body: string }, opts: { tag?: string; url?: string } = {}): Promise<boolean> {
   if (notificationPermission() !== "granted") return false;
-  const options: NotificationOptions = { body: text.body, tag: opts.tag, data: { url: withBase(opts.url ?? "/") }, icon: withBase("/icons/icon-192.png") };
+  const options: NotificationOptions = { body: text.body, tag: opts.tag, data: { url: withBase(opts.url ?? "/") }, icon: withBase("/icons/icon-192-20261031.png") };
   const title = text.title ?? GENERIC_TITLE;
   try {
     const sw = (globalThis.navigator as Navigator | undefined)?.serviceWorker;

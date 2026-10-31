@@ -11,7 +11,7 @@ export function BrandLogo({ compact = false, className }: { compact?: boolean; c
     <span className={cn("inline-flex shrink-0 items-center gap-2.5", className)}>
       <span aria-hidden className={cn("block shrink-0", compact ? "size-11" : "size-14")}>
         <Image
-          src={withBase("/illustrations/family-logo-02-mark.webp")}
+          src={withBase("/brand/family-calendar-mark-20261031-transparent.webp")}
           width={512}
           height={512}
           alt=""

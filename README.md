@@ -188,6 +188,17 @@ Do not block /lich-gia-dinh/ in robots.txt: crawlers need to read page-level noi
 
 After deployment, verify the landing and each public canonical URL return 200 over HTTPS, the OG image returns image/png at 1200x630, and sitemap.xml returns application/xml with only the six public URLs. Test raw HTML with social crawler user agents as well as a browser. Confirm noindex on app, onboarding, invite, SOS, print and UI-kit routes. Social platforms may retain cached previews; request a re-scrape where supported.
 
+### Bộ nhận diện cập nhật 2026-10-31
+
+Logo không vòng tròn dùng ảnh gốc do người dùng cung cấp, lưu tại
+`frontend/public/brand/family-calendar-mark-source-20261031.png`. Chạy
+`cd frontend && node scripts/generate-brand-assets.mjs` để xuất lại logo,
+favicon, icon PWA và ảnh chia sẻ 1200×630. Favicon đơn giản nằm trong SVG
+cùng thư mục brand. URL icon và ảnh chia sẻ có phiên bản mới để tránh cache cũ.
+Open Graph, Twitter Cards và JSON-LD dùng chung ảnh mới qua `SHARE_IMAGE_PATH`.
+Triển khai lại bản build với origin/base path hiện có; nếu link đã từng chia sẻ
+vẫn hiện ảnh cũ, yêu cầu nền tảng chia sẻ tải lại metadata.
+
 ## Gia đình cùng sử dụng
 
 Cách mời, duyệt thành viên, quản lý thiết bị/quyền, đồng bộ và yêu cầu SMTP production: [docs/family-sharing.md](docs/family-sharing.md).
