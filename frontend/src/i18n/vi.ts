@@ -33,7 +33,7 @@ export const vi = {
   pwa: pwaVi,
   sharing: sharingVi,
   appName: "Lịch Gia Đình",
-  tagline: "Hôm nay nhà mình có gì?",
+  tagline: "— Gắn kết gia đình.",
   script: {
     together: "Nhà mình cùng xem cùng sắp xếp",
     footer: "Làm việc nhẹ hơn. Mỗi ngày tốt hơn!",
@@ -85,7 +85,7 @@ export const vi = {
     localModeBody: "Dữ liệu chỉ nằm trên thiết bị này. Chưa gửi gì lên máy chủ.",
     sosSoonTitle: "SOS",
     sosSoonBody: "Nút SOS sẽ có ở bản cập nhật tới. Khi khẩn cấp, hãy gọi 113 (công an), 114 (cứu hỏa), 115 (cấp cứu).",
-    footerTagline: "Hôm nay nhà mình có gì?",
+    footerTagline: "— Gắn kết gia đình.",
   },
   footer: {
     about: "Giới thiệu",

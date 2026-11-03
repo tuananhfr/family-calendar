@@ -108,7 +108,7 @@
 @media (max-width: 800px) {
   .headerInner { flex-wrap: wrap; gap: 10px; padding: 12px 20px 8px; }
   .brand { font-size: 1.05rem; }
-  .brand img { height: 36px; width: auto; }
+  .brand img { height: 100%; width: 100%; object-fit: contain; }
   .navigation { order: 3; width: 100%; justify-content: center; gap: 24px; }
   .navigation a { font-size: .83rem; }
   .openApp { margin-left: auto; font-size: .8rem; padding: 8px 12px; }

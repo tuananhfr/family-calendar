@@ -3,12 +3,12 @@ import { appConfig, siteUrl } from "@/core/config";
 import { PUBLIC_PAGES, type PublicPageKey } from "./public-pages";
 
 const home = PUBLIC_PAGES.home;
-export const SHARE_IMAGE_PATH = "/social/family-calendar-20261031.png";
-const image = { url: siteUrl(SHARE_IMAGE_PATH), width: 1200, height: 630, type: "image/png", alt: appConfig.appName };
+export const SHARE_IMAGE_PATH = "/social/family-calendar-20261103.png";
+const image = { url: siteUrl(SHARE_IMAGE_PATH), width: 1200, height: 630, type: "image/png", alt: "Lịch Gia Đình – Gắn kết gia đình qua từng ngày." };
 
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteUrl("/")),
-  title: { default: appConfig.appName, template: "%s · " + appConfig.appName },
+  title: { default: home.title, template: "%s · " + appConfig.appName },
   description: home.description,
   applicationName: appConfig.appName,
   // Only explicitly listed public pages opt in to indexing.

@@ -9,6 +9,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Lịch Gia Đình",
     short_name: "Lịch Gia Đình",
+    description: "Cùng quản lý lịch, sự kiện, nhắc việc và những dịp quan trọng của gia đình.",
     lang: "vi",
     start_url: withBase(ROUTES.today),
     scope: withBase("/"),
@@ -16,8 +17,8 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: "#f4f7fc",
     theme_color: "#f4f7fc",
     icons: [
-      { src: withBase("/icons/icon-192-20261031.png"), sizes: "192x192", type: "image/png" },
-      { src: withBase("/icons/icon-512-20261031.png"), sizes: "512x512", type: "image/png" },
+      { src: withBase("/icons/icon-192-20261103.png"), sizes: "192x192", type: "image/png", purpose: "any" },
+      { src: withBase("/icons/icon-512-20261103.png"), sizes: "512x512", type: "image/png" },
     ],
   };
 }

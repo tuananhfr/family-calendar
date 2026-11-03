@@ -1,5 +1,5 @@
 export const landingVi = {
-  description: "Lịch, việc và những điều cần nhớ của cả nhà, trong một nơi. Theo dõi lịch gia đình, thời khóa biểu, sức khỏe, chi tiêu và giấy tờ.",
+  description: "Cùng quản lý lịch, sự kiện, nhắc việc và những dịp quan trọng của gia đình.",
   skip: "Bỏ qua đến nội dung",
   navLabel: "Giới thiệu ứng dụng",
   featuresLink: "Tính năng",
@@ -8,7 +8,7 @@ export const landingVi = {
   openApp: "Mở lịch của tôi",
   start: "Bắt đầu dùng",
   explore: "Khám phá tính năng",
-  hero: { title: "Hôm nay nhà mình có gì?", body: "Lịch, việc và những điều cần nhớ của cả nhà, trong một nơi.", previewAlt: "Giao diện Hôm nay của Lịch Gia Đình với lịch và việc của một gia đình mẫu.", sample: "Minh họa bằng dữ liệu mẫu" },
+  hero: { title: "Gắn kết gia đình qua từng ngày.", body: "Cùng quản lý lịch, sự kiện, nhắc việc và những dịp quan trọng của gia đình.", previewAlt: "Giao diện Hôm nay của Lịch Gia Đình với lịch và việc của một gia đình mẫu.", sample: "Minh họa bằng dữ liệu mẫu" },
   calendar: {
     label: "Lịch & việc",
     title: "Cả nhà bận rộn. Mọi việc vẫn rõ ràng.",

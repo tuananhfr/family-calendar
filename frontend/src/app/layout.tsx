@@ -22,8 +22,11 @@ const script = Dancing_Script({
 export const metadata: Metadata = {
   ...defaultMetadata,
   icons: {
-    icon: [{ url: withBase("/icons/favicon-48-20261031.png"), sizes: "48x48", type: "image/png" }],
-    apple: withBase("/icons/apple-touch-icon-20261031.png"),
+    icon: [
+      { url: withBase("/icons/favicon-48-20261103.png"), sizes: "48x48", type: "image/png" },
+      { url: withBase("/brand/family-calendar-favicon-20261103.svg"), type: "image/svg+xml" },
+    ],
+    apple: withBase("/icons/apple-touch-icon-20261103.png"),
   },
 };
 

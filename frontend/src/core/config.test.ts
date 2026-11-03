@@ -11,7 +11,7 @@ describe("appConfig", () => {
 
 describe("t", () => {
   it("returns Vietnamese strings", () => {
-    expect(t("tagline")).toBe("Hôm nay nhà mình có gì?");
+    expect(t("tagline")).toBe("— Gắn kết gia đình.");
   });
 
   it("interpolates variables", () => {

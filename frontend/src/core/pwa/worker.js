@@ -69,8 +69,8 @@ self.addEventListener("push", (event) => {
     const isSos = new URL(url).pathname === config.basePath + "/sos/";
     await self.registration.showNotification(config.messages.title, {
       body: isSos ? config.messages.sosBody : config.messages.body,
-      icon: config.basePath + "/icons/icon-192-20261031.png",
-      badge: config.basePath + "/icons/icon-192-20261031.png",
+      icon: config.basePath + "/icons/icon-192-20261103.png",
+      badge: config.basePath + "/icons/icon-192-20261103.png",
       tag: typeof payload.tag === "string" ? payload.tag.slice(0, 100) : "family-calendar",
       data: { url },
     });
