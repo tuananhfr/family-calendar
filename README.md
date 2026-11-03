@@ -191,7 +191,7 @@ After deployment, verify the landing and each public canonical URL return 200 ov
 ### Bộ nhận diện cập nhật 2026-10-31
 
 Logo không vòng tròn dùng ảnh gốc do người dùng cung cấp, lưu tại
-`frontend/public/brand/family-calendar-mark-source-20261031.png`. Chạy
+`frontend/assets/brand/family-calendar-mark-source-20261031.png`. Chạy
 `cd frontend && node scripts/generate-brand-assets.mjs` để xuất lại logo,
 favicon, icon PWA và ảnh chia sẻ 1200×630. Favicon đơn giản nằm trong SVG
 cùng thư mục brand. URL icon và ảnh chia sẻ có phiên bản mới để tránh cache cũ.

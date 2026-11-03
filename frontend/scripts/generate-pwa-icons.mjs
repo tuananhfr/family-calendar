@@ -5,7 +5,7 @@ import sharp from "sharp";
 
 const root = path.resolve(import.meta.dirname, "..");
 const iconDir = path.join(root, "public/icons");
-const source = path.join(root, "public/brand/family-calendar-mark-transparent-source-20261031.png");
+const source = path.join(root, "assets/brand/family-calendar-mark-transparent-source-20261031.png");
 const faviconSource = path.join(root, "public/brand/family-calendar-favicon-20261103.svg");
 
 export async function generatePwaIcons() {

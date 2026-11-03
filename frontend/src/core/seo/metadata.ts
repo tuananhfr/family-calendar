@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { appConfig, siteUrl } from "@/core/config";
+import { t } from "@/i18n/vi";
 import { PUBLIC_PAGES, type PublicPageKey } from "./public-pages";
 
 const home = PUBLIC_PAGES.home;
 export const SHARE_IMAGE_PATH = "/social/family-calendar-20261103.png";
-const image = { url: siteUrl(SHARE_IMAGE_PATH), width: 1200, height: 630, type: "image/png", alt: "Lịch Gia Đình – Gắn kết gia đình qua từng ngày." };
+const image = { url: siteUrl(SHARE_IMAGE_PATH), width: 1200, height: 630, type: "image/png", alt: t("landing.shareImageAlt") };
 
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteUrl("/")),

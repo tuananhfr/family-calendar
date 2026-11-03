@@ -3,12 +3,12 @@ import sharp from 'sharp';
 import { generatePwaIcons } from './generate-pwa-icons.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
-// Bản nguồn sạch đã tách nền, giữ nguyên hình và màu của logo được cung cấp.
-const source = path.join(root, 'public/brand/family-calendar-mark-transparent-source-20261031.png');
+// Background-removed copy of the supplied logo; shapes and colors must stay untouched.
+const source = path.join(root, 'assets/brand/family-calendar-mark-transparent-source-20261031.png');
 await sharp(source).resize(512, 512).webp({ lossless: true }).toFile(path.join(root, 'public/brand/family-calendar-mark-20261103-transparent.webp'));
 await generatePwaIcons();
 
-// Một logo và một thông điệp chính; không đưa dữ liệu gia đình lên ảnh chia sẻ.
+// The share card must never contain family data.
 const logo = await sharp(source).resize(350, 350, { fit: 'contain', background: '#00000000' }).png().toBuffer();
 const artwork = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
 <rect width="1200" height="630" fill="#f4f7fc"/>

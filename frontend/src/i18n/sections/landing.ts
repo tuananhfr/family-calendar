@@ -1,5 +1,6 @@
 export const landingVi = {
   description: "Cùng quản lý lịch, sự kiện, nhắc việc và những dịp quan trọng của gia đình.",
+  shareImageAlt: "Lịch Gia Đình – Gắn kết gia đình qua từng ngày.",
   skip: "Bỏ qua đến nội dung",
   navLabel: "Giới thiệu ứng dụng",
   featuresLink: "Tính năng",
