@@ -45,6 +45,7 @@ export const vi = {
     tasks: "Việc cần làm",
     reminders: "Nhắc nhở",
     timetable: "Thời khóa biểu",
+    screenTime: "Thời gian màn hình",
     health: "Sức khỏe",
     finance: "Tài chính gia đình",
     specialDays: "Ngày đặc biệt",
@@ -88,6 +89,7 @@ export const vi = {
     footerTagline: "— Gắn kết gia đình.",
   },
   footer: {
+    androidDownload: "Tải app Android",
     about: "Giới thiệu",
     terms: "Điều khoản",
     privacy: "Quyền riêng tư",

@@ -18,6 +18,7 @@ import { RemindersModule } from './modules/reminders/reminders.module';
 import { SpacesModule } from './modules/spaces/spaces.module';
 import { StorageModule } from './modules/storage/storage.module';
 import { SyncModule } from './modules/sync/sync.module';
+import { ScreenTimeModule } from './modules/screen-time/screen-time.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { SyncModule } from './modules/sync/sync.module';
     EmergencyModule,
     AiModule,
     IcsModule,
+    ScreenTimeModule,
   ],
   providers: [
     RateLimitService,

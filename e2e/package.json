@@ -12,7 +12,9 @@
     "test:headed": "playwright test --headed",
     "install:browsers": "playwright install chromium webkit",
     "report": "playwright show-report",
-    "test:sharing": "playwright test -c sharing.config.ts"
+    "test:sharing": "playwright test -c sharing.config.ts",
+    "test:screen-time": "playwright test -c screen-time.config.ts",
+    "test:screen-time:types": "tsc --noEmit -p tsconfig.screen-time.json"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

@@ -7,7 +7,7 @@ import { LandingBrand } from "./LandingBrand";
 import { StartLink } from "./StartLink";
 import styles from "../landing.module.css";
 
-const links = ["about", "privacy", "help", "contact"] as const;
+const links = ["androidDownload", "about", "privacy", "help", "contact"] as const;
 
 export function ClosingSection() {
   return (

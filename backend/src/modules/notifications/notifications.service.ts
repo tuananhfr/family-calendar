@@ -55,7 +55,16 @@ function decodeCursor(raw: string): Cursor {
 /** Only the caller's own notifications, and only for Spaces they still belong to: leaving a Space hides its bell. */
 const VISIBLE = `FROM notifications n
   JOIN memberships m ON m.space_id = n.space_id AND m.actor_id = n.actor_id AND m.status = 'ACTIVE'
- WHERE n.actor_id = ?`;
+ WHERE n.actor_id = ?
+   AND (COALESCE(JSON_UNQUOTE(JSON_EXTRACT(n.resource_ref, '$.type')), '') <> 'screen_time'
+     OR EXISTS (
+       SELECT 1 FROM members mb JOIN roles r ON r.id = m.role_id AND r.space_id = m.space_id AND r.deleted_at IS NULL
+       WHERE mb.space_id = n.space_id AND mb.id = JSON_UNQUOTE(JSON_EXTRACT(n.resource_ref, '$.id'))
+         AND mb.deleted_at IS NULL AND mb.status = 'ACTIVE'
+         AND (r.role_key = 'OWNER' OR EXISTS (
+           SELECT 1 FROM member_representations mr WHERE mr.space_id = mb.space_id AND mr.member_id = mb.id AND mr.actor_id = n.actor_id
+         ))
+     ))`;
 
 @Injectable()
 export class NotificationsService {

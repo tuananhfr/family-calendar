@@ -17,6 +17,7 @@ import {
   Pill,
   Plus,
   Settings,
+  Smartphone,
   Share2,
   ShieldCheck,
   Users,
@@ -48,6 +49,7 @@ export const ROUTES = {
   tasks: "/viec/",
   reminders: "/nhac/",
   timetable: "/thoi-khoa-bieu/",
+  screenTime: "/thoi-gian-man-hinh/",
   specialDays: "/ngay-dac-biet/",
   members: "/thanh-vien/",
   addMember: "/thanh-vien/them/",
@@ -70,6 +72,7 @@ export const ROUTES = {
   privacy: "/quyen-rieng-tu/",
   contact: "/lien-he/",
   help: "/tro-giup/",
+  androidDownload: "/tai-ung-dung/",
 } as const;
 
 const item = (key: string, labelKey: string, href: string, icon: LucideIcon, extra: Partial<NavItem> = {}): NavItem => ({ key, label: t(labelKey), href, icon, ...extra });
@@ -77,6 +80,7 @@ const item = (key: string, labelKey: string, href: string, icon: LucideIcon, ext
 export const TOPNAV_ITEMS: NavItem[] = [
   item("today", "nav.today", ROUTES.today, House),
   item("calendar", "nav.calendar", ROUTES.calendar, CalendarDays),
+  item("screenTime", "nav.screenTime", ROUTES.screenTime, Smartphone),
   item("tasks", "nav.tasks", ROUTES.tasks, ListChecks),
   item("reminders", "nav.reminders", ROUTES.reminders, Bell),
   item("members", "nav.members", ROUTES.members, Users),
@@ -92,6 +96,7 @@ export const SIDEBAR_ITEMS: NavItem[] = [
   item("reminders", "nav.reminders", ROUTES.reminders, Bell),
   item("upcoming", "nav.upcoming", ROUTES.upcoming, CalendarClock),
   item("timetable", "nav.timetable", ROUTES.timetable, BookOpen),
+  item("screenTime", "nav.screenTime", ROUTES.screenTime, Smartphone),
   item("health", "nav.health", ROUTES.health, HeartPulse, { capability: "health" }),
   item("finance", "nav.finance", ROUTES.finance, Wallet, { capability: "finance" }),
   item("specialDays", "nav.specialDays", ROUTES.specialDays, Cake),
@@ -121,6 +126,7 @@ export const MOBILE_TABS: NavItem[] = [
 ];
 
 export const FAMILY_SHEET_ITEMS: NavItem[] = [
+  item("screenTime", "nav.screenTime", ROUTES.screenTime, Smartphone),
   item("tasks", "nav.tasks", ROUTES.tasks, ListChecks, { badge: "tasksToday" }),
   item("reminders", "nav.reminders", ROUTES.reminders, Bell),
   item("timetable", "nav.timetable", ROUTES.timetable, BookOpen),
@@ -138,6 +144,7 @@ export const FAMILY_SHEET_ITEMS: NavItem[] = [
 ];
 
 export const FOOTER_LINKS: NavItem[] = [
+  item("androidDownload", "footer.androidDownload", ROUTES.androidDownload, Smartphone),
   item("about", "footer.about", ROUTES.about, FileText),
   item("terms", "footer.terms", ROUTES.terms, FileText),
   item("privacy", "footer.privacy", ROUTES.privacy, ShieldCheck),

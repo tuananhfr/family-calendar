@@ -3,7 +3,7 @@
 /** "" at the domain root, "/lich-gia-dinh" when served under a sub-path (fixed at build time). */
 const basePath = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").trim().replace(/\/+$/, "");
 
-const siteOrigin = new URL(process.env.NEXT_PUBLIC_SITE_ORIGIN ?? "https://lpc.vn");
+const siteOrigin = new URL(process.env.NEXT_PUBLIC_SITE_ORIGIN ?? "https://lichgiadinh.info");
 if (!["http:", "https:"].includes(siteOrigin.protocol) || siteOrigin.pathname !== "/" || siteOrigin.search || siteOrigin.hash || siteOrigin.username || siteOrigin.password) {
   throw new Error("NEXT_PUBLIC_SITE_ORIGIN must be an HTTP(S) origin without a path, query, or credentials");
 }

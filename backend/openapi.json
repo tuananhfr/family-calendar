@@ -2738,6 +2738,731 @@
           "integrations"
         ]
       }
+    },
+    "/api/v1/spaces/{spaceId}/screen-time/members": {
+      "get": {
+        "operationId": "ScreenTimeController_members",
+        "parameters": [
+          {
+            "name": "spaceId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScreenMembersResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "AUTH_REQUIRED / DEVICE_REVOKED"
+          },
+          "403": {
+            "description": "FORBIDDEN / SPACE_ACCESS_REVOKED"
+          },
+          "409": {
+            "description": "REVISION_CONFLICT"
+          },
+          "422": {
+            "description": "VALIDATION_FAILED"
+          },
+          "429": {
+            "description": "RATE_LIMITED"
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "summary": "Danh sách thành viên mà phiên hiện tại được xem thời gian màn hình.",
+        "tags": [
+          "screen-time"
+        ]
+      }
+    },
+    "/api/v1/spaces/{spaceId}/screen-time/members/{memberId}/summary": {
+      "get": {
+        "operationId": "ScreenTimeController_summary",
+        "parameters": [
+          {
+            "name": "spaceId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "memberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": "2026-11-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": "2026-11-07",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScreenSummaryResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "AUTH_REQUIRED / DEVICE_REVOKED"
+          },
+          "403": {
+            "description": "FORBIDDEN / SPACE_ACCESS_REVOKED"
+          },
+          "409": {
+            "description": "REVISION_CONFLICT"
+          },
+          "422": {
+            "description": "VALIDATION_FAILED"
+          },
+          "429": {
+            "description": "RATE_LIMITED"
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "screen-time"
+        ]
+      }
+    },
+    "/api/v1/spaces/{spaceId}/screen-time/members/{memberId}/pairings": {
+      "post": {
+        "operationId": "ScreenTimeController_pair",
+        "parameters": [
+          {
+            "name": "spaceId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "memberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PairScreenDeviceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScreenPairingResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "AUTH_REQUIRED / DEVICE_REVOKED"
+          },
+          "403": {
+            "description": "FORBIDDEN / SPACE_ACCESS_REVOKED"
+          },
+          "409": {
+            "description": "REVISION_CONFLICT"
+          },
+          "422": {
+            "description": "VALIDATION_FAILED"
+          },
+          "429": {
+            "description": "RATE_LIMITED"
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "screen-time"
+        ]
+      }
+    },
+    "/api/v1/spaces/{spaceId}/screen-time/members/{memberId}/goal": {
+      "put": {
+        "operationId": "ScreenTimeController_saveGoal",
+        "parameters": [
+          {
+            "name": "spaceId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "memberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveScreenGoalDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "version"
+                  ],
+                  "properties": {
+                    "version": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "AUTH_REQUIRED / DEVICE_REVOKED"
+          },
+          "403": {
+            "description": "FORBIDDEN / SPACE_ACCESS_REVOKED"
+          },
+          "409": {
+            "description": "REVISION_CONFLICT"
+          },
+          "422": {
+            "description": "VALIDATION_FAILED"
+          },
+          "429": {
+            "description": "RATE_LIMITED"
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "screen-time"
+        ]
+      }
+    },
+    "/api/v1/spaces/{spaceId}/screen-time/members/{memberId}/devices/{deviceId}": {
+      "delete": {
+        "operationId": "ScreenTimeController_disconnect",
+        "parameters": [
+          {
+            "name": "spaceId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "memberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "deviceId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "401": {
+            "description": "AUTH_REQUIRED / DEVICE_REVOKED"
+          },
+          "403": {
+            "description": "FORBIDDEN / SPACE_ACCESS_REVOKED"
+          },
+          "409": {
+            "description": "REVISION_CONFLICT"
+          },
+          "422": {
+            "description": "VALIDATION_FAILED"
+          },
+          "429": {
+            "description": "RATE_LIMITED"
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "screen-time"
+        ]
+      }
+    },
+    "/api/v1/spaces/{spaceId}/screen-time/members/{memberId}/export": {
+      "get": {
+        "operationId": "ScreenTimeController_export",
+        "parameters": [
+          {
+            "name": "spaceId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "memberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": "2026-11-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": "2026-11-07",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScreenSummaryResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "AUTH_REQUIRED / DEVICE_REVOKED"
+          },
+          "403": {
+            "description": "FORBIDDEN / SPACE_ACCESS_REVOKED"
+          },
+          "409": {
+            "description": "REVISION_CONFLICT"
+          },
+          "422": {
+            "description": "VALIDATION_FAILED"
+          },
+          "429": {
+            "description": "RATE_LIMITED"
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "summary": "Xuất JSON trong khoảng ngày đã chọn (tối đa 31 ngày).",
+        "tags": [
+          "screen-time"
+        ]
+      }
+    },
+    "/api/v1/spaces/{spaceId}/screen-time/members/{memberId}/data": {
+      "delete": {
+        "operationId": "ScreenTimeController_delete",
+        "parameters": [
+          {
+            "name": "spaceId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "memberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteScreenDataDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "401": {
+            "description": "AUTH_REQUIRED / DEVICE_REVOKED"
+          },
+          "403": {
+            "description": "FORBIDDEN / SPACE_ACCESS_REVOKED"
+          },
+          "409": {
+            "description": "REVISION_CONFLICT"
+          },
+          "422": {
+            "description": "VALIDATION_FAILED"
+          },
+          "429": {
+            "description": "RATE_LIMITED"
+          }
+        },
+        "security": [
+          {
+            "fc_sid": []
+          }
+        ],
+        "tags": [
+          "screen-time"
+        ]
+      }
+    },
+    "/api/v1/screen-time/collector/link": {
+      "post": {
+        "operationId": "ScreenCollectorController_link",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RedeemScreenPairingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScreenLinkResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "AUTH_REQUIRED / DEVICE_REVOKED"
+          },
+          "403": {
+            "description": "FORBIDDEN / SPACE_ACCESS_REVOKED"
+          },
+          "409": {
+            "description": "OPERATION_ID_REUSED"
+          },
+          "422": {
+            "description": "VALIDATION_FAILED / INVITE_INVALID"
+          },
+          "429": {
+            "description": "RATE_LIMITED"
+          }
+        },
+        "summary": "Đổi mã dùng một lần lấy token chỉ được upload cho thiết bị này.",
+        "tags": [
+          "screen-time-collector"
+        ]
+      },
+      "delete": {
+        "operationId": "ScreenCollectorController_disconnect",
+        "parameters": [
+          {
+            "name": "authorization",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "401": {
+            "description": "AUTH_REQUIRED / DEVICE_REVOKED"
+          },
+          "403": {
+            "description": "FORBIDDEN / SPACE_ACCESS_REVOKED"
+          },
+          "409": {
+            "description": "OPERATION_ID_REUSED"
+          },
+          "422": {
+            "description": "VALIDATION_FAILED / INVITE_INVALID"
+          },
+          "429": {
+            "description": "RATE_LIMITED"
+          }
+        },
+        "security": [
+          {
+            "screen-device": []
+          }
+        ],
+        "tags": [
+          "screen-time-collector"
+        ]
+      }
+    },
+    "/api/v1/screen-time/collector/config": {
+      "get": {
+        "operationId": "ScreenCollectorController_config",
+        "parameters": [
+          {
+            "name": "authorization",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "AUTH_REQUIRED / DEVICE_REVOKED"
+          },
+          "403": {
+            "description": "FORBIDDEN / SPACE_ACCESS_REVOKED"
+          },
+          "409": {
+            "description": "OPERATION_ID_REUSED"
+          },
+          "422": {
+            "description": "VALIDATION_FAILED / INVITE_INVALID"
+          },
+          "429": {
+            "description": "RATE_LIMITED"
+          }
+        },
+        "security": [
+          {
+            "screen-device": []
+          }
+        ],
+        "tags": [
+          "screen-time-collector"
+        ]
+      }
+    },
+    "/api/v1/screen-time/collector/state": {
+      "put": {
+        "operationId": "ScreenCollectorController_state",
+        "parameters": [
+          {
+            "name": "authorization",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScreenCollectorStateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "401": {
+            "description": "AUTH_REQUIRED / DEVICE_REVOKED"
+          },
+          "403": {
+            "description": "FORBIDDEN / SPACE_ACCESS_REVOKED"
+          },
+          "409": {
+            "description": "OPERATION_ID_REUSED"
+          },
+          "422": {
+            "description": "VALIDATION_FAILED / INVITE_INVALID"
+          },
+          "429": {
+            "description": "RATE_LIMITED"
+          }
+        },
+        "security": [
+          {
+            "screen-device": []
+          }
+        ],
+        "tags": [
+          "screen-time-collector"
+        ]
+      }
+    },
+    "/api/v1/screen-time/collector/batches": {
+      "post": {
+        "operationId": "ScreenCollectorController_ingest",
+        "parameters": [
+          {
+            "name": "authorization",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScreenBatchDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "accepted",
+                    "duplicate"
+                  ],
+                  "properties": {
+                    "accepted": {
+                      "type": "integer"
+                    },
+                    "duplicate": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "AUTH_REQUIRED / DEVICE_REVOKED"
+          },
+          "403": {
+            "description": "FORBIDDEN / SPACE_ACCESS_REVOKED"
+          },
+          "409": {
+            "description": "OPERATION_ID_REUSED"
+          },
+          "422": {
+            "description": "VALIDATION_FAILED / INVITE_INVALID"
+          },
+          "429": {
+            "description": "RATE_LIMITED"
+          }
+        },
+        "security": [
+          {
+            "screen-device": []
+          }
+        ],
+        "tags": [
+          "screen-time-collector"
+        ]
+      }
     }
   },
   "info": {
@@ -2754,6 +3479,12 @@
         "type": "apiKey",
         "in": "cookie",
         "name": "fc_sid"
+      },
+      "screen-device": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http",
+        "description": "Token chỉ dành cho Android collector, cấp qua mã liên kết dùng một lần."
       }
     },
     "schemas": {
@@ -5536,6 +6267,439 @@
           "integrations",
           "can_manage_ics",
           "ics_feeds"
+        ]
+      },
+      "ScreenMemberResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "profile": {
+            "type": "string"
+          },
+          "can_manage": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "display_name",
+          "profile",
+          "can_manage"
+        ]
+      },
+      "ScreenMembersResponse": {
+        "type": "object",
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScreenMemberResponse"
+            }
+          }
+        },
+        "required": [
+          "members"
+        ]
+      },
+      "ScreenGoalResponse": {
+        "type": "object",
+        "properties": {
+          "limit_minutes": {
+            "type": "number"
+          },
+          "reminders_enabled": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "number"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "limit_minutes",
+          "reminders_enabled",
+          "version",
+          "updated_at"
+        ]
+      },
+      "ScreenDeviceResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "UNLINKED",
+              "PENDING_PERMISSION",
+              "ACTIVE",
+              "STALE",
+              "PERMISSION_REVOKED",
+              "DISCONNECTED"
+            ]
+          },
+          "last_seen_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "consent_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "state",
+          "last_seen_at",
+          "consent_at"
+        ]
+      },
+      "ScreenAppUsageDto": {
+        "type": "object",
+        "properties": {
+          "package_name": {
+            "type": "string",
+            "example": "com.google.android.youtube"
+          },
+          "label": {
+            "type": "string",
+            "example": "YouTube"
+          },
+          "seconds": {
+            "type": "number",
+            "description": "Foreground seconds; overlapping apps may exceed device total."
+          }
+        },
+        "required": [
+          "package_name",
+          "label",
+          "seconds"
+        ]
+      },
+      "ScreenDayResponse": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "total_seconds": {
+            "type": "number",
+            "nullable": true,
+            "description": "null means missing data; 0 is an observed zero. Sum of device totals, without cross-device overlap removal."
+          },
+          "coverage": {
+            "type": "string",
+            "enum": [
+              "UNKNOWN",
+              "PARTIAL",
+              "COMPLETE"
+            ]
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "apps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScreenAppUsageDto"
+            }
+          },
+          "device_count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "date",
+          "total_seconds",
+          "coverage",
+          "updated_at",
+          "apps",
+          "device_count"
+        ]
+      },
+      "ScreenSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "member_id": {
+            "type": "string"
+          },
+          "time_zone": {
+            "type": "string"
+          },
+          "can_manage": {
+            "type": "boolean"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "ANDROID_USAGE_EVENTS"
+            ]
+          },
+          "algorithm_version": {
+            "type": "string",
+            "enum": [
+              "android-events-v1"
+            ]
+          },
+          "goal": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ScreenGoalResponse"
+              }
+            ]
+          },
+          "devices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScreenDeviceResponse"
+            }
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScreenDayResponse"
+            }
+          }
+        },
+        "required": [
+          "member_id",
+          "time_zone",
+          "can_manage",
+          "source",
+          "algorithm_version",
+          "goal",
+          "devices",
+          "days"
+        ]
+      },
+      "PairScreenDeviceDto": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "example": "Điện thoại của con"
+          },
+          "consent": {
+            "type": "boolean",
+            "description": "Người liên kết xác nhận được phép chia sẻ dữ liệu của thành viên này."
+          }
+        },
+        "required": [
+          "label",
+          "consent"
+        ]
+      },
+      "ScreenPairingResponse": {
+        "type": "object",
+        "properties": {
+          "device_id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "example": "AB12CD34EF56",
+            "description": "Only returned when creating the pairing; 10-minute expiry."
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "time_zone": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "device_id",
+          "code",
+          "expires_at",
+          "time_zone"
+        ]
+      },
+      "SaveScreenGoalDto": {
+        "type": "object",
+        "properties": {
+          "limit_minutes": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 1440
+          },
+          "reminders_enabled": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "number",
+            "description": "0 to create; current version to update."
+          }
+        },
+        "required": [
+          "limit_minutes",
+          "reminders_enabled",
+          "version"
+        ]
+      },
+      "DeleteScreenDataDto": {
+        "type": "object",
+        "properties": {
+          "confirm": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "confirm"
+        ]
+      },
+      "RedeemScreenPairingDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Mã liên kết dùng một lần, có hiệu lực 10 phút."
+          },
+          "consent": {
+            "type": "boolean",
+            "description": "Người dùng thiết bị đã đọc và đồng ý chia sẻ thời gian sử dụng."
+          }
+        },
+        "required": [
+          "code",
+          "consent"
+        ]
+      },
+      "ScreenLinkResponse": {
+        "type": "object",
+        "properties": {
+          "device_id": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string",
+            "description": "Device-scoped bearer token. Only returned once; never authenticates a web session."
+          },
+          "time_zone": {
+            "type": "string"
+          },
+          "consent_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "PENDING_PERMISSION"
+            ]
+          }
+        },
+        "required": [
+          "device_id",
+          "token",
+          "time_zone",
+          "consent_at",
+          "state"
+        ]
+      },
+      "ScreenCollectorStateDto": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "PENDING_PERMISSION",
+              "PERMISSION_REVOKED"
+            ]
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "ScreenDayUsageDto": {
+        "type": "object",
+        "properties": {
+          "local_date": {
+            "type": "string",
+            "example": "2026-11-03"
+          },
+          "captured_at": {
+            "type": "string"
+          },
+          "observed_from": {
+            "type": "string",
+            "description": "Start of the actual observation window, UTC."
+          },
+          "total_seconds": {
+            "type": "number",
+            "description": "Union of foreground intervals while the screen is interactive."
+          },
+          "coverage": {
+            "type": "string",
+            "enum": [
+              "COMPLETE",
+              "PARTIAL"
+            ]
+          },
+          "apps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScreenAppUsageDto"
+            }
+          }
+        },
+        "required": [
+          "local_date",
+          "captured_at",
+          "observed_from",
+          "total_seconds",
+          "coverage",
+          "apps"
+        ]
+      },
+      "ScreenBatchDto": {
+        "type": "object",
+        "properties": {
+          "batch_id": {
+            "type": "string"
+          },
+          "time_zone": {
+            "type": "string",
+            "example": "Asia/Ho_Chi_Minh"
+          },
+          "algorithm_version": {
+            "type": "string",
+            "example": "android-events-v1"
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScreenDayUsageDto"
+            }
+          }
+        },
+        "required": [
+          "batch_id",
+          "time_zone",
+          "algorithm_version",
+          "days"
         ]
       }
     }

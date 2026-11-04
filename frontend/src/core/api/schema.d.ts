@@ -448,6 +448,71 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/screen-time/collector/batches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ScreenCollectorController_ingest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/screen-time/collector/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ScreenCollectorController_config"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/screen-time/collector/link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Đổi mã dùng một lần lấy token chỉ được upload cho thiết bị này. */
+        post: operations["ScreenCollectorController_link"];
+        delete: operations["ScreenCollectorController_disconnect"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/screen-time/collector/state": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["ScreenCollectorController_state"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/session": {
         parameters: {
             query?: never;
@@ -1024,6 +1089,120 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/spaces/{spaceId}/screen-time/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Danh sách thành viên mà phiên hiện tại được xem thời gian màn hình. */
+        get: operations["ScreenTimeController_members"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/spaces/{spaceId}/screen-time/members/{memberId}/data": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["ScreenTimeController_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/spaces/{spaceId}/screen-time/members/{memberId}/devices/{deviceId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["ScreenTimeController_disconnect"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/spaces/{spaceId}/screen-time/members/{memberId}/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Xuất JSON trong khoảng ngày đã chọn (tối đa 31 ngày). */
+        get: operations["ScreenTimeController_export"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/spaces/{spaceId}/screen-time/members/{memberId}/goal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["ScreenTimeController_saveGoal"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/spaces/{spaceId}/screen-time/members/{memberId}/pairings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ScreenTimeController_pair"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/spaces/{spaceId}/screen-time/members/{memberId}/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ScreenTimeController_summary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/spaces/bootstrap": {
         parameters: {
             query?: never;
@@ -1318,6 +1497,9 @@ export interface components {
             keys: components["schemas"]["PushKeysDto"];
             /** @description Show NORMAL titles on this device lock screen. Default false on create, unchanged on update; never applies to SENSITIVE. */
             show_details?: boolean;
+        };
+        DeleteScreenDataDto: {
+            confirm: boolean;
         };
         DeviceDto: {
             /** Format: date-time */
@@ -1781,6 +1963,12 @@ export interface components {
             /** @enum {string} */
             status: "APPLIED" | "REJECTED";
         };
+        PairScreenDeviceDto: {
+            /** @description Người liên kết xác nhận được phép chia sẻ dữ liệu của thành viên này. */
+            consent: boolean;
+            /** @example Điện thoại của con */
+            label: string;
+        };
         PolicyChangedDto: {
             policy_version: string;
         };
@@ -1839,6 +2027,12 @@ export interface components {
             /** Format: uuid */
             device_id: string;
         };
+        RedeemScreenPairingDto: {
+            /** @description Mã liên kết dùng một lần, có hiệu lực 10 phút. */
+            code: string;
+            /** @description Người dùng thiết bị đã đọc và đồng ý chia sẻ thời gian sử dụng. */
+            consent: boolean;
+        };
         RegisterDeviceDto: {
             /**
              * Format: uuid
@@ -1854,6 +2048,115 @@ export interface components {
             actorId: string;
             /** Format: uuid */
             deviceId: string;
+        };
+        SaveScreenGoalDto: {
+            limit_minutes: number;
+            reminders_enabled: boolean;
+            /** @description 0 to create; current version to update. */
+            version: number;
+        };
+        ScreenAppUsageDto: {
+            /** @example YouTube */
+            label: string;
+            /** @example com.google.android.youtube */
+            package_name: string;
+            /** @description Foreground seconds; overlapping apps may exceed device total. */
+            seconds: number;
+        };
+        ScreenBatchDto: {
+            /** @example android-events-v1 */
+            algorithm_version: string;
+            batch_id: string;
+            days: components["schemas"]["ScreenDayUsageDto"][];
+            /** @example Asia/Ho_Chi_Minh */
+            time_zone: string;
+        };
+        ScreenCollectorStateDto: {
+            /** @enum {string} */
+            state: "ACTIVE" | "PENDING_PERMISSION" | "PERMISSION_REVOKED";
+        };
+        ScreenDayResponse: {
+            apps: components["schemas"]["ScreenAppUsageDto"][];
+            /** @enum {string} */
+            coverage: "UNKNOWN" | "PARTIAL" | "COMPLETE";
+            /** Format: date */
+            date: string;
+            device_count: number;
+            /** @description null means missing data; 0 is an observed zero. Sum of device totals, without cross-device overlap removal. */
+            total_seconds: number | null;
+            /** Format: date-time */
+            updated_at: string | null;
+        };
+        ScreenDayUsageDto: {
+            apps: components["schemas"]["ScreenAppUsageDto"][];
+            captured_at: string;
+            /** @enum {string} */
+            coverage: "COMPLETE" | "PARTIAL";
+            /** @example 2026-11-03 */
+            local_date: string;
+            /** @description Start of the actual observation window, UTC. */
+            observed_from: string;
+            /** @description Union of foreground intervals while the screen is interactive. */
+            total_seconds: number;
+        };
+        ScreenDeviceResponse: {
+            /** Format: date-time */
+            consent_at: string | null;
+            id: string;
+            label: string;
+            /** Format: date-time */
+            last_seen_at: string | null;
+            /** @enum {string} */
+            state: "UNLINKED" | "PENDING_PERMISSION" | "ACTIVE" | "STALE" | "PERMISSION_REVOKED" | "DISCONNECTED";
+        };
+        ScreenGoalResponse: {
+            limit_minutes: number;
+            reminders_enabled: boolean;
+            /** Format: date-time */
+            updated_at: string;
+            version: number;
+        };
+        ScreenLinkResponse: {
+            /** Format: date-time */
+            consent_at: string;
+            device_id: string;
+            /** @enum {string} */
+            state: "PENDING_PERMISSION";
+            time_zone: string;
+            /** @description Device-scoped bearer token. Only returned once; never authenticates a web session. */
+            token: string;
+        };
+        ScreenMemberResponse: {
+            can_manage: boolean;
+            display_name: string;
+            id: string;
+            profile: string;
+        };
+        ScreenMembersResponse: {
+            members: components["schemas"]["ScreenMemberResponse"][];
+        };
+        ScreenPairingResponse: {
+            /**
+             * @description Only returned when creating the pairing; 10-minute expiry.
+             * @example AB12CD34EF56
+             */
+            code: string;
+            device_id: string;
+            /** Format: date-time */
+            expires_at: string;
+            time_zone: string;
+        };
+        ScreenSummaryResponse: {
+            /** @enum {string} */
+            algorithm_version: "android-events-v1";
+            can_manage: boolean;
+            days: components["schemas"]["ScreenDayResponse"][];
+            devices: components["schemas"]["ScreenDeviceResponse"][];
+            goal: components["schemas"]["ScreenGoalResponse"] | null;
+            member_id: string;
+            /** @enum {string} */
+            source: "ANDROID_USAGE_EVENTS";
+            time_zone: string;
         };
         SessionDto: {
             /** Format: uuid */
@@ -2590,6 +2893,293 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["RedeemRecoveryResponseDto"];
                 };
+            };
+        };
+    };
+    ScreenCollectorController_ingest: {
+        parameters: {
+            query?: never;
+            header: {
+                authorization: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScreenBatchDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        accepted: number;
+                        duplicate: boolean;
+                    };
+                };
+            };
+            /** @description AUTH_REQUIRED / DEVICE_REVOKED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN / SPACE_ACCESS_REVOKED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description OPERATION_ID_REUSED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description VALIDATION_FAILED / INVITE_INVALID */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ScreenCollectorController_config: {
+        parameters: {
+            query?: never;
+            header: {
+                authorization: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description AUTH_REQUIRED / DEVICE_REVOKED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN / SPACE_ACCESS_REVOKED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description OPERATION_ID_REUSED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description VALIDATION_FAILED / INVITE_INVALID */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ScreenCollectorController_link: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RedeemScreenPairingDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScreenLinkResponse"];
+                };
+            };
+            /** @description AUTH_REQUIRED / DEVICE_REVOKED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN / SPACE_ACCESS_REVOKED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description OPERATION_ID_REUSED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description VALIDATION_FAILED / INVITE_INVALID */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ScreenCollectorController_disconnect: {
+        parameters: {
+            query?: never;
+            header: {
+                authorization: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description AUTH_REQUIRED / DEVICE_REVOKED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN / SPACE_ACCESS_REVOKED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description OPERATION_ID_REUSED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description VALIDATION_FAILED / INVITE_INVALID */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ScreenCollectorController_state: {
+        parameters: {
+            query?: never;
+            header: {
+                authorization: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScreenCollectorStateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description AUTH_REQUIRED / DEVICE_REVOKED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN / SPACE_ACCESS_REVOKED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description OPERATION_ID_REUSED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description VALIDATION_FAILED / INVITE_INVALID */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -3623,6 +4213,421 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["SnapshotResponseDto"];
                 };
+            };
+        };
+    };
+    ScreenTimeController_members: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                spaceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScreenMembersResponse"];
+                };
+            };
+            /** @description AUTH_REQUIRED / DEVICE_REVOKED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN / SPACE_ACCESS_REVOKED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description REVISION_CONFLICT */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description VALIDATION_FAILED */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ScreenTimeController_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                memberId: string;
+                spaceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteScreenDataDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description AUTH_REQUIRED / DEVICE_REVOKED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN / SPACE_ACCESS_REVOKED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description REVISION_CONFLICT */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description VALIDATION_FAILED */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ScreenTimeController_disconnect: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                deviceId: string;
+                memberId: string;
+                spaceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description AUTH_REQUIRED / DEVICE_REVOKED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN / SPACE_ACCESS_REVOKED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description REVISION_CONFLICT */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description VALIDATION_FAILED */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ScreenTimeController_export: {
+        parameters: {
+            query: {
+                from: string;
+                to: string;
+            };
+            header?: never;
+            path: {
+                memberId: string;
+                spaceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScreenSummaryResponse"];
+                };
+            };
+            /** @description AUTH_REQUIRED / DEVICE_REVOKED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN / SPACE_ACCESS_REVOKED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description REVISION_CONFLICT */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description VALIDATION_FAILED */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ScreenTimeController_saveGoal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                memberId: string;
+                spaceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SaveScreenGoalDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        version: number;
+                    };
+                };
+            };
+            /** @description AUTH_REQUIRED / DEVICE_REVOKED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN / SPACE_ACCESS_REVOKED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description REVISION_CONFLICT */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description VALIDATION_FAILED */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ScreenTimeController_pair: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                memberId: string;
+                spaceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PairScreenDeviceDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScreenPairingResponse"];
+                };
+            };
+            /** @description AUTH_REQUIRED / DEVICE_REVOKED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN / SPACE_ACCESS_REVOKED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description REVISION_CONFLICT */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description VALIDATION_FAILED */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ScreenTimeController_summary: {
+        parameters: {
+            query: {
+                from: string;
+                to: string;
+            };
+            header?: never;
+            path: {
+                memberId: string;
+                spaceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScreenSummaryResponse"];
+                };
+            };
+            /** @description AUTH_REQUIRED / DEVICE_REVOKED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description FORBIDDEN / SPACE_ACCESS_REVOKED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description REVISION_CONFLICT */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description VALIDATION_FAILED */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

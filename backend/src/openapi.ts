@@ -28,7 +28,8 @@ async function generate(): Promise<void> {
   configureApp(app);
   const document = SwaggerModule.createDocument(
     app,
-    new DocumentBuilder().setTitle('Lịch Gia Đình API').setVersion('1').addCookieAuth('fc_sid').build(),
+    new DocumentBuilder().setTitle('Lịch Gia Đình API').setVersion('1').addCookieAuth('fc_sid')
+      .addBearerAuth({ type: 'http', scheme: 'bearer', description: 'Token chỉ dành cho Android collector, cấp qua mã liên kết dùng một lần.' }, 'screen-device').build(),
   );
   writeFileSync(join(__dirname, '..', 'openapi.json'), `${JSON.stringify(document, null, 2)}\n`);
   await app.close();

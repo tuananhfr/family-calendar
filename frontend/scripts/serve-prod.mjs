@@ -35,10 +35,12 @@ const MIME = {
   ".woff2": "font/woff2",
   ".mp3": "audio/mpeg",
   ".wav": "audio/wav",
+  ".apk": "application/vnd.android.package-archive",
 };
 
 // Hashed build assets never change; everything else must revalidate so a deploy is picked up.
 function cacheControl(urlPath, ext) {
+  if (ext === ".apk" || urlPath === "/downloads/android-release.json") return "no-cache";
   if (urlPath.startsWith("/_next/static/")) return "public, max-age=31536000, immutable";
   if (ext === ".html" || urlPath === "/sw.js" || ext === ".webmanifest") return "no-cache";
   return "public, max-age=3600, must-revalidate";
@@ -81,6 +83,7 @@ function send(res, req, file, status, urlPath) {
     "Content-Length": file.size,
     "Cache-Control": cacheControl(urlPath, ext),
     "X-Content-Type-Options": "nosniff",
+    ...(ext === ".apk" ? { "Content-Disposition": 'attachment; filename="lich-gia-dinh-screen-time.apk"' } : {}),
   });
   if (req.method === "HEAD") return res.end();
   createReadStream(file.path).pipe(res);
@@ -141,7 +144,7 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`serving ${ROOT} on http://${HOST}:${PORT}${BASE_PATH}/ (api → ${API_TARGET.origin})`);
+  console.log(`serving ${ROOT} on http://${HOST}:${server.address().port}${BASE_PATH}/ (api → ${API_TARGET.origin})`);
 });
 
 for (const signal of ["SIGINT", "SIGTERM"]) process.on(signal, () => server.close(() => process.exit(0)));

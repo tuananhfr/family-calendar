@@ -1,0 +1,11 @@
+{
+    "applicationId":  "vn.lichgiadinh.screentime",
+    "buildType":  "release",
+    "versionName":  "0.1.1",
+    "versionCode":  2,
+    "minAndroid":  "10",
+    "fileName":  "lich-gia-dinh-screen-time.apk",
+    "bytes":  193698,
+    "sha256":  "2c905f5657df74d3ebf2133c70ee56e5327982efb895d5af1fa02be83b352a47",
+    "signingCertificateSha256":  "6d7ae9b3fa9cb309a08755e79c9e6d0d77df1d26f7af00586695e4211fe9b655"
+}
