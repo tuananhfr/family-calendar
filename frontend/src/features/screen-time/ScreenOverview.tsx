@@ -222,7 +222,17 @@ function AppDistribution({
       name: "Ứng dụng còn lại",
       seconds: sorted.slice(4).reduce((sum, a) => sum + a.seconds, 0),
     });
-  let offset = 0;
+  const slices = groups.reduce<
+    Array<{ name: string; share: number; start: number }>
+  >((list, group) => {
+    const previous = list.at(-1);
+    list.push({
+      name: group.name,
+      share: (group.seconds / total) * 100,
+      start: previous ? previous.start + previous.share : 0,
+    });
+    return list;
+  }, []);
   return (
     <Card className="flex flex-col gap-5">
       <div>
@@ -250,25 +260,20 @@ function AppDistribution({
             stroke="var(--color-border)"
             strokeWidth="13"
           />
-          {groups.map((group, i) => {
-            const share = (group.seconds / total) * 100;
-            const start = offset;
-            offset += share;
-            return (
-              <circle
-                key={group.name + i}
-                cx="60"
-                cy="60"
-                r="48"
-                fill="none"
-                stroke={COLORS[i]}
-                strokeWidth="13"
-                pathLength="100"
-                strokeDasharray={`${share} ${100 - share}`}
-                strokeDashoffset={-start}
-              />
-            );
-          })}
+          {slices.map((slice, i) => (
+            <circle
+              key={slice.name + i}
+              cx="60"
+              cy="60"
+              r="48"
+              fill="none"
+              stroke={COLORS[i]}
+              strokeWidth="13"
+              pathLength="100"
+              strokeDasharray={`${slice.share} ${100 - slice.share}`}
+              strokeDashoffset={-slice.start}
+            />
+          ))}
         </svg>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
           <span className="text-lg font-bold text-text">
