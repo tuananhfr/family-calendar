@@ -1,6 +1,11 @@
 "use client";
 
 import { Bell, BellRing, Info, Mail, RefreshCw, ShieldAlert, Users, Wallet, Zap, type LucideIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { api } from "@/core/api/client";
+import { ROUTES } from "@/app-shell/nav-config";
+import { SCREEN_NOTIFICATIONS_KEY } from "../hooks/useNotifications";
 import type { NotificationRow } from "@/core/db/db";
 import { markRead } from "@/core/notifications/local-center";
 import { parseOccurrenceKey } from "@/core/recurrence/occurrence-key";
@@ -33,11 +38,18 @@ function whenLabel(row: NotificationRow, group: NotificationGroup["key"], timeZo
 }
 
 function Row({ row, group, timeZone }: { row: NotificationRow; group: NotificationGroup["key"]; timeZone: string }) {
+  const router = useRouter();
+  const queries = useQueryClient();
   const openDetail = useItemEditor((s) => s.openDetail);
   const Icon = TYPE_ICON[row.type] ?? Bell;
   const key = occurrenceOf(row);
   const unread = row.readAt === null;
   const open = () => {
+    if (row.resourceRef?.type === 'screen_time') {
+      if (unread) void api('POST', '/notifications/read', { ids: [row.id] }).then(() => queries.invalidateQueries({ queryKey: [SCREEN_NOTIFICATIONS_KEY] })).catch(() => undefined);
+      router.push(ROUTES.screenTime);
+      return;
+    }
     if (unread) void markRead(row.id);
     const parsed = key ? parseOccurrenceKey(key) : null;
     if (parsed && key) openDetail(parsed.itemId, key);

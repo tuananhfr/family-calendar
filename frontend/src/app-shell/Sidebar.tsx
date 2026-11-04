@@ -52,7 +52,7 @@ export function Sidebar({ collapsible = true, onNavigate }: { collapsible?: bool
   const setQuickAddOpen = useShellStore((s) => s.setQuickAddOpen);
   const sidebarItems = useVisibleNav(SIDEBAR_ITEMS);
   const quickTools = useVisibleNav(QUICK_TOOLS);
-  const coreKeys = ["today", "calendar", "tasks", "reminders", "upcoming", "timetable", "specialDays", "members"];
+  const coreKeys = ["today", "calendar", "tasks", "reminders", "upcoming", "timetable", "screenTime", "specialDays", "members"];
   const primary = coreKeys.flatMap((key) => sidebarItems.filter((item) => item.key === key));
   const secondary = sidebarItems.filter((item) => !coreKeys.includes(item.key) && item.key !== "settings");
   const resourceKeys = ["health", "finance", "storage"];

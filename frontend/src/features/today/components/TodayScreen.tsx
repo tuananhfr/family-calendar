@@ -1,6 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
+import Link from "next/link";
+import { ChevronRight, Smartphone } from "lucide-react";
+import { ROUTES } from "@/app-shell/nav-config";
 import { Card, Skeleton, SkeletonList } from "@/design/components";
 import { t } from "@/i18n/vi";
 import { useAppStore } from "@/store/app.store";
@@ -47,6 +50,10 @@ export function TodayScreen() {
     <div className="flex flex-col gap-4">
       <Greeting header={data.header} />
       <TodayStats stats={data.stats} />
+      <Link href={ROUTES.screenTime} className="flex items-center gap-3 rounded-card border border-border bg-surface p-4 text-text shadow-sm hover:bg-primary-soft">
+        <span className="rounded-control bg-primary-soft p-2 text-primary"><Smartphone aria-hidden className="size-5" /></span>
+        <span className="min-w-0 flex-1"><span className="block font-bold">Thời gian màn hình</span><span className="block text-sm text-muted">Xem thời gian sử dụng điện thoại và mục tiêu mỗi ngày.</span></span><ChevronRight aria-hidden className="size-5 shrink-0 text-muted" />
+      </Link>
       <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_19rem] 2xl:grid-cols-[minmax(0,1fr)_21rem]">
         <DayBoard key={today} entries={data.entries} members={data.members} states={states} today={today} nowTime={data.header.time} />
         <aside className="grid content-start items-start gap-4 md:grid-cols-2 xl:grid-cols-1">

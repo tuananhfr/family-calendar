@@ -1,13 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { api } from "@/core/api/client";
 import { Bell, CheckCheck, Info } from "lucide-react";
 import { DEFAULT_TIME_ZONE } from "@/core/model/common";
 import { markAllRead } from "@/core/notifications/local-center";
 import { Button, Card, EmptyState, PageHeader, SkeletonList, Tabs } from "@/design/components";
 import { useActiveSpace, useSpaceToday } from "@/features/members";
 import { t } from "@/i18n/vi";
-import { useNotifications } from "../hooks/useNotifications";
+import { SCREEN_NOTIFICATIONS_KEY, useNotifications } from "../hooks/useNotifications";
 import { groupNotifications } from "../model/notification-groups";
 import { NotificationList } from "./NotificationList";
 import { PermissionPrompt } from "./PermissionPrompt";
@@ -16,6 +18,7 @@ type Tab = "ALL" | "UNREAD";
 
 /** `/thong-bao` (modules.md §13): the local notification center, newest first, grouped by day. */
 export function NotificationsPage() {
+  const queries = useQueryClient();
   const { space } = useActiveSpace();
   const today = useSpaceToday();
   const timeZone = space?.timeZone ?? DEFAULT_TIME_ZONE;
@@ -32,7 +35,11 @@ export function NotificationsPage() {
         icon={<Bell />}
         illustration="corner-reminders"
         actions={
-          <Button variant="secondary" icon={<CheckCheck className="size-4" />} onClick={() => void markAllRead()} disabled={unread === 0}>
+          <Button variant="secondary" icon={<CheckCheck className="size-4" />} onClick={() => {
+            void markAllRead();
+            const ids = rows.filter((r) => r.resourceRef?.type === 'screen_time' && r.readAt === null).map((r) => r.id);
+            if (ids.length) void api('POST', '/notifications/read', { ids }).then(() => queries.invalidateQueries({ queryKey: [SCREEN_NOTIFICATIONS_KEY] })).catch(() => undefined);
+          }} disabled={unread === 0}>
             {t("notifications.markAllRead")}
           </Button>
         }

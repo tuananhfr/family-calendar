@@ -1,0 +1,42 @@
+plugins { id 'com.android.application' }
+
+def releaseStore = System.getenv('FC_ANDROID_KEYSTORE')
+def releaseStorePassword = System.getenv('FC_ANDROID_STORE_PASSWORD')
+def releaseKeyAlias = System.getenv('FC_ANDROID_KEY_ALIAS')
+def releaseKeyPassword = System.getenv('FC_ANDROID_KEY_PASSWORD')
+def hasReleaseSigning = releaseStore && releaseStorePassword && releaseKeyAlias && releaseKeyPassword
+
+android {
+    namespace 'vn.lichgiadinh.screentime'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'vn.lichgiadinh.screentime'
+        minSdk 29
+        targetSdk 35
+        versionCode 2
+        versionName '0.1.1'
+    }
+    buildFeatures { buildConfig true }
+    signingConfigs {
+        if (hasReleaseSigning) {
+            production {
+                storeFile file(releaseStore)
+                storePassword releaseStorePassword
+                keyAlias releaseKeyAlias
+                keyPassword releaseKeyPassword
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    buildTypes {
+        debug { applicationIdSuffix '.debug' }
+        release {
+            minifyEnabled false
+            if (hasReleaseSigning) signingConfig signingConfigs.production
+        }
+    }
+}
+dependencies { testImplementation 'junit:junit:4.13.2' }

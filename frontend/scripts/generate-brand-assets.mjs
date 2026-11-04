@@ -18,7 +18,7 @@ const artwork = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="1200
 <text x="472" y="252" font-size="28" fill="#475569">— Gắn kết gia đình.</text>
 <text x="470" y="355" font-size="48" font-weight="700" fill="#0e2a47">Gắn kết gia đình</text>
 <text x="470" y="415" font-size="48" font-weight="700" fill="#0e2a47">qua từng ngày.</text>
-<text x="472" y="500" font-size="23" fill="#475569">lpc.vn/lich-gia-dinh</text>
+<text x="472" y="500" font-size="23" fill="#475569">lichgiadinh.info</text>
 </g></svg>`);
 await sharp(artwork).composite([{ input: logo, left: 64, top: 136 }]).png().toFile(path.join(root, 'public/social/family-calendar-20261103.png'));
 console.log('Generated transparent brand/PWA icons, favicon and 1200×630 social card.');

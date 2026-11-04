@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["screen-time.config.ts", "sharing/screen-time.spec.ts", "helpers/onboard.ts"]
+}
