@@ -275,7 +275,7 @@ function AppDistribution({
             />
           ))}
         </svg>
-        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
+        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-8 text-center sm:px-10">
           <span className="text-lg font-bold text-text">
             {known ? durationLabel(total) : "—"}
           </span>
